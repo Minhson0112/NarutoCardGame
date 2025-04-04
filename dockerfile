@@ -17,4 +17,4 @@ COPY . .
 ENV PYTHONUNBUFFERED=1
 
 # Command để chạy bot (giả sử file chính là bot.py)
-CMD ["python", "bot.py"]
+CMD ["python", "-m", "bot.main"]
