@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, BigInteger, String, TIMESTAMP, ForeignKey, text
+from sqlalchemy import Column, Integer, BigInteger, String, TIMESTAMP, ForeignKey, text, Boolean
 from sqlalchemy.orm import relationship
 from bot.config.database import Base
 
@@ -10,8 +10,7 @@ class PlayerWeapon(Base):
     weapon_key = Column(String(50), ForeignKey('weapon_templates.weapon_key'), nullable=False)
     level = Column(Integer, nullable=False, default=1)
     quantity = Column(Integer, nullable=False, default=1)
-    equipped_card_id = Column(Integer, ForeignKey('player_cards.id'), nullable=True)
-    slot_number = Column(Integer, nullable=True)
+    equipped = Column(Boolean, nullable=False, default=False)
     created_at = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
 
     # Relationship: mỗi PlayerWeapon có một WeaponTemplate liên kết

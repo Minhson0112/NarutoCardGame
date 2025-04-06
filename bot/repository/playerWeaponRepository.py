@@ -1,4 +1,5 @@
 from bot.entity.playerWeapon import PlayerWeapon
+from bot.entity.weaponTemplate import WeaponTemplate
 
 class PlayerWeaponRepository:
     def __init__(self, session):
@@ -48,3 +49,32 @@ class PlayerWeaponRepository:
             playerWeapon = PlayerWeapon(player_id=playerId, weapon_key=weaponKey, quantity=increment)
             self.session.add(playerWeapon)
         self.session.commit()
+
+    def getByWeaponNameAndPlayerId(self, playerId: int, weaponName: str):
+        """
+        Lấy danh sách các vũ khí của người chơi có tên khớp với weaponName.
+        
+        :param playerId: ID của người chơi
+        :param weaponName: Tên vũ khí cần tìm
+        :return: Danh sách các đối tượng PlayerWeapon thỏa điều kiện
+        """
+        return (
+            self.session.query(PlayerWeapon)
+            .join(WeaponTemplate, PlayerWeapon.weapon_key == WeaponTemplate.weapon_key)
+            .filter(
+                PlayerWeapon.player_id == playerId,
+                WeaponTemplate.name == weaponName  # So sánh tên vũ khí trong template
+            )
+            .all()
+    )
+
+    def getEquippedWeaponsByPlayerId(self, playerId: int):
+        """
+        Lấy danh sách các vũ khí của người chơi đang được cài đặt (equipped).
+        :param playerId: ID của người chơi
+        :return: Danh sách các đối tượng PlayerWeapon với equipped=True
+        """
+        return self.session.query(PlayerWeapon).filter(
+            PlayerWeapon.player_id == playerId,
+            PlayerWeapon.equipped == True
+        ).all()

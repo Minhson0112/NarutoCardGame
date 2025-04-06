@@ -32,7 +32,11 @@ async def main():
         "bot.commands.buyCard",
         "bot.commands.buyWeapon",
         "bot.commands.inventory",
-
+        "bot.commands.showProfile",
+        "bot.commands.setCard",
+        "bot.commands.setWeapon",
+        "bot.commands.levelupCard",
+        "bot.commands.levelupWeapon",
     ]
 
     # Load từng extension

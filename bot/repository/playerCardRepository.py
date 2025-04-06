@@ -1,4 +1,5 @@
 from bot.entity.playerCards import PlayerCard
+from bot.entity.cardTemplate import CardTemplate  
 
 class PlayerCardRepository:
     def __init__(self, session):
@@ -47,3 +48,34 @@ class PlayerCardRepository:
             playerCard = PlayerCard(player_id=playerId, card_key=cardKey, quantity=increment)
             self.session.add(playerCard)
         self.session.commit()
+
+    def getByCardNameAndPlayerId(self, player_id: int, card_name: str):
+        """
+        Lấy danh sách các thẻ của người chơi có tên khớp với card_name.
+
+        :param player_id: ID của người chơi
+        :param card_name: Tên thẻ cần tìm
+        :return: Danh sách các đối tượng PlayerCard thỏa điều kiện
+        """
+        return (
+            self.session.query(PlayerCard)
+            .join(CardTemplate, PlayerCard.card_key == CardTemplate.card_key)
+            .filter(
+                PlayerCard.player_id == player_id,
+                CardTemplate.name == card_name
+            )
+            .all()
+        )
+    
+    def getEquippedCardsByPlayerId(self, playerId: int):
+        """
+        Lấy danh sách các thẻ của người chơi đang được cài đặt (equipped).
+        """
+        return self.session.query(PlayerCard).filter(
+            PlayerCard.player_id == playerId,
+            PlayerCard.equipped == True
+        ).all()
+    
+    def deleteCard(self, card):
+        """Xóa bản ghi thẻ khỏi session."""
+        self.session.delete(card)

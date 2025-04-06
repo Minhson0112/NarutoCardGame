@@ -55,7 +55,7 @@ class Inventory(commands.Cog):
                             f"  ┣ **Bậc:** {card.template.tier}\n"
                             f"  ┣ **Cấp:** {card.level}\n"
                             f"  ┣ **Sức mạnh:** {strength}\n"
-                            f"  ┗ **SL:** {card.quantity}"
+                            f"  ┗ **Số Lượng:** {card.quantity}"
                         )
                     
                     cardDescription = "\n\n".join(cardLines)
@@ -85,8 +85,8 @@ class Inventory(commands.Cog):
                             f"• 🔪 **{weapon.template.name}**\n"
                             f"  ┣ **Grade:** {weapon.template.grade}\n"
                             f"  ┣ **Level:** {weapon.level}\n"
-                            f"  ┣ **Sức mạnh:** {strength}\n"
-                            f"  ┗ **SL:** {weapon.quantity}"
+                            f"  ┣ **Sức Mạnh:** {strength}\n"
+                            f"  ┗ **Số Lượng:** {weapon.quantity}"
                         )
                     
                     weaponDescription = "\n\n".join(weaponLines)
