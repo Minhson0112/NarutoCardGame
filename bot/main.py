@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 import asyncio
-from bot.config import DISCORD_TOKEN
+from bot.config.config import DISCORD_TOKEN
 
 # Định nghĩa intents – bắt buộc nếu muốn bot đọc tin nhắn hoặc phản hồi người dùng
 intents = discord.Intents.default()
@@ -24,6 +24,15 @@ async def on_ready():
 async def main():
     # Danh sách các module cần load
     extensions = [
+        "bot.commands.register",
+        "bot.commands.daily",
+        "bot.commands.checkMoney",
+        "bot.commands.shopCard",
+        "bot.commands.shopWeapon",
+        "bot.commands.buyCard",
+        "bot.commands.buyWeapon",
+        "bot.commands.inventory",
+
     ]
 
     # Load từng extension

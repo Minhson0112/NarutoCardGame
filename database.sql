@@ -72,7 +72,7 @@ CREATE TABLE player_weapons (
     level INT NOT NULL DEFAULT 1,            -- logic nâng cấp tương thự thẻ
     quantity INT NOT NULL DEFAULT 1,         -- Số lượng của vũ khí này
     equipped_card_id INT DEFAULT NULL,       -- Nếu vũ khí đã được gắn vào thẻ (player_cards.id)
-    slot_number INT DEFAULT NULL,            -- Số slot (ví dụ: slot 1, 2, 3)
+    slot_number INT DEFAULT NULL,            -- Số slot chỉ có 1 slot nên có gắn vào thì cũng là 1
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (player_id) REFERENCES players(player_id),
     FOREIGN KEY (weapon_key) REFERENCES weapon_templates(weapon_key),
@@ -85,7 +85,7 @@ CREATE TABLE player_weapons (
 DROP TABLE IF EXISTS player_active_setup;
 CREATE TABLE player_active_setup (
     player_id BIGINT PRIMARY KEY,         -- Khóa ngoại đến players
-    active_card_id INT NOT NULL,           -- ID của thẻ chiến chính từ player_cards
+    active_card_id INT DEFAULT NULL,           -- ID của thẻ chiến chính từ player_cards
     weapon_slot1 INT DEFAULT NULL,         -- ID của vũ khí gắn vào slot 1 (player_weapons.id)
     weapon_slot2 INT DEFAULT NULL,         -- ID của vũ khí gắn vào slot 2
     weapon_slot3 INT DEFAULT NULL,         -- ID của vũ khí gắn vào slot 3

@@ -1,0 +1,18 @@
+INSERT INTO weapon_templates (weapon_key, name, grade, bonus_power, image_url, sell_price) VALUES
+('Kunai', 'Kunai', 'Normal', 150, 'Kunai150', 500000),
+('Knife', 'Knife', 'Normal', 160, 'Knife160', 500000),
+('ChakraKnife', 'ChakraKnife', 'Normal', 170, 'ChakraKnife170', 500000),
+('Guandao', 'Guandao', 'Normal', 180, 'Guandao180', 500000),
+('Katana', 'Katana', 'Normal', 190, 'Katana190', 500000),
+('Shuriken', 'Shuriken', 'Normal', 200, 'Shuriken200', 500000),
+('Bow', 'Bow', 'Normal', 210, 'Bow210', 500000),
+('Flail', 'Flail', 'Normal', 220, 'Flail220', 500000),
+('Kibaku', 'Kibaku', 'Normal', 230, 'Kibaku230', 500000),
+('Tansa', 'Tansa', 'Normal', 250, 'Tansa250', 500000),
+('Tessen', 'Tessen', 'Rare', 430, 'Tessen430', 1500000),
+('Sansaju', 'Sansaju', 'Rare', 440, 'Sansaju440', 1500000),
+('Suna', 'Suna', 'Rare', 450, 'Suna450', 1500000),
+('Enma', 'Enma', 'Rare', 480, 'Enma480', 1500000),
+('Samehada', 'Samehada', 'Rare', 500, 'Samehada500', 1500000),
+('Rinnegan', 'Rinnegan', 'Legendary', 600, 'Rinnegan600', 4000000),
+('Gudodama', 'Gudodama', 'Legendary', 700, 'Gudodama700', 4000000);

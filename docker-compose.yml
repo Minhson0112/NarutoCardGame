@@ -6,6 +6,9 @@ services:
     depends_on:
       - mysql
     restart: unless-stopped
+    volumes:
+      - .:/app         # Gắn toàn bộ project vào container tại /app
+      - /app/__pycache__  # Ngăn Docker ghi cache .pyc gây xung đột
 
   mysql:
     image: mysql:8.0
@@ -13,7 +16,7 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: naruto
+      MYSQL_DATABASE: naruto_card_game
       MYSQL_USER: naruto
       MYSQL_PASSWORD: naruto
     ports:
