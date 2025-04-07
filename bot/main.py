@@ -37,6 +37,12 @@ async def main():
         "bot.commands.setWeapon",
         "bot.commands.levelupCard",
         "bot.commands.levelupWeapon",
+        "bot.commands.give",
+        "bot.commands.giveawayryo",
+        "bot.commands.sellcard",
+        "bot.commands.sellweapon",
+        "bot.commands.fight",
+        "bot.commands.fightWith",
     ]
 
     # Load từng extension

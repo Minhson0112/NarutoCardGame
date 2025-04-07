@@ -8,6 +8,8 @@ class Player(Base):
     username = Column(String(100))
     coin_balance = Column(Integer, nullable=False, default=0)
     rank_points = Column(Integer, nullable=False, default=0)
+    highest_rank_points = Column(Integer, nullable=False, default=0)
+    winning_streak = Column(Integer, nullable=False, default=0)
     created_at = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
     updated_at = Column(
         TIMESTAMP, 

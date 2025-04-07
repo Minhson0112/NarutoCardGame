@@ -78,3 +78,6 @@ class PlayerWeaponRepository:
             PlayerWeapon.player_id == playerId,
             PlayerWeapon.equipped == True
         ).all()
+    
+    def deleteWeapon(self, weapon):
+        self.session.delete(weapon)
