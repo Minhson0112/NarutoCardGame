@@ -7,7 +7,7 @@ class CardTemplate(Base):
     card_key = Column(String(50), primary_key=True)
     name = Column(String(100), nullable=False)
     tier = Column(Enum('Genin', 'Chunin', 'Jounin', 'Kage', 'Legendary', name="card_tier_enum"), nullable=False)
-    element = Column(String(20))
+    element = Column(String(20)) # Phong Lôi Thổ Thủy Hỏa Phong Thể
     base_power = Column(Integer)
     image_url = Column(Text)  # Lưu key để tra cứu trong CARD_IMAGE_MAP
     sell_price = Column(Integer, nullable=False, default=0)

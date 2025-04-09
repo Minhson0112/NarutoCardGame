@@ -51,7 +51,7 @@ class Inventory(commands.Cog):
                             strength = "N/A"
                         
                         cardLines.append(
-                            f"• 🥷 **{card.template.name}**\n"
+                            f"•🥷 **{card.template.name}**\n"
                             f"  ┣ **Bậc:** {card.template.tier}\n"
                             f"  ┣ **Cấp:** {card.level}\n"
                             f"  ┣ **Sức mạnh:** {strength}\n"
@@ -82,8 +82,8 @@ class Inventory(commands.Cog):
                             strength = "N/A"
                         
                         weaponLines.append(
-                            f"• 🔪 **{weapon.template.name}**\n"
-                            f"  ┣ **Grade:** {weapon.template.grade}\n"
+                            f"•🔪 **{weapon.template.name}**\n"
+                            f"  ┣ **Bậc:** {weapon.template.grade}\n"
                             f"  ┣ **Level:** {weapon.level}\n"
                             f"  ┣ **Sức Mạnh:** {strength}\n"
                             f"  ┗ **Số Lượng:** {weapon.quantity}"

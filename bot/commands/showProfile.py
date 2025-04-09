@@ -35,9 +35,8 @@ class ShowProfile(commands.Cog):
                 # Lấy thông tin active setup của người chơi
                 activeSetup = activeSetupRepo.getByPlayerId(playerId)
 
-                # Nếu chưa lắp thẻ chính, nhưng có thể đã set vũ khí
+                # Nếu chưa lắp thẻ chính (có thể đã set vũ khí)
                 if not activeSetup or activeSetup.active_card_id is None:
-                    # Nếu đã set vũ khí thì lấy ảnh vũ khí, nếu không thì dùng ảnh mặc định
                     if activeSetup and activeSetup.weapon_slot1 is not None:
                         activeWeapon = playerWeaponRepo.getById(activeSetup.weapon_slot1)
                         weaponImageUrl = WEAPON_IMAGE_MAP.get(activeWeapon.template.image_url, NONE_WEAPON_IMAGE_URL) if activeWeapon else NONE_WEAPON_IMAGE_URL
@@ -45,13 +44,12 @@ class ShowProfile(commands.Cog):
                         weaponImageUrl = NONE_WEAPON_IMAGE_URL
 
                     embed = discord.Embed(
-                        title="Hồ sơ chiến đấu của bạn",
+                        title="Hồ sơ Chiến Đấu của bạn",
                         color=discord.Color.gold()
                     )
-                    embed.add_field(
-                        name="Thông báo",
-                        value="⚠️ Bạn chưa lắp thẻ chiến đấu. Dùng lệnh /setcard card: tên_thẻ để lắp thẻ.",
-                        inline=False
+                    embed.description = (
+                        "⚠️ Bạn chưa lắp thẻ chiến đấu!\n"
+                        "➜ Dùng lệnh `/setcard card: tên_thẻ` để lắp thẻ."
                     )
                     embed.set_image(url=NONE_CARD_IMAGE_URL)
                     embed.set_thumbnail(url=weaponImageUrl)
@@ -82,33 +80,36 @@ class ShowProfile(commands.Cog):
                     weaponImageUrl = WEAPON_IMAGE_MAP.get(activeWeapon.template.image_url, NONE_WEAPON_IMAGE_URL)
 
                 totalStrength = cardStrength + weaponStrength
-
-                # Lấy ảnh thẻ: sử dụng key từ activeCard.template.image_url với CARD_IMAGE_MAP
                 cardImageUrl = CARD_IMAGE_MAP.get(activeCard.template.image_url, NONE_CARD_IMAGE_URL)
 
-                # Tạo embed với thông tin thẻ chiến đấu
+                # Xây dựng mô tả chi tiết theo dạng danh sách
+                description_lines = [
+                    f"**Tên thẻ:** {activeCard.template.name}",
+                    f"**Bậc thẻ:** {activeCard.template.tier}",
+                    f"**Hệ:** {activeCard.template.element}",
+                    f"**Cấp thẻ:** {activeCard.level}",
+                    "",
+                ]
+                if activeWeapon:
+                    description_lines.extend([
+                        f"**Tên vũ khí:** {activeWeapon.template.name}",
+                        f"**Bậc vũ khí:** {activeWeapon.template.grade}",
+                        f"**Cấp vũ khí:** {activeWeapon.level}",
+                        "",
+                    ])
+                else:
+                    description_lines.append("**Vũ khí:** Chưa cài đặt\n")
+                description_lines.append(f"**Tổng Sức Mạnh:** {totalStrength}")
+
                 embed = discord.Embed(
-                    title="Hồ sơ chiến đấu của bạn",
-                    description="Đây là thẻ chiến đấu của bạn:",
+                    title="Hồ sơ Chiến Đấu của bạn",
+                    description="\n".join(description_lines),
                     color=discord.Color.gold()
                 )
-                embed.add_field(name="Tên thẻ", value=f"**{activeCard.template.name}**", inline=True)
-                embed.add_field(name="Bậc thẻ", value=f"**{activeCard.template.tier}**", inline=True)
-                embed.add_field(name="Cấp thẻ", value=f"**{activeCard.level}**", inline=True)
-
-                # Nếu có thông tin vũ khí thì thêm các trường chi tiết của vũ khí
-                if activeWeapon:
-                    embed.add_field(name="Tên vũ khí", value=f"**{activeWeapon.template.name}**", inline=True)
-                    embed.add_field(name="Bậc vũ khí", value=f"**{activeWeapon.template.grade}**", inline=True)
-                    embed.add_field(name="Cấp vũ khí", value=f"**{activeWeapon.level}**", inline=True)
-                else:
-                    embed.add_field(name="Vũ khí", value="Chưa cài đặt", inline=False)
-
-                embed.add_field(name="Tổng Sức Mạnh:", value=f"**{totalStrength}**", inline=True)
                 embed.set_image(url=cardImageUrl)
                 embed.set_thumbnail(url=weaponImageUrl)
                 embed.set_footer(text=f"Số dư: {player.coin_balance:,} Ryo | Điểm rank: {player.rank_points}")
-
+                
                 await interaction.followup.send(embed=embed)
         except Exception as e:
             print("❌ Lỗi khi xử lý ShowProfile:", e)
