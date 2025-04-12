@@ -52,6 +52,7 @@ async def main():
         "bot.commands.devinfo",
         "bot.commands.challenge",
         "bot.commands.gifcode",
+        "bot.commands.help",
         #"bot.commands.narutotrap",
     ]
 
