@@ -43,6 +43,16 @@ async def main():
         "bot.commands.sellweapon",
         "bot.commands.fight",
         "bot.commands.fightWith",
+        "bot.commands.bingo",
+        "bot.commands.coinflip",
+        "bot.commands.slot",
+        "bot.commands.blackjack",
+        "bot.commands.rename",
+        "bot.commands.top10",
+        "bot.commands.devinfo",
+        "bot.commands.challenge",
+        "bot.commands.gifcode",
+        #"bot.commands.narutotrap",
     ]
 
     # Load từng extension

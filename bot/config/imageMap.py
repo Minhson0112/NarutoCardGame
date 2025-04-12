@@ -56,7 +56,7 @@ CARD_IMAGE_MAP = {
     "danzo": "https://cdn.discordapp.com/attachments/1359449182938726612/1359451471271301171/Shimura_Danzo.gif?ex=67f78758&is=67f635d8&hm=1e7ee75c9cf04decab852e4217bf82d3bf306fa34dd8713dbb019ade3b012c41&",
     "haku": "https://cdn.discordapp.com/attachments/1359449182938726612/1359453556058620064/Haku.gif?ex=67f78949&is=67f637c9&hm=55e1312e8101d3ce0e90692c4c41f2c7f66d37638439d60522d19ecc500103af&",
     "kakashi": "https://cdn.discordapp.com/attachments/1359449182938726612/1359454901142294598/Hatake_Kakashi.gif?ex=67f78a89&is=67f63909&hm=802a7349c875684cda284dbaace24fbed52246888326dc83903c3df990adfdc1&",
-    "naruto": "https://cdn.discordapp.com/attachments/1359449182938726612/1359456810196795412/Uzumaki_Naruto.gif?ex=67f78c51&is=67f63ad1&hm=aab1612a7aa85a737fc2467cf40188e0f5811f751ec84c193689ccf37ce93cdb&",
+    "naruto": "https://cdn.discordapp.com/attachments/1359449182938726612/1359784637651484723/Uzumaki_Naruto.gif?ex=67f8bda1&is=67f76c21&hm=dcc111710a0822910cd2d76f7ee9c6502be7604227bf46b20b453bd0689099e1&",
     "susanoosasuke": "https://cdn.discordapp.com/attachments/1359449182938726612/1359457465397415986/Susanoo_Sasuke.gif?ex=67f78ced&is=67f63b6d&hm=94d7e73402c7d8ee2d835ae498a5c1ce5efae49b664dce3bea3d28964f39bf6b&",
     "6pain": "https://cdn.discordapp.com/attachments/1359449182938726612/1359459852757237820/Six_Paths_Pain.gif?ex=67f78f26&is=67f63da6&hm=b974b88edc7ca7ad7f7d6c068378456c38f850db320b2b3a988b93c65d330490&",
     "akatsukiitachi": "https://cdn.discordapp.com/attachments/1359449182938726612/1359461034754310216/Akatstuki_Itachi.gif?ex=67f79040&is=67f63ec0&hm=dd0b5e5bc49c05ae1976299a2fb042f9413483bf1466c6f3c65dc1dd804731cf&"
@@ -80,4 +80,38 @@ WEAPON_IMAGE_MAP = {
     "Samehada500": "https://cdn.discordapp.com/attachments/1358315431257182288/1358316754098454720/Samehada500.png?ex=67f3668e&is=67f2150e&hm=aff3b488d824c3f4906bad73cff771417519b40b0c99f8cf794370a05eb06806&",
     "Rinnegan600": "https://cdn.discordapp.com/attachments/1358315431257182288/1358316781785317496/Rinnegan600.png?ex=67f36695&is=67f21515&hm=cf878972462d689943a27ff3656980fc1edc09ca2b1dc6968cd9f1eb3e62cd08&",
     "Gudodama700": "https://cdn.discordapp.com/attachments/1358315431257182288/1358316797719351476/Gudodama700.png?ex=67f36698&is=67f21518&hm=e1ee164e0e6ca9aade53f31dc148fd934ba7f9eb877b30247a5ce58353670683&"
+}
+
+STORY_IMAGE_MAP = {
+    "cuu_iruka": "https://cdn.discordapp.com/attachments/1359856878494027838/1359905622417735740/mizuki30.gif?ex=67f92e4e&is=67f7dcce&hm=a8eab65d6dfae4ae06e738933d0ab6e432df238421a2a2cd26cba40c3a6494a9&",
+    "gap_Sakura": "https://cdn.discordapp.com/attachments/1359856878494027838/1359905655066202362/sakura40.gif?ex=67f92e55&is=67f7dcd5&hm=4828d49be4c5fdc1702ba067c7050ccee74a47ed8b8ba3410139cc98048f1450&",
+    "gap_Sasuke": "https://cdn.discordapp.com/attachments/1359856878494027838/1359905676381393071/sakuke45.gif?ex=67f92e5b&is=67f7dcdb&hm=8e9f5782eb8e8513665fbb5017a5ae4633e3ff6191c1f76e6969b72fca9e72e9&",
+    "lay_chuong": "https://cdn.discordapp.com/attachments/1359856878494027838/1359905845785133279/laychuong49.gif?ex=67f92e83&is=67f7dd03&hm=84f4bf3946a99890c37769b3e677792f86c520bfd245be3314497f618ee258ff&",
+    "vs_yabuza": "https://cdn.discordapp.com/attachments/1359856878494027838/1359906163973423154/vszabuza_59.gif?ex=67f92ecf&is=67f7dd4f&hm=74dac3e5203f8ffde2084caddc24db42be113e6184d4b68e3c297849a4e500c1&",
+    "thi_chunin": "https://cdn.discordapp.com/attachments/1359856878494027838/1359906218436726977/thichunin79.gif?ex=67f92edc&is=67f7dd5c&hm=a44487b39de50a9525df132dd4d7111cf3421a8ce4a4df0383a3b363219ceb92&",
+    "gap_jiraiya": "https://cdn.discordapp.com/attachments/1359856878494027838/1359906315463295277/thayjiraiya99.gif?ex=67f92ef3&is=67f7dd73&hm=dcb615f6b332d78bc8e62c81592a2230e49795bfa272c01bc9d5334dccfb15f6&",
+    "sasuke_bo_lang": "https://cdn.discordapp.com/attachments/1359856878494027838/1359906658360234204/sasukebolang119.gif?ex=67f92f45&is=67f7ddc5&hm=9ae59a87b4c5500521040566a9fe1f5a1bf29f8dc096a3e82f4e6e8ccc5b202e&",
+    "giai_cuu_gaara": "https://cdn.discordapp.com/attachments/1359856878494027838/1359906772407685311/giaicuu139.gif?ex=67f92f60&is=67f7dde0&hm=b1599a938cc0724f6412a2331a2a1ef859de13298d5c30eee0a1b840d3007d7e&",
+    "sakura_vs_sasori": "https://cdn.discordapp.com/attachments/1359856878494027838/1359906872580243636/Sakura__Chiyo_vs_Sasori149.gif?ex=67f92f78&is=67f7ddf8&hm=30f42840b027885f7722c921d4b58d710569ceaf56432dbe4692b64040943418&",
+    "doi7_moi": "https://cdn.discordapp.com/attachments/1359856878494027838/1359906981200269527/doi7moi199.gif?ex=67f92f92&is=67f7de12&hm=53e3693dbb7503233a94f3b96b4c38bfea8bd845b833c04f7d888b3240af8da9&",
+    "gaplai_sasuke": "https://cdn.discordapp.com/attachments/1359856878494027838/1359908946441142412/gaplaisasule219.gif?ex=67f93166&is=67f7dfe6&hm=0fd8866b7b2ecdcdf06c7b35e0a1a1d75c65e271a968c1d48523afdc7e8dcf84&",
+    "asuma_vs_hidan": "https://cdn.discordapp.com/attachments/1359856878494027838/1359907327532204323/asuma_hidan239.gif?ex=67f92fe4&is=67f7de64&hm=72c66cf524205093fb1b6bef2395830c837a5c701f697a45d9b989d5b948f117&",
+    "dung_do_kakuzu": "https://cdn.discordapp.com/attachments/1359856878494027838/1359907394456649788/kakuzu279.gif?ex=67f92ff4&is=67f7de74&hm=0a5d59e343cf14a041552de16f640187a4c9564f119ad14ade8f6b2f1014d737&",
+    "jiraiya_vs_pain": "https://cdn.discordapp.com/attachments/1359856878494027838/1359907529030631617/pain_vs_jiraiya319.gif?ex=67f93014&is=67f7de94&hm=562e4594d70a9fc4b6af065a55efa8db560dd980e6531aa4f8f48735da69f939&",
+    "sasuke_bao_thu": "https://cdn.discordapp.com/attachments/1359856878494027838/1359907608072556595/sasuke_vs_itachi299.gif?ex=67f93027&is=67f7dea7&hm=7c01bccdaebcf5b9cd67a89689359317e1dc38b7e29efe5221e29ae63d6dcb24&",
+    "naruto_vs_pain": "https://cdn.discordapp.com/attachments/1359856878494027838/1359907776104501339/naruto_vs_pain379.gif?ex=67f9304f&is=67f7decf&hm=2a78b3691c4c9703e3af9637c64e42cc640155bac7ddd4df494545c5392592da&",
+    "kisame_vs_bee": "https://cdn.discordapp.com/attachments/1359856878494027838/1359907957244170423/killbee_vs_kisame479.gif?ex=67f9307a&is=67f7defa&hm=c7aa1b74caf4af4e700d78c256afbc582a6fb06ecbc6b4089d6bc85c456bfe65&",
+    "oboto_vs_konan": "https://cdn.discordapp.com/attachments/1359856878494027838/1359908232491176107/tobivskonan579.gif?ex=67f930bc&is=67f7df3c&hm=e18b2c636375371f0d0ca2fb8e9a02c1cbf32351ae116495c10be28c7eba00af&",
+    "zetsu": "https://cdn.discordapp.com/attachments/1359856878494027838/1359908280331407662/Zetsu_trang669.gif?ex=67f930c7&is=67f7df47&hm=ed6a339ee771cabb934c8b0db2493296bdc28c11c4a881e7bb71ea6be9b0186d&",
+    "naruto&bee_vs_tobi": "https://cdn.discordapp.com/attachments/1359856878494027838/1359909052158574733/Naruto__Bee_vs_Obito779.gif?ex=67f9317f&is=67f7dfff&hm=dd732c7cd25ee6c258c961d44e36ce4d5158cd9b4815f5f0a246e6f53f00d727&",
+    "naruto&sasuke_vs_madara": "https://cdn.discordapp.com/attachments/1359856878494027838/1359908401273901116/Naruto__Sasuke_vs_Madara889.gif?ex=67f930e4&is=67f7df64&hm=6f19e970e361dd79376a5beaafa8d851099367b7234197de5e1145c4ea57f22e&",
+    "1vi": "https://cdn.discordapp.com/attachments/1359856878494027838/1359908429983912117/nhatvi999.gif?ex=67f930eb&is=67f7df6b&hm=d98ab3219b0e08c001011962eb9c77cf4f1327cfec3a9f8cc58a20415bce052f&",
+    "2vi": "https://cdn.discordapp.com/attachments/1359856878494027838/1359908473730633818/nhivi1299.gif?ex=67f930f6&is=67f7df76&hm=614b90894b31e76d9771501994d6b72d28f07cb1b94468d6dd2d35e741dc8f43&",
+    "3vi": "https://cdn.discordapp.com/attachments/1359856878494027838/1359908522703458384/tamvi1499.gif?ex=67f93101&is=67f7df81&hm=e6603f5291ec415df460aaeb79beb39cf65376cee11b851070d0977f7072d594&",
+    "4vi": "https://cdn.discordapp.com/attachments/1359856878494027838/1359908599702225126/tuvi1699.gif?ex=67f93114&is=67f7df94&hm=d6c8dfc74121c3fc80512d719de7bfb9f1894af2834cae0f0e1a9a05a1110843&",
+    "5vi": "https://cdn.discordapp.com/attachments/1359856878494027838/1359908617733668895/nguvi1899.gif?ex=67f93118&is=67f7df98&hm=8443b15039ec226c323861577bd308f930694bcd1db5cf3aa69970a4ba1c70fc&",
+    "6vi": "https://cdn.discordapp.com/attachments/1359856878494027838/1359908633777017076/6vi2099.gif?ex=67f9311c&is=67f7df9c&hm=c503ea8e8164ea1577c22526b566341083d93896fe964af589d4064d56be180d&",
+    "7vi": "https://cdn.discordapp.com/attachments/1359856878494027838/1359908647391461376/7vi2299.gif?ex=67f9311f&is=67f7df9f&hm=96080104a1ce521de17b8fe22e60b2dc271f0b2d316e400bdb9e468fd658dc5d&",
+    "8vi": "https://cdn.discordapp.com/attachments/1359856878494027838/1359908661912404039/8vi_2499.gif?ex=67f93122&is=67f7dfa2&hm=0ba202cd6737235ac3e0e515f4e4c6570a16eb2f7cf110f6dabcbc710a6c38ff&",
+    "9vi": "https://cdn.discordapp.com/attachments/1359856878494027838/1359908675942219837/9vi_2699.gif?ex=67f93126&is=67f7dfa6&hm=6a73608c0aff0414e23083f2f77312debc476a1de82a0e1a8ad744c14c75ac56&"
 }

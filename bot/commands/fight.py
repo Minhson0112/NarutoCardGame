@@ -207,21 +207,21 @@ class Fight(commands.Cog):
                 
                 # Tạo embed kết quả trận đấu
                 if result == "win":
-                    outcome_text = f"Người tấn công (**{attacker.username}**) chiến thắng! (+5 điểm rank)\n\n"
+                    outcome_text = f"✅Người tấn công (**{attacker.username}**) chiến thắng! (+5 điểm rank)\n\n"
                 elif result == "loss":
-                    outcome_text = f"Người tấn công (**{attacker.username}**) thất bại! (-5 điểm rank)\n\n"
+                    outcome_text = f"❌Người tấn công (**{attacker.username}**) thất bại! (-5 điểm rank)\n\n"
                 else:
-                    outcome_text = "Trận đấu hòa!"
+                    outcome_text = "🔥Trận đấu hòa!"
                 embed_result = discord.Embed(
                     title="Kết quả Trận Chiến",
                     description=(
                         f"{counterMsg}\n\n"
-                        f"**Kết quả:** {result.upper()}\n"
-                        f"Người tấn công (**{attacker.username}**): **{attackerTotalStrength}**\n"
-                        f"Người bị tấn công (**{defender.username}**): **{defenderTotalStrength}**\n\n"
+                        f"🎖️ **Kết quả:** {result.upper()}\n"
+                        f"⚔️Người tấn công (**{attacker.username}**): **{attackerTotalStrength}**\n"
+                        f"🛡️Người bị tấn công (**{defender.username}**): **{defenderTotalStrength}**\n\n"
                         f"{outcome_text}\n"
-                        f"**Thưởng:** {bonus_reward + bonus_highest:,} Ryo\n"
-                        f"**Chuỗi thắng:** {attacker.winning_streak}"
+                        f"💰**Thưởng:** {bonus_reward + bonus_highest:,} Ryo\n"
+                        f"🏆**Chuỗi thắng:** {attacker.winning_streak}"
                     ),
                     color=discord.Color.green() if result == "win" else discord.Color.red() if result == "loss" else discord.Color.orange()
                 )

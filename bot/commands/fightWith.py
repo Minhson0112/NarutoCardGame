@@ -106,13 +106,13 @@ class FightWith(commands.Cog):
                 # Xác định kết quả trận đấu (friendly pk: không cập nhật rank hay winning streak)
                 if attackerTotalStrength > defenderTotalStrength:
                     result = "win"
-                    outcome_text = f"Người tấn công (**{attacker.username}**) thắng!"
+                    outcome_text = f"✅Người tấn công (**{attacker.username}**) thắng!"
                 elif attackerTotalStrength < defenderTotalStrength:
                     result = "loss"
-                    outcome_text = f"Người tấn công (**{attacker.username}**) thua!"
+                    outcome_text = f"❌Người tấn công (**{attacker.username}**) thua!"
                 else:
                     result = "draw"
-                    outcome_text = "Trận đấu hòa!"
+                    outcome_text = "🔥Trận đấu hòa!"
                 # Không cập nhật điểm rank hay winning streak vì đây là friendly PK.
 
                 # Xây dựng mô tả theo dạng danh sách (bullet list)
@@ -184,11 +184,11 @@ class FightWith(commands.Cog):
                     title="Kết quả trận chiến (Friendly PK)",
                     description=(
                         f"{counterMsg}\n\n"
-                        f"**Kết quả:** {result.upper()}\n"
-                        f"Người tấn công (**{attacker.username}**): **{attackerTotalStrength}**\n"
-                        f"Người bị tấn công (**{defender.username}**): **{defenderTotalStrength}**\n\n"
+                        f"🎖️ **Kết quả:** {result.upper()}\n"
+                        f"⚔️Người tấn công (**{attacker.username}**): **{attackerTotalStrength}**\n"
+                        f"🛡️Người bị tấn công (**{defender.username}**): **{defenderTotalStrength}**\n\n"
                         f"{outcome_text}\n\n"
-                        "Trận đấu này không làm thay đổi điểm rank hay chuỗi thắng."
+                        "🤝Trận đấu này không làm thay đổi điểm rank hay chuỗi thắng."
                     ),
                     color=discord.Color.green() if result == "win" else discord.Color.red() if result == "loss" else discord.Color.orange()
                 )
