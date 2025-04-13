@@ -39,15 +39,27 @@ class PlayerWeaponRepository:
 
     def incrementQuantity(self, playerId: int, weaponKey: str, increment: int = 1):
         """
-        Nếu người chơi đã có vũ khí với weaponKey, tăng số lượng của nó lên.
-        Nếu chưa có, tạo bản ghi mới với số lượng là increment.
+        Nếu người chơi đã có vũ khí với weaponKey ở cấp 1, tăng số lượng của nó lên.
+        Nếu chưa có, tạo bản ghi mới với level = 1 và số lượng là increment.
         """
-        playerWeapon = self.getByPlayerAndWeaponKey(playerId, weaponKey)
+        # Tìm bản ghi PlayerWeapon với level == 1
+        playerWeapon = self.session.query(PlayerWeapon).filter_by(
+            player_id=playerId,
+            weapon_key=weaponKey,
+            level=1
+        ).first()
+        
         if playerWeapon:
             playerWeapon.quantity += increment
         else:
-            playerWeapon = PlayerWeapon(player_id=playerId, weapon_key=weaponKey, quantity=increment)
+            playerWeapon = PlayerWeapon(
+                player_id=playerId,
+                weapon_key=weaponKey,
+                level=1,
+                quantity=increment
+            )
             self.session.add(playerWeapon)
+        
         self.session.commit()
 
     def getByWeaponNameAndPlayerId(self, playerId: int, weaponName: str):

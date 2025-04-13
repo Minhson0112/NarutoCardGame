@@ -38,14 +38,29 @@ class PlayerCardRepository:
 
     def incrementQuantity(self, playerId: int, cardKey: str, increment: int = 1):
         """
-        Nếu người chơi đã có thẻ với cardKey, tăng số lượng của nó lên.
-        Nếu chưa có, tạo bản ghi mới với số lượng là increment.
+        Thêm thẻ vào kho của người chơi:
+        - Nếu người chơi đã có thẻ với cardKey và cấp (level) là 1, 
+            thì tăng số lượng của thẻ đó.
+        - Nếu không có thẻ nào có level 1, tạo bản ghi mới với level = 1
+            và số lượng là increment.
         """
-        playerCard = self.getByPlayerAndCardKey(playerId, cardKey)
+        # Tìm bản ghi PlayerCard với level 1
+        playerCard = self.session.query(PlayerCard).filter_by(
+            player_id=playerId, 
+            card_key=cardKey, 
+            level=1
+        ).first()
+
         if playerCard:
             playerCard.quantity += increment
         else:
-            playerCard = PlayerCard(player_id=playerId, card_key=cardKey, quantity=increment)
+            # Tạo bản ghi mới với level 1
+            playerCard = PlayerCard(
+                player_id=playerId, 
+                card_key=cardKey, 
+                level=1, 
+                quantity=increment
+            )
             self.session.add(playerCard)
         self.session.commit()
 
