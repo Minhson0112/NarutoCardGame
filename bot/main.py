@@ -54,6 +54,7 @@ async def main():
         "bot.commands.gifcode",
         "bot.commands.help",
         #"bot.commands.narutotrap",
+        "bot.commands.dailyTask",
     ]
 
     # Load từng extension
