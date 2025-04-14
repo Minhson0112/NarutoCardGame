@@ -26,17 +26,17 @@ GACHA_PRICES = {
 GACHA_DROP_RATE = {
     "card_basic": {
         "Genin": 75,
-        "Chunin": 15,
-        "Jounin": 8,
-        "Kage": 2,
-        "Legendary": 0
+        "Chunin": 19,
+        "Jounin": 5,
+        "Kage": 0.9999,
+        "Legendary": 0.0001
     },
     "card_advanced": {
-        "Genin": 55,
-        "Chunin": 20,
+        "Genin": 50,
+        "Chunin": 29,
         "Jounin": 15,
-        "Kage": 8,
-        "Legendary": 2
+        "Kage": 5,
+        "Legendary": 1
     },
     "card_elite": {
         "Genin": 15,
