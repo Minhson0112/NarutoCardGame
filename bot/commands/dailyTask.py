@@ -14,12 +14,12 @@ class DailyTask(commands.Cog):
         
         # Mô tả chi tiết cho từng nhiệm vụ
         self.taskDescriptions = {
-            "fight_win": "Thắng 10 lần bằng lệnh /fight",
+            "fight_win": "Thắng 10 lần bằng lệnh `/fight`",
             "minigame": "Chơi 10 lần minigame với bot",
-            "fightwith": "Khiêu chiến 5 lần với bạn bè bằng /fightwith",
+            "fightwith": "Khiêu chiến 5 lần với bạn bè bằng `/fightwith`",
             "shop_buy": "Mua đồ trong shop 3 lần",
             "shop_sell": "Bán đồ cho shop 3 lần",
-            "stage_clear": "Chiến thắng ải ít nhất 1 lần bằng lệnh /challenge",
+            "stage_clear": "Chiến thắng ải ít nhất 1 lần bằng lệnh `/challenge`",
         }
         
         # Emoji cho từng nhiệm vụ
@@ -34,7 +34,7 @@ class DailyTask(commands.Cog):
 
     @app_commands.command(
         name="dailytask",
-        description="Kiểm tra tiến độ nhiệm vụ hằng ngày và nhận thưởng nếu hoàn thành."
+        description="Kiểm tra tiến độ nhiệm vụ hằng ngày và nhận thưởng"
     )
     async def dailytask(self, interaction: discord.Interaction):
         await interaction.response.defer(thinking=True)
@@ -74,15 +74,14 @@ class DailyTask(commands.Cog):
                     # Nếu đã hoàn thành nhiệm vụ, cộng thưởng và reset bộ đếm của nhiệm vụ đó
                     if currentCount >= requirement:
                         totalReward += reward
-                        setattr(dailyTask, f"{taskKey}_count", 0)
                     
                     # Xây dựng chuỗi mô tả cho nhiệm vụ:
                     # Dòng 1: Bullet kèm emoji, mô tả nhiệm vụ và tiến độ
                     # Dòng 2: Thụt đầu dòng hiển thị phần thưởng (dùng emoji)
-                    taskLine = f"• {emoji} {fullDesc} (**{currentCount}/{requirement}**)"
-                    rewardLine = f"> 💰 Thưởng: {reward:,} Ryo"
+                    taskLine = f"{emoji} {fullDesc} (**{currentCount}/{requirement}**)\n"
+                    rewardLine = f"• 💰 Thưởng: {reward:,} Ryo"
                     # Tạo khoảng cách 2 dòng giữa các nhiệm vụ
-                    descriptionLines.append(f"{taskLine}\n\n{rewardLine}")
+                    descriptionLines.append(f"{taskLine}{rewardLine}\n")
 
                 # Cộng phần thưởng nếu có nhiệm vụ được hoàn thành
                 if totalReward > 0:
@@ -100,7 +99,7 @@ class DailyTask(commands.Cog):
                 if totalReward > 0:
                     embed.add_field(
                         name="Phần thưởng",
-                        value=f"Bạn nhận được tổng cộng {totalReward:,} Ryo!",
+                        value=f"Bạn đã nhận tổng {totalReward:,} Ryo! từ nhiệm vụ hôm nay.",
                         inline=False
                     )
                 else:

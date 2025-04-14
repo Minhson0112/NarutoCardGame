@@ -6,6 +6,7 @@ import asyncio
 
 from bot.config.database import getDbSession
 from bot.repository.playerRepository import PlayerRepository
+from bot.repository.dailyTaskRepository import DailyTaskRepository
 
 class Bingo(commands.Cog):
     def __init__(self, bot):
@@ -31,6 +32,7 @@ class Bingo(commands.Cog):
             with getDbSession() as session:
                 # Lấy thông tin người chơi
                 playerRepo = PlayerRepository(session)
+                dailyTaskRepo = DailyTaskRepository(session)
                 player = playerRepo.getById(player_id)
                 if not player:
                     await interaction.followup.send("⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!")
@@ -43,7 +45,8 @@ class Bingo(commands.Cog):
                 if player.coin_balance < bet:
                     await interaction.followup.send("⚠️ Số dư của bạn không đủ.")
                     return
-
+                
+                dailyTaskRepo.updateMinigame(player_id)
                 # Random số may mắn
                 win_number = random.randint(1, 5)
 

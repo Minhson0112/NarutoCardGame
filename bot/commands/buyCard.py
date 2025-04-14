@@ -9,6 +9,7 @@ from bot.repository.playerRepository import PlayerRepository
 from bot.repository.gachaPityCounterRepository import GachaPityCounterRepository
 from bot.repository.cardTemplateRepository import CardTemplateRepository
 from bot.repository.playerCardRepository import PlayerCardRepository
+from bot.repository.dailyTaskRepository import DailyTaskRepository
 from bot.services.playerService import PlayerService
 from bot.config.gachaConfig import GACHA_PRICES, PITY_LIMIT, PITY_PROTECTION, GACHA_DROP_RATE
 from bot.config.imageMap import CARD_IMAGE_MAP
@@ -22,6 +23,11 @@ class BuyCard(commands.Cog):
     @app_commands.describe(
         pack="Tên gói mở thẻ (card_basic, card_advanced, card_elite)"
     )
+    @app_commands.choices(pack=[
+        app_commands.Choice(name="card_basic", value="card_basic"),
+        app_commands.Choice(name="card_advanced", value="card_advanced"),
+        app_commands.Choice(name="card_elite", value="card_elite")
+    ])
     async def buyCard(self, interaction: discord.Interaction, pack: str):
         await interaction.response.defer(thinking=True)
         playerId = interaction.user.id
@@ -34,6 +40,7 @@ class BuyCard(commands.Cog):
                 cardTemplateRepo = CardTemplateRepository(session)
                 playerCardRepo = PlayerCardRepository(session)
                 playerService = PlayerService(playerRepo)
+                dailyTaskRepo = DailyTaskRepository(session)
 
                 # Kiểm tra tài khoản người chơi
                 player = playerRepo.getById(playerId)
@@ -80,7 +87,8 @@ class BuyCard(commands.Cog):
                 if not card:
                     await interaction.followup.send("❌ Lỗi khi mở hộp, không tìm thấy thẻ phù hợp.")
                     return
-
+                
+                dailyTaskRepo.updateShopBuy(playerId)
                 # Thêm card vào kho của người chơi
                 playerCardRepo.incrementQuantity(playerId, card.card_key, increment=1)
 

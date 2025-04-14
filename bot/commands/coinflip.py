@@ -6,6 +6,7 @@ import asyncio
 
 from bot.config.database import getDbSession
 from bot.repository.playerRepository import PlayerRepository
+from bot.repository.dailyTaskRepository import DailyTaskRepository
 
 class CoinFlip(commands.Cog):
     def __init__(self, bot):
@@ -27,6 +28,7 @@ class CoinFlip(commands.Cog):
         try:
             with getDbSession() as session:
                 playerRepo = PlayerRepository(session)
+                dailyTaskRepo = DailyTaskRepository(session)
                 player = playerRepo.getById(interaction.user.id)
                 if not player:
                     await interaction.followup.send("⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!")
@@ -39,7 +41,8 @@ class CoinFlip(commands.Cog):
                 if player.coin_balance < bet:
                     await interaction.followup.send("⚠️ Số dư của bạn không đủ.")
                     return
-
+                
+                dailyTaskRepo.updateMinigame(interaction.user.id)
                 # Thực hiện lật đồng xu (random từ "úp" đến "ngửa")
                 coin_result = random.choice(["u", "n"])
                 

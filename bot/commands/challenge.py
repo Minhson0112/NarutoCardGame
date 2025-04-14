@@ -8,6 +8,7 @@ from bot.repository.playerRepository import PlayerRepository
 from bot.repository.playerCardRepository import PlayerCardRepository
 from bot.repository.playerWeaponRepository import PlayerWeaponRepository
 from bot.repository.playerActiveSetupRepository import PlayerActiveSetupRepository
+from bot.repository.dailyTaskRepository import DailyTaskRepository
 from bot.config.config import VS_IMAGE, NONE_CARD_IMAGE_URL, NONE_WEAPON_IMAGE_URL
 from bot.config.imageMap import CARD_IMAGE_MAP, WEAPON_IMAGE_MAP, STORY_IMAGE_MAP
 from bot.entity.challenge import Challenge
@@ -28,6 +29,7 @@ class ChallengeGame(commands.Cog):
                 cardRepo = PlayerCardRepository(session)
                 weaponRepo = PlayerWeaponRepository(session)
                 activeSetupRepo = PlayerActiveSetupRepository(session)
+                dailyTaskRepo = DailyTaskRepository(session)
 
                 # Lấy thông tin người chơi
                 player = playerRepo.getById(player_id)
@@ -77,6 +79,7 @@ class ChallengeGame(commands.Cog):
                 # nếu attackerTotalStrength <= challenge.card_strength => thua (không mất gì)
                 if attackerTotalStrength > challenge.card_strength:
                     result = "win"
+                    dailyTaskRepo.updateStageClear(player_id)
                     outcome_text = (
                         f"🥳 Chúc mừng! Bạn đã vượt qua thử thách **{challenge.card_name}**.\n"
                         f"Nhận thưởng: **{challenge.bonus_ryo} Ryo**!"

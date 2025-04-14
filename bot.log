@@ -1,0 +1,28 @@
+2025-04-13 10:24:25,343:INFO:discord.client: logging in using static token
+2025-04-13 10:24:26,476:INFO:discord.gateway: Shard ID None has connected to Gateway (Session ID: 97749eecd70557e0534e7d308e7022dc).
+2025-04-13 10:24:53,871:ERROR:bot.commands.inventory: ❌ Lỗi khi chuyển trang (Tiếp) trong CardInventoryView:
+Traceback (most recent call last):
+  File "/app/bot/commands/inventory.py", line 78, in next_page
+    await interaction.response.edit_message(embed=self.embeds[self.current_page], view=self)
+          ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Button' object has no attribute 'response'
+2025-04-13 10:24:53,877:ERROR:discord.ui.view: Ignoring exception in view <CardInventoryView timeout=300 children=2> for item <Button style=<ButtonStyle.primary: 1> url=None disabled=False label='Tiếp' emoji=None row=None sku_id=None>
+Traceback (most recent call last):
+  File "/app/bot/commands/inventory.py", line 78, in next_page
+    await interaction.response.edit_message(embed=self.embeds[self.current_page], view=self)
+          ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Button' object has no attribute 'response'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/discord/ui/view.py", line 435, in _scheduled_task
+    await item.callback(interaction)
+  File "/app/bot/commands/inventory.py", line 83, in next_page
+    await interaction.response.send_message("❌ Lỗi khi chuyển trang.", ephemeral=True)
+          ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Button' object has no attribute 'response'
+2025-04-13 10:26:57,633:INFO:discord.client: logging in using static token
+2025-04-13 10:26:59,042:INFO:discord.gateway: Shard ID None has connected to Gateway (Session ID: 98ac0d3cc9f72c9d8a6f3eab70a8099e).
+2025-04-13 10:32:41,727:INFO:discord.client: logging in using static token
+2025-04-13 10:32:42,821:INFO:discord.gateway: Shard ID None has connected to Gateway (Session ID: 9d0d5bc5f1c5b06380edd54d688243b6).

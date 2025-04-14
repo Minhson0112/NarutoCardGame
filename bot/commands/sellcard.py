@@ -5,6 +5,7 @@ from discord import app_commands
 from bot.config.database import getDbSession
 from bot.repository.playerRepository import PlayerRepository
 from bot.repository.playerCardRepository import PlayerCardRepository
+from bot.repository.dailyTaskRepository import DailyTaskRepository
 
 class SellCard(commands.Cog):
     def __init__(self, bot):
@@ -29,6 +30,7 @@ class SellCard(commands.Cog):
                 # Lấy thông tin người chơi
                 player_repo = PlayerRepository(session)
                 card_repo = PlayerCardRepository(session)
+                dailyTaskRepo = DailyTaskRepository(session)
                 player = player_repo.getById(player_id)
                 if not player:
                     await interaction.followup.send("⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!")
@@ -77,7 +79,7 @@ class SellCard(commands.Cog):
 
                 # Cộng tiền bán được vào số dư của người chơi
                 player.coin_balance += total_money
-
+                dailyTaskRepo.updateShopSell(player_id)
                 session.commit()
                 await interaction.followup.send(
                     f"✅ Bán thành công! Bạn nhận được **{total_money:,} Ryo** từ việc bán {quantity} thẻ **{card}** cấp {level}."

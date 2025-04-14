@@ -8,6 +8,7 @@ from bot.config.database import getDbSession
 from bot.repository.playerRepository import PlayerRepository
 from bot.repository.weaponTemplateRepository import WeaponTemplateRepository
 from bot.repository.playerWeaponRepository import PlayerWeaponRepository
+from bot.repository.dailyTaskRepository import DailyTaskRepository
 from bot.services.playerService import PlayerService
 from bot.config.weaponGachaConfig import WEAPON_GACHA_PRICES, WEAPON_GACHA_DROP_RATE, WEAPON_GACHA_PACKS
 from bot.config.imageMap import WEAPON_IMAGE_MAP  # mapping ảnh vũ khí
@@ -21,6 +22,9 @@ class BuyWeapon(commands.Cog):
     @app_commands.describe(
         pack="Tên gói mở vũ khí (ví dụ: weapon_pack)"
     )
+    @app_commands.choices(pack=[
+        app_commands.Choice(name="weapon_pack", value="weapon_pack")
+    ])
     async def buyWeapon(self, interaction: discord.Interaction, pack: str):
         await interaction.response.defer(thinking=True)
         playerId = interaction.user.id
@@ -32,6 +36,7 @@ class BuyWeapon(commands.Cog):
                 weaponTemplateRepo = WeaponTemplateRepository(session)
                 playerWeaponRepo = PlayerWeaponRepository(session)
                 playerService = PlayerService(playerRepo)
+                dailyTaskRepo = DailyTaskRepository(session)
 
                 # Kiểm tra tài khoản người chơi
                 player = playerRepo.getById(playerId)
@@ -66,6 +71,7 @@ class BuyWeapon(commands.Cog):
                     await interaction.followup.send("❌ Lỗi khi mở hộp, không tìm thấy vũ khí phù hợp.")
                     return
 
+                dailyTaskRepo.updateShopBuy(playerId)
                 # Thêm vũ khí vào kho của người chơi
                 playerWeaponRepo.incrementQuantity(playerId, weapon.weapon_key, increment=1)
 

@@ -8,6 +8,7 @@ from bot.repository.playerRepository import PlayerRepository
 from bot.repository.playerCardRepository import PlayerCardRepository
 from bot.repository.playerWeaponRepository import PlayerWeaponRepository
 from bot.repository.playerActiveSetupRepository import PlayerActiveSetupRepository
+from bot.repository.dailyTaskRepository import DailyTaskRepository
 from bot.config.config import VS_IMAGE, NONE_CARD_IMAGE_URL, NONE_WEAPON_IMAGE_URL, ELEMENT_COUNTER
 from bot.config.imageMap import CARD_IMAGE_MAP, WEAPON_IMAGE_MAP
 from bot.entity.player import Player  # model Player
@@ -28,6 +29,7 @@ class Fight(commands.Cog):
                 cardRepo = PlayerCardRepository(session)
                 weaponRepo = PlayerWeaponRepository(session)
                 activeSetupRepo = PlayerActiveSetupRepository(session)
+                dailyTaskRepo = DailyTaskRepository(session)
                 
                 # Lấy thông tin người tấn công
                 attacker = playerRepo.getById(attacker_id)
@@ -121,6 +123,7 @@ class Fight(commands.Cog):
                         
                 if attackerTotalStrength > defenderTotalStrength:
                     result = "win"
+                    dailyTaskRepo.updateFightWin(attacker_id)
                     attacker.rank_points += 5
                     attacker.winning_streak += 1
                     # Thưởng theo chuỗi thắng: 500 ryo * winning_streak

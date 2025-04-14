@@ -55,6 +55,7 @@ async def main():
         "bot.commands.help",
         #"bot.commands.narutotrap",
         "bot.commands.dailyTask",
+        "bot.commands.sellAllCard",
     ]
 
     # Load từng extension

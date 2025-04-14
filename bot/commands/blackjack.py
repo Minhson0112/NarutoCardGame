@@ -6,6 +6,7 @@ import asyncio
 
 from bot.config.database import getDbSession
 from bot.repository.playerRepository import PlayerRepository
+from bot.repository.dailyTaskRepository import DailyTaskRepository
 
 class Blackjack(commands.Cog):
     def __init__(self, bot):
@@ -71,6 +72,8 @@ class Blackjack(commands.Cog):
             with getDbSession() as session:
                 # Lấy thông tin người chơi
                 playerRepo = PlayerRepository(session)
+                dailyTaskRepo = DailyTaskRepository(session)
+                
                 player = playerRepo.getById(player_id)
                 if not player:
                     await interaction.followup.send("⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!")
@@ -83,7 +86,7 @@ class Blackjack(commands.Cog):
                 if player.coin_balance < bet:
                     await interaction.followup.send("⚠️ Số dư của bạn không đủ.")
                     return
-
+                dailyTaskRepo.updateMinigame(player_id)
                 # Tạo bộ bài và chia bài ban đầu
                 deck = self.create_deck()
                 player_cards = [deck.pop(), deck.pop()]

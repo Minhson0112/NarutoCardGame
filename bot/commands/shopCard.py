@@ -46,11 +46,11 @@ class ShopCard(commands.Cog):
                     rateText = "\n".join([f"- {tier}: {percent}%" for tier, percent in rates.items()])
                     
                     embed.add_field(
-                        name=f"\n📦 {pack} — Giá: {price:,} Ryo",
+                        name=f"\n\n\n📦 {pack} — Giá: {price:,} Ryo",
                         value=(
                             f"{rateText}\n"
                             f"🛡️ Còn {left} lần mua để đảm bảo nhận **{protection}**\n"
-                            f"👉 Sử dụng lệnh `/buycard pack: {pack}` để mua"
+                            f"👉 Sử dụng lệnh `/buycard pack: {pack}` để mua\n\n\n"
                         ),
                         inline=False
                     )

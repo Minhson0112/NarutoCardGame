@@ -6,6 +6,7 @@ import asyncio
 
 from bot.config.database import getDbSession
 from bot.repository.playerRepository import PlayerRepository
+from bot.repository.dailyTaskRepository import DailyTaskRepository
 
 class Slot(commands.Cog):
     def __init__(self, bot):
@@ -24,6 +25,7 @@ class Slot(commands.Cog):
             with getDbSession() as session:
                 # Kiểm tra thông tin người chơi và số dư
                 playerRepo = PlayerRepository(session)
+                dailyTaskRepo = DailyTaskRepository(session)
                 player = playerRepo.getById(player_id)
                 if not player:
                     await interaction.followup.send("⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!")
@@ -34,7 +36,8 @@ class Slot(commands.Cog):
                 if player.coin_balance < bet:
                     await interaction.followup.send("⚠️ Số dư của bạn không đủ.")
                     return
-
+                
+                dailyTaskRepo.updateMinigame(player_id)
                 # Random ra 3 emoji (3 ngăn quay)
                 outcome = [random.choice(self.slot_emojis) for _ in range(3)]
                 unique_count = len(set(outcome))
