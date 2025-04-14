@@ -44,7 +44,7 @@ class Slot(commands.Cog):
                 if unique_count == 1:
                     multiplier = 10
                 elif unique_count == 2:
-                    multiplier = 3
+                    multiplier = 2
                 else:
                     multiplier = 0
 
@@ -97,7 +97,7 @@ class Slot(commands.Cog):
                     else:
                         outcome_text = (
                             f"😊 Chúc mừng! Máy Slot ra: **{' | '.join(outcome)}**.\n"
-                            f"Bạn trúng thưởng, nhận thưởng **{reward} Ryo** (Cược x3)."
+                            f"Bạn trúng thưởng, nhận thưởng **{reward} Ryo** (Cược x2)."
                         )
                     player.coin_balance = player.coin_balance - bet + reward
                     final_color = discord.Color.green()
