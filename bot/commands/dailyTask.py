@@ -71,19 +71,28 @@ class DailyTask(commands.Cog):
                     fullDesc = self.taskDescriptions.get(taskKey, taskKey)
                     emoji = self.taskEmojis.get(taskKey, "")
                     
-                    # Nếu đã hoàn thành nhiệm vụ, cộng thưởng và reset bộ đếm của nhiệm vụ đó
+                    # Lấy trạng thái nhận thưởng của nhiệm vụ
+                    claimed = getattr(dailyTask, f"{taskKey}_claimed")
+                    # Nếu đã đạt yêu cầu và phần thưởng chưa được nhận, cộng thưởng và đánh dấu đã nhận
                     if currentCount >= requirement:
-                        totalReward += reward
-                    
+                        if not claimed:
+                            totalReward += reward
+                            setattr(dailyTask, f"{taskKey}_claimed", True)
+                            claim_status = "Đã nhận"
+                        else:
+                            claim_status = "Đã nhận"
+                    else:
+                        claim_status = "Chưa đủ"
+
                     # Xây dựng chuỗi mô tả cho nhiệm vụ:
-                    # Dòng 1: Bullet kèm emoji, mô tả nhiệm vụ và tiến độ
+                    # Dòng 1: Bullet kèm emoji, mô tả nhiệm vụ, tiến độ và trạng thái
                     # Dòng 2: Thụt đầu dòng hiển thị phần thưởng (dùng emoji)
-                    taskLine = f"{emoji} {fullDesc} (**{currentCount}/{requirement}**)\n"
+                    taskLine = f"{emoji} {fullDesc} (**{currentCount}/{requirement}**) - {claim_status}\n"
                     rewardLine = f"• 💰 Thưởng: {reward:,} Ryo"
                     # Tạo khoảng cách 2 dòng giữa các nhiệm vụ
                     descriptionLines.append(f"{taskLine}{rewardLine}\n")
 
-                # Cộng phần thưởng nếu có nhiệm vụ được hoàn thành
+                # Cộng phần thưởng (nếu có nhiệm vụ mới được nhận thưởng) vào số dư của người chơi
                 if totalReward > 0:
                     player.coin_balance += totalReward
                 
@@ -99,12 +108,12 @@ class DailyTask(commands.Cog):
                 if totalReward > 0:
                     embed.add_field(
                         name="Phần thưởng",
-                        value=f"Bạn đã nhận tổng {totalReward:,} Ryo! từ nhiệm vụ hôm nay.",
+                        value=f"Bạn nhận được tổng cộng {totalReward:,} Ryo từ nhiệm vụ hôm nay.",
                         inline=False
                     )
                 else:
                     embed.add_field(
-                        name="Chưa đạt thưởng",
+                        name="Thông tin",
                         value="Hãy nỗ lực hoàn thành các nhiệm vụ để nhận thưởng.",
                         inline=False
                     )

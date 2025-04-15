@@ -10,7 +10,7 @@ class DailyTaskRepository:
         """
         Lấy thông tin nhiệm vụ của người chơi theo playerId với ngày hiện tại (date.today()).
         Nếu chưa có bản ghi, tạo mới với ngày hiện tại.
-        Nếu đã có nhưng ngày hiện tại khác với mission_date trong db, reset các bộ đếm về 0 và cập nhật mission_date.
+        Nếu đã có nhưng ngày hiện tại khác với mission_date trong db, reset các bộ đếm và trạng thái nhận thưởng về 0/False, sau đó cập nhật mission_date.
         """
         currentDate = date.today()
         dailyTask = self.session.query(DailyTask).filter_by(player_id=playerId).first()
@@ -19,13 +19,25 @@ class DailyTaskRepository:
             self.session.add(dailyTask)
             self.session.commit()
         elif dailyTask.mission_date != currentDate:
+            # Reset ngày nhiệm vụ
             dailyTask.mission_date = currentDate
+
+            # Reset các bộ đếm nhiệm vụ
             dailyTask.fight_win_count = 0
             dailyTask.fightwith_count = 0
             dailyTask.minigame_count = 0
             dailyTask.shop_buy_count = 0
             dailyTask.shop_sell_count = 0
             dailyTask.stage_clear_count = 0
+
+            # Reset trạng thái nhận thưởng cho từng nhiệm vụ
+            dailyTask.fight_win_claimed = False
+            dailyTask.fightwith_claimed = False
+            dailyTask.minigame_claimed = False
+            dailyTask.shop_buy_claimed = False
+            dailyTask.shop_sell_claimed = False
+            dailyTask.stage_clear_claimed = False
+
             self.session.commit()
         return dailyTask
 
