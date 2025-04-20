@@ -11,51 +11,115 @@ class SetWeapon(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @app_commands.command(name="setweapon", description="Lắp vũ khí cho bạn")
-    @app_commands.describe(
-        weapon="Tên vũ khí bạn sở hữu (ví dụ: Suriken)"
+    @app_commands.command(
+        name="setweapon",
+        description="Lắp vũ khí cho vị trí tương ứng với thẻ đã equip"
     )
-    async def setWeapon(self, interaction: discord.Interaction, weapon: str):
+    @app_commands.describe(
+        position="Chọn vị trí lắp: tanker/middle/back (tương ứng với vị trí thẻ)",
+        weapon="Tên vũ khí bạn sở hữu (ví dụ: Samehada)"
+    )
+    @app_commands.choices(position=[
+        app_commands.Choice(name="tanker", value="tanker"),
+        app_commands.Choice(name="middle",  value="middle"),
+        app_commands.Choice(name="back",    value="back"),
+    ])
+    async def setWeapon(
+        self,
+        interaction: discord.Interaction,
+        position: app_commands.Choice[str],
+        weapon: str
+    ):
         await interaction.response.defer(thinking=True)
-        playerId = interaction.user.id
+        player_id = interaction.user.id
 
         try:
             with getDbSession() as session:
-                # Lấy thông tin người chơi
                 playerRepo = PlayerRepository(session)
-                player = playerRepo.getById(playerId)
-                if not player:
-                    await interaction.followup.send("⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!")
-                    return
-
-                # Lấy repository vũ khí và active setup
                 weaponRepo = PlayerWeaponRepository(session)
-                activeSetupRepo = PlayerActiveSetupRepository(session)
+                setupRepo  = PlayerActiveSetupRepository(session)
 
-                # Tìm tất cả các vũ khí của người chơi có tên khớp
-                weapons = weaponRepo.getByWeaponNameAndPlayerId(playerId, weapon)
-                if not weapons:
-                    await interaction.followup.send("⚠️ Bạn nhập sai tên vũ khí hoặc bạn không sở hữu vũ khí đó.")
+                # 1) Kiểm tra người chơi đã đăng ký
+                player = playerRepo.getById(player_id)
+                if not player:
+                    await interaction.followup.send(
+                        "⚠️ Bạn chưa đăng ký tài khoản. Dùng `/register` trước!"
+                    )
                     return
 
-                # Tháo tất cả các vũ khí đang được cài đặt
-                equippedWeapons = weaponRepo.getEquippedWeaponsByPlayerId(playerId)
-                for equipWeapon in equippedWeapons:
-                    equipWeapon.equipped = False
+                # 2) Lấy tất cả vũ khí matching tên
+                candidates = weaponRepo.getByWeaponNameAndPlayerId(player_id, weapon)
+                if not candidates:
+                    await interaction.followup.send(
+                        "⚠️ Nhập sai tên vũ khí hoặc bạn không sở hữu vũ khí đó."
+                    )
+                    return
 
-                # Chọn vũ khí có cấp cao nhất để lắp
-                selectedWeapon = max(weapons, key=lambda w: w.level)
-                selectedWeapon.equipped = True
+                # 3) Chọn vũ khí level cao nhất
+                selected = max(candidates, key=lambda w: w.level)
 
-                # Cập nhật active setup với vũ khí vừa được lắp
-                activeSetupRepo.updateActiveWeapon(playerId, selectedWeapon.id)
+                # 4) Lấy hoặc tạo active setup
+                setup = setupRepo.getByPlayerId(player_id)
+                if not setup:
+                    setup = setupRepo.createEmptySetup(player_id)
+
+                # 5) Kiểm vị trí tương ứng có thẻ hay chưa
+                slot_map_card = {
+                    "tanker": "card_slot1",
+                    "middle": "card_slot2",
+                    "back":   "card_slot3",
+                }
+                slot_map_weapon = {
+                    "tanker": "weapon_slot1",
+                    "middle": "weapon_slot2",
+                    "back":   "weapon_slot3",
+                }
+                pos = position.value
+                card_attr   = slot_map_card[pos]
+                weapon_attr = slot_map_weapon[pos]
+
+                card_id_in_slot = getattr(setup, card_attr)
+                if card_id_in_slot is None:
+                    await interaction.followup.send(
+                        f"❌ Không thể lắp vũ khí vào vị trí **{pos}** khi chưa có thẻ tương ứng."
+                    )
+                    return
+
+                # 6) Ngăn lắp trùng vũ khí ở slot khác
+                for other_pos, w_attr in slot_map_weapon.items():
+                    if other_pos != pos and getattr(setup, w_attr) == selected.id:
+                        await interaction.followup.send(
+                            "❌ Vũ khí này đã được lắp ở vị trí khác, không thể lắp trùng!",
+                            ephemeral=True
+                        )
+                        return
+
+                # 7) Unequip vũ khí cũ ở slot hiện tại
+                old_weapon_id = getattr(setup, weapon_attr)
+                if old_weapon_id is not None:
+                    old_weapon = weaponRepo.getById(old_weapon_id)
+                    if old_weapon:
+                        old_weapon.equipped = False
+
+                # 8) Equip vũ khí mới & cập nhật slot
+                selected.equipped = True
+                if pos == "tanker":
+                    setupRepo.updateWeaponSlot1(player_id, selected.id)
+                elif pos == "middle":
+                    setupRepo.updateWeaponSlot2(player_id, selected.id)
+                else:  # back
+                    setupRepo.updateWeaponSlot3(player_id, selected.id)
 
                 await interaction.followup.send(
-                    f"✅ Đã lắp vũ khí **{selectedWeapon.template.name}** (Cấp {selectedWeapon.level}). Kiểm tra lại bằng /showprofile"
+                    f"✅ Đã lắp vũ khí **{selected.template.name}** (Lv {selected.level}) vào **{pos}**."
                 )
+
         except Exception as e:
-            print("❌ Lỗi khi xử lý setweapon:", e)
-            await interaction.followup.send("❌ Có lỗi xảy ra. Vui lòng thử lại sau.")
+            # Debug lỗi nếu cần
+            await interaction.followup.send(
+                f"❌ Lỗi khi setweapon:\n```{e}```",
+                ephemeral=True
+            )
 
 async def setup(bot):
     await bot.add_cog(SetWeapon(bot))

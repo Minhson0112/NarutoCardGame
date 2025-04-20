@@ -19,7 +19,7 @@ class DailyTask(commands.Cog):
             "fightwith": "Khiêu chiến 5 lần với bạn bè bằng `/fightwith`",
             "shop_buy": "Mua đồ trong shop 3 lần",
             "shop_sell": "Bán đồ cho shop 3 lần",
-            "stage_clear": "Chiến thắng ải ít nhất 1 lần bằng lệnh `/challenge`",
+            "stage_clear": "Đánh ải ít nhất 1 lần bằng lệnh `/challenge`",
         }
         
         # Emoji cho từng nhiệm vụ
