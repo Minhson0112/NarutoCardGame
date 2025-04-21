@@ -294,7 +294,7 @@ class Fight(commands.Cog):
                             edit_embed.set_image(url=f"attachment://{filename}")
 
                             await log_msg.edit(embed=edit_embed)
-                            await asyncio.sleep(3)
+                            await asyncio.sleep(2)
                             turn += 1
 
                             # nếu đã phế hết def_team, thoát sớm
