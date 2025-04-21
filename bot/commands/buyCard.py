@@ -28,8 +28,8 @@ class BuyCard(commands.Cog):
         app_commands.Choice(name="card_advanced", value="card_advanced"),
         app_commands.Choice(name="card_elite", value="card_elite")
     ])
-    @checks.cooldown(1, 5.0, key=lambda interaction: interaction.user.id)
-    async def buyCard(self, interaction: discord.Interaction, pack: str):
+    @checks.cooldown(1, 2.0, key=lambda interaction: interaction.user.id)
+    async def buyCard(self,interaction: discord.Interaction, pack: str):
         await interaction.response.defer(thinking=True)
         playerId = interaction.user.id
 
