@@ -35,9 +35,9 @@ class BattleRule(commands.Cog):
             value=(
                 "**Genin**: Hồi máu 1 đồng minh thấp nhất bằng 600% SMKK\n"
                 "**Chunin**: Hồi máu 2 đồng minh thấp nhất bằng 600% SMKK\n"
-                "**Jounin**: Hồi máu 2 đồng minh thấp nhất 600% SMKK & buff Giáp +10% SMKK\n"
-                "**Kage**: Hồi máu toàn đội 600% SMKK & buff Giáp +10% SMKK\n"
-                "**Legendary**: Hồi máu toàn đội 600% SMKK, buff Giáp +10% SMKK & buff SMKK +30%"
+                "**Jounin**: Hồi máu 2 đồng minh thấp nhất 600% SMKK & buff Giáp +5% SMKK\n"
+                "**Kage**: Hồi máu toàn đội 600% SMKK & buff Giáp +5% SMKK\n"
+                "**Legendary**: Hồi máu toàn đội 600% SMKK, buff Giáp +5% SMKK & buff SMKK +30%"
             ),
             inline=False
         )
