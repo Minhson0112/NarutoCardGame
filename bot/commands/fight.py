@@ -338,7 +338,7 @@ class Fight(commands.Cog):
 
                 # 3) Gửi embed kết quả cuối cùng
                 result_embed = discord.Embed(
-                    title=f"🏁 Kết quả trận chiến của {attacker.username}",
+                    title=f"🏁 Kết quả trận chiến của {attacker.username} VS {defender.username}",
                     description=(
                         f"🎖️ **Kết quả:** {result}\n"
                         f"💰**Thưởng:** {bonus_reward + bonus_highest:,} Ryo\n"
