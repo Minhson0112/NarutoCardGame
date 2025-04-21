@@ -2,34 +2,41 @@ from typing import Optional, Tuple
 
 def get_card_effective_stats(card):
     """
-    Trả về dict với các chỉ số đã được buff theo cấp độ:
-      - strength: base_damage × cấp độ
-      - các chỉ số khác (nếu có): ví dụ hp, armor… × (1 + 0.1*(level-1))
+    Trả về dict với các chỉ số đã được buff theo cấp độ và theo bậc thẻ:
+      - strength, hp, armor, crit_rate, speed, chakra đều được nhân với multiplier
+      - multiplier = 1 + tier_rate * (level - 1)
+    Tier rate:
+      - Genin:      30%  mỗi cấp
+      - Chunin:     25%  mỗi cấp
+      - Jounin:     20%  mỗi cấp
+      - Kage:       15%  mỗi cấp
+      - Legendary:  10%  mỗi cấp (giữ nguyên)
     """
     lvl = card.level or 1
-    # độ tăng 10% cho mỗi cấp sau cấp 1
-    multiplier = 1 + 0.1 * (lvl - 1)
+
+    # Định nghĩa tỉ lệ buff theo từng tier
+    buff_rates = {
+        "Genin":     0.30,
+        "Chunin":    0.25,
+        "Jounin":    0.20,
+        "Kage":      0.15,
+        "Legendary": 0.10,
+    }
+    tier = card.template.tier
+    tier_rate = buff_rates.get(tier, 0.10)  # nếu không tìm thấy thì mặc định 10%
+
+    # multiplier = 1 + tier_rate × (level - 1)
+    multiplier = 1 + tier_rate * (lvl - 1)
 
     base = card.template
-    # strength = base_damage × level × buff
-    strength = int(base.base_damage * multiplier)
-
-    # Buff các chỉ số khác nếu template có trường đó
-    hp        = int(base.health * multiplier)
-    armor     = int(base.armor * multiplier)
-    crit_rate = base.crit_rate * multiplier
-    speed     = base.speed * multiplier
-    chakra    = int(base.chakra * multiplier)
-
     return {
-        "strength":   strength,
-        "hp":         hp,
-        "armor":      armor,
-        "crit_rate":  crit_rate,
-        "speed":      speed,
-        "chakra":     chakra,
+        "strength":  int(base.base_damage * multiplier),
+        "hp":        int(base.health     * multiplier),
+        "armor":     int(base.armor      * multiplier),
+        "crit_rate": base.crit_rate      * multiplier,
+        "speed":     base.speed          * multiplier,
+        "chakra":    int(base.chakra     * multiplier),
     }
-
 
 def get_weapon_effective_stats(weapon):
     """
