@@ -68,12 +68,19 @@ def battle_turn(attacker_team, enemy_team):
 class Fight(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.active_fights: set[int] = set()
 
     @app_commands.command(name="fight", description="Thách đấu người chơi cùng trình độ")
     async def fight(self, interaction: discord.Interaction):
-        await interaction.response.defer(thinking=True)
         attacker_id = interaction.user.id
-
+        if attacker_id in self.active_fights:
+            await interaction.response.send_message(
+            "⚠️ Bạn đang trong trận đấu, vui lòng chờ cho trận trước kết thúc rồi mới /fight tiếp!",
+            ephemeral=True
+            )
+            return
+        
+        await interaction.response.defer(thinking=True)
         try:
             with getDbSession() as session:
                 # Lấy các repository cần thiết
@@ -182,7 +189,6 @@ class Fight(commands.Cog):
                     battle_defender_team.append(create_card(*params))
 
                 paths = []
-
                 for pc in attacker_cards + defender_cards:
                     key = pc.template.image_url
                     # nếu không tìm thấy key trong map thì fallback sang NON_CARD_PATH nếu bạn có
@@ -208,6 +214,8 @@ class Fight(commands.Cog):
                 for c in battle_defender_team:
                     c.team      = battle_defender_team
                     c.enemyTeam = battle_attacker_team
+
+                self.active_fights.add(attacker_id)
 
                 # 1) Gửi embed log ban đầu kèm ảnh
                 initial_desc = []
@@ -356,6 +364,8 @@ class Fight(commands.Cog):
                 f"❌ Có lỗi xảy ra:\n```{tb}```",
                 ephemeral=True
             )
+        finally:
+            self.active_fights.remove(attacker_id)
 
 async def setup(bot):
     await bot.add_cog(Fight(bot))

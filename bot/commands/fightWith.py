@@ -67,16 +67,23 @@ def battle_turn(attacker_team, enemy_team):
 class FightWith(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.active_fights: set[int] = set()
 
     @app_commands.command(name="fightwith", description="Pk vui với người chơi đã tag (không cập nhật rank)")
     @app_commands.describe(
         target="Tag của người chơi bạn muốn pk"
     )
     async def fightwith(self, interaction: discord.Interaction, target: discord.Member):
-        await interaction.response.defer(thinking=True)
         attacker_id = interaction.user.id
         defender_id = target.id
-
+        if attacker_id in self.active_fights:
+            await interaction.response.send_message(
+            "⚠️ Bạn đang trong trận đấu, vui lòng chờ cho trận trước kết thúc rồi mới /fight tiếp!",
+            ephemeral=True
+            )
+            return
+            
+        await interaction.response.defer(thinking=True)
         try:
             with getDbSession() as session:
                 # Lấy các repository cần thiết
@@ -192,6 +199,8 @@ class FightWith(commands.Cog):
                 for c in battle_defender_team:
                     c.team      = battle_defender_team
                     c.enemyTeam = battle_attacker_team
+
+                self.active_fights.add(attacker_id)
 
                 # 1) Gửi embed log ban đầu kèm ảnh
                 initial_desc = []
@@ -320,6 +329,7 @@ class FightWith(commands.Cog):
         except Exception as e:
             print("❌ Lỗi khi xử lý fightwith:", e)
             await interaction.followup.send("❌ Có lỗi xảy ra. Vui lòng thử lại sau.")
-
+        finally:
+            self.active_fights.remove(attacker_id)
 async def setup(bot):
     await bot.add_cog(FightWith(bot))
