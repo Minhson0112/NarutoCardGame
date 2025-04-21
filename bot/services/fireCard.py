@@ -6,7 +6,7 @@ class FireCard(Card):
         logs.append(f"{self.name} kích hoạt kỹ năng đặc biệt hệ Hỏa! 🔥")
 
         alive_enemies = [c for c in self.enemyTeam if c.is_alive()]
-        damage = int(self.base_damage * 3)
+        damage = int(self.base_damage * 5)
 
         if self.tier == "Genin":
             # Tấn công hàng đầu tiên còn sống

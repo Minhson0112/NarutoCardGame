@@ -16,7 +16,7 @@ class WindCard(Card):
             "Legendary": 0.25
         }.get(self.tier, 0)
 
-        base_damage = self.base_damage * 3
+        base_damage = self.base_damage * 4
         damage_reduction_rate = 0.8  # Mỗi mục tiêu sau sẽ giảm 20% damage
 
         for idx, target in enumerate(alive_enemies):

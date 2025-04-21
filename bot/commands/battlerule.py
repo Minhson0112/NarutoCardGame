@@ -37,7 +37,7 @@ class BattleRule(commands.Cog):
                 "**Chunin**: Hồi máu 2 đồng minh thấp nhất bằng 600% SMKK\n"
                 "**Jounin**: Hồi máu 2 đồng minh thấp nhất 600% SMKK & buff Giáp +5% SMKK\n"
                 "**Kage**: Hồi máu toàn đội 600% SMKK & buff Giáp +5% SMKK\n"
-                "**Legendary**: Hồi máu toàn đội 600% SMKK, buff Giáp +5% SMKK & buff SMKK +30%"
+                "**Legendary**: Hồi máu toàn đội 600% SMKK, buff Giáp +5% SMKK & buff SMKK +20%"
             ),
             inline=False
         )
@@ -55,7 +55,7 @@ class BattleRule(commands.Cog):
         embed2.add_field(
             name="🌪️ Hệ Phong (sát thương mạnh, kết liễu)",
             value=(
-                "**Genin**: Gây 300% sát thương toàn địch, giảm 20% mỗi địch trúng chiêu, ngay lập tức kết liễu địch <5% máu\n"
+                "**Genin**: Gây 400% sát thương toàn địch, giảm 20% mỗi địch trúng chiêu, ngay lập tức kết liễu địch <5% máu\n"
                 "**Chunin**: Như Genin, mốc <10% máu\n"
                 "**Jounin**: Như Genin, mốc <15% máu\n"
                 "**Kage**: Như Genin, mốc <20% máu\n"
@@ -77,10 +77,10 @@ class BattleRule(commands.Cog):
         embed2.add_field(
             name="🔥 Hệ Hỏa (giảm hồi phục, phá giáp, sát thương chuẩn)",
             value=(
-                "**Genin**: Gây 300% sát thương lên địch đầu tiên, giảm hồi phục 15%\n"
+                "**Genin**: Gây 500% sát thương lên địch đầu tiên, giảm hồi phục 15%\n"
                 "**Chunin**: Như Genin cho 2 địch đầu, giảm hồi phục 20%\n"
-                "**Jounin**: 300% toàn địch, giảm hồi phục 25%\n"
-                "**Kage**: 300% sát thương chuẩn (bỏ qua giáp), giảm hồi phục 25%\n"
+                "**Jounin**: 500% toàn địch, giảm hồi phục 25%\n"
+                "**Kage**: 500% sát thương chuẩn (bỏ qua giáp), giảm hồi phục 25%\n"
                 "**Legendary**: Như Kage + Giảm giáp địch 30%"
             ),
             inline=False
@@ -88,11 +88,11 @@ class BattleRule(commands.Cog):
         embed2.add_field(
             name="🏋️‍♂️ Hệ Thể (thể thuật)",
             value=(
-                "**Genin**: Tăng 150% toàn bộ chỉ số bản thân & hồi 30% máu đã mất\n"
-                "**Chunin**: Tăng 180% & hồi 30%\n"
-                "**Jounin**: Tăng 220% & hồi 30%\n"
-                "**Kage**: Tăng 250% & hồi 30%\n"
-                "**Legendary**: Tăng 300% & hồi 30%"
+                "**Genin**: Tăng 150% toàn bộ chỉ số bản thân & hy sinh 10% máu hiện tại\n"
+                "**Chunin**: Tăng 180% & mất 10%\n"
+                "**Jounin**: Tăng 220% & mất 10%\n"
+                "**Kage**: Tăng 250% & mất 10%\n"
+                "**Legendary**: Tăng 300% & mất 10%"
             ),
             inline=False
         )

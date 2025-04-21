@@ -14,8 +14,12 @@ class LightningCard(Card):
         def boost_speed(targets, boost_amount):
             for t in targets:
                 original_speed = t.speed
-                t.speed += boost_amount
-                logs.append(f"⚡ {t.name} được tăng né tránh từ {original_speed:.2f} lên {t.speed:.2f}")
+                # cộng thêm nhưng không vượt quá 0.7
+                t.speed = min(t.speed + boost_amount, 0.7)
+                logs.append(
+                    f"⚡ {t.name} được tăng né tránh từ {original_speed:.2f} "
+                    f"lên {t.speed:.2f} (giới hạn 70%)"
+                )
 
         if self.tier == "Genin":
             # Gây damage *4 lên tuyến đầu tiên còn sống

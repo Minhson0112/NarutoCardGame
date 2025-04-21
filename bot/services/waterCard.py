@@ -11,7 +11,7 @@ class WaterCard(Card):
         # Tính sẵn các giá trị buff
         heal = int(self.base_damage * 6)
         armor_buff = int(self.base_damage * 0.05)
-        damage_buff = int(self.base_damage * 0.3)
+        damage_buff = int(self.base_damage * 0.2)
 
         if self.tier == "Genin":
             target = min(alive_allies, key=lambda c: c.health, default=None)

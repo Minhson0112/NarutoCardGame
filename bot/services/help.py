@@ -12,7 +12,7 @@ def get_card_effective_stats(card):
 
     base = card.template
     # strength = base_damage × level × buff
-    strength = int(base.base_damage * lvl * multiplier)
+    strength = int(base.base_damage * multiplier)
 
     # Buff các chỉ số khác nếu template có trường đó
     hp        = int(base.health * multiplier)
