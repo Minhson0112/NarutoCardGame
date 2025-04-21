@@ -35,9 +35,9 @@ class BattleRule(commands.Cog):
             value=(
                 "**Genin**: Hồi máu 1 đồng minh thấp nhất bằng 600% SMKK\n"
                 "**Chunin**: Hồi máu 2 đồng minh thấp nhất bằng 600% SMKK\n"
-                "**Jounin**: Hồi máu 2 đồng minh thấp nhất 600% SMKK & buff Giáp +150% SMKK\n"
-                "**Kage**: Hồi máu toàn đội 600% SMKK & buff Giáp +150% SMKK\n"
-                "**Legendary**: Hồi máu toàn đội 600% SMKK, buff Giáp +150% SMKK & buff SMKK +30%"
+                "**Jounin**: Hồi máu 2 đồng minh thấp nhất 600% SMKK & buff Giáp +10% SMKK\n"
+                "**Kage**: Hồi máu toàn đội 600% SMKK & buff Giáp +10% SMKK\n"
+                "**Legendary**: Hồi máu toàn đội 600% SMKK, buff Giáp +10% SMKK & buff SMKK +30%"
             ),
             inline=False
         )
@@ -88,7 +88,7 @@ class BattleRule(commands.Cog):
         embed2.add_field(
             name="🏋️‍♂️ Hệ Thể (thể thuật)",
             value=(
-                "**Genin**: Tăng 150% chỉ số bản thân & hồi 30% máu đã mất\n"
+                "**Genin**: Tăng 150% toàn bộ chỉ số bản thân & hồi 30% máu đã mất\n"
                 "**Chunin**: Tăng 180% & hồi 30%\n"
                 "**Jounin**: Tăng 220% & hồi 30%\n"
                 "**Kage**: Tăng 250% & hồi 30%\n"

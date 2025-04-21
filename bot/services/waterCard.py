@@ -10,7 +10,7 @@ class WaterCard(Card):
 
         # Tính sẵn các giá trị buff
         heal = int(self.base_damage * 6)
-        armor_buff = int(self.base_damage * 1.5)
+        armor_buff = int(self.base_damage * 0.1)
         damage_buff = int(self.base_damage * 0.3)
 
         if self.tier == "Genin":
