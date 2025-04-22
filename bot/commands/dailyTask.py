@@ -108,7 +108,7 @@ class DailyTask(commands.Cog):
                 if totalReward > 0:
                     embed.add_field(
                         name="Phần thưởng",
-                        value=f"Bạn nhận được tổng cộng {totalReward:,} Ryo từ nhiệm vụ hôm nay.",
+                        value=f"Bạn nhận được {totalReward:,} Ryo từ lần check này.",
                         inline=False
                     )
                 else:
