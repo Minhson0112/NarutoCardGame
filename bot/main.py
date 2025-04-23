@@ -72,6 +72,7 @@ async def main():
         "bot.commands.unequipweapon",
         "bot.commands.battlerule",
         "bot.commands.adventure",
+        "bot.commands.tailedboss",
     ]
 
     # Load từng extension

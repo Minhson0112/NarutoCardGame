@@ -80,7 +80,7 @@ MODIFY COLUMN `tier` VARCHAR(20) NOT NULL;
 
 INSERT INTO `card_templates`
   (card_key, name, tier, element, image_url, sell_price,
-   health, armor, base_damage, crit_rate, speed, chakra, first_position)
+  health, armor, base_damage, crit_rate, speed, chakra, first_position)
 VALUES
 ('1vi', 'Nhất Vĩ', '1vi', 'vi', '1vi', 0, 12000, 25, 300, 0.05, 0.05, 0, FALSE),
 ('2vi', 'Nhị Vĩ', '2vi', 'vi', '2vi', 0, 14000, 30, 350, 0.10, 0.10, 0, FALSE),

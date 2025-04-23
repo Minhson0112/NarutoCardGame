@@ -78,7 +78,9 @@ class Adventure(commands.Cog):
         teamNames = ["Team thích thể hiện", "Team phổi to", "Team phá làng phá xóm", "Team giang hồ mõm",
                     "Team cung bọ cạp", "Team biết bố mày là ai không", "Team chọc gậy bánh xe", "Team nghiện cờ bạc",
                     "Team con nhà người ta", "Team thì ra mày chọn cái chết", "Team mình tao chấp hết",
-                    "Team tao có kiên", "Team hacker lỏ"]
+                    "Team tao có kiên", "Team hacker lỏ", "Team Không trượt phát lào", "Team tuổi l sánh vai", "Team đầu chộm đuôi cướp",
+                    "Team buôn hàng nóng", "Team gấu tró", "Team máu dồn lên não", "Team wibu", "Team fan mu", "Team đáy xã hội", 
+                    "Team phụ hồ", "Team Ca sĩ hàn quốc", "Team đom đóm", "Team hội mê peter"]
         teamName = random.choice(teamNames)
         try:
             with getDbSession() as session:
