@@ -37,9 +37,9 @@ class HelpCommand(commands.Cog):
                 "3. Tham gia đánh ải cốt truyện bằng lệnh ``/challenge`` – càng đánh càng được thưởng nhiều.\n\n"
                 "4. Thử vận may với lệnh ``/fight`` để leo bảng xếp hạng; chuỗi thắng cao sẽ nhận thêm tiền.\n\n"
                 "5. Chơi minigame với bot qua các lệnh ``/slot``, ``/blackjack``, ``/coinflip``, ``/bingo`` để kiếm tiền.\n\n"
-                "6. Mua gói thẻ rẻ (với tỷ lệ rơi thẻ hiếm) và bán chúng bằng lệnh ``/sellcard`` hoặc ``/sellweapon`` để kiếm lời."
-                "7. đi viễn chinh bằng ``/adventure ``, thắng sẽ nhận được tiền"
-                "8. đánh boss vĩ thú bằng ``/tailedboss ``, nhận được tiền theo sát thương gây ra, hạ gục vĩ thú sẽ có tỉ lệ nhận được thẻ và vũ khí"
+                "6. Mua gói thẻ rẻ (với tỷ lệ rơi thẻ hiếm) và bán chúng bằng lệnh ``/sellcard`` hoặc ``/sellweapon`` để kiếm lời.\n\n"
+                "7. đi viễn chinh bằng ``/adventure ``, thắng sẽ nhận được tiền\n\n"
+                "8. đánh boss vĩ thú bằng ``/tailedboss ``, nhận được tiền theo sát thương gây ra, hạ gục vĩ thú sẽ có tỉ lệ nhận được thẻ và vũ khí\n\n"
             )
         )
 
