@@ -69,7 +69,7 @@ def battle_turn(attacker_team, enemy_team):
 class Adventure(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-    @app_commands.command(name= "adventure", description= "đi thám hiểm, dẹp loạn, nhận 30k ryo nếu thắng")
+    @app_commands.command(name= "adventure", description= "đi thám hiểm, dẹp loạn, nhận ryo nếu thắng")
     @checks.cooldown(1, 300, key=lambda interaction: interaction.user.id)
     async def adventure(self, interaction: discord.Interaction):
         attacker_id = interaction.user.id

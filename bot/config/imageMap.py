@@ -200,8 +200,21 @@ WEAPON_IMAGE_LOCAL_PATH_MAP = {
     "Gudodama700": "bot/Image/weapon/Gudodama700.png"
 }
 
+TAILED_IMAGE_LOCAL_PATH_MAP = {
+    "1vi": "bot/Image/tailed/nhatvi.gif",
+    "2vi": "bot/Image/tailed/nhivi.gif",
+    "3vi": "bot/Image/tailed/tamvi.gif",
+    "4vi": "bot/Image/tailed/tuvi.gif",
+    "5vi": "bot/Image/tailed/nguvi.gif",
+    "6vi": "bot/Image/tailed/lucvi.gif",
+    "7vi": "bot/Image/tailed/thatvi.gif",
+    "8vi": "bot/Image/tailed/batvi.gif",
+    "9vi": "bot/Image/tailed/cuuvi.gif",
+}
+
 NON_WEAPON_PATH = "bot/Image/weapon/Nonweapon.png"
 NON_CARD_PATH = "bot/Image/Genin/noncard.png"
 BG = "bot/Image/background/Valley_of_the_end.png"
 BG_FIGHT = "bot/Image/background/fightbackground.png"
 BG_ADVENTURE = "bot/Image/background/mapBg.png"
+BG_TAILED = "bot/Image/background/TailedBg.png"

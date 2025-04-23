@@ -76,3 +76,18 @@ VALUES
 
 ALTER TABLE `card_templates`
 MODIFY COLUMN `tier` VARCHAR(20) NOT NULL;
+
+
+INSERT INTO `card_templates`
+  (card_key, name, tier, element, image_url, sell_price,
+   health, armor, base_damage, crit_rate, speed, chakra, first_position)
+VALUES
+('1vi', 'Nhất Vĩ', '1vi', 'vi', '1vi', 0, 12000, 25, 300, 0.05, 0.05, 0, FALSE),
+('2vi', 'Nhị Vĩ', '2vi', 'vi', '2vi', 0, 14000, 30, 350, 0.10, 0.10, 0, FALSE),
+('3vi', 'Tam Vĩ', '3vi', 'vi', '3vi', 0, 15000, 35, 400, 0.15, 0.15, 0, FALSE),
+('4vi', 'Tứ Vĩ', '4vi', 'vi', '4vi', 0, 16000, 40, 450, 0.20, 0.20, 0, FALSE),
+('5vi', 'Ngũ Vĩ', '5vi', 'vi', '5vi', 0, 17000, 45, 500, 0.25, 0.25, 0, FALSE),
+('6vi', 'Lục Vĩ', '6vi', 'vi', '6vi', 0, 18000, 50, 550, 0.30, 0.30, 0, FALSE),
+('7vi', 'Thất Vĩ', '7vi', 'vi', '7vi', 0, 19000, 55, 600, 0.35, 0.35, 0, FALSE),
+('8vi', 'Bát Vĩ', '8vi', 'vi', '8vi', 0, 20000, 60, 660, 0.40, 0.40, 0, FALSE),
+('9vi', 'Cửu Vĩ', '9vi', 'vi', '9vi', 0, 21000, 65, 700, 0.45, 0.45, 0, FALSE);

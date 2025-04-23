@@ -26,6 +26,11 @@ class CardTemplateRepository:
         if cards:
             return random.choice(cards)
         return None
+    
+    def getRandomTailedCard(self) -> List[Optional[CardTemplate]]:
+        tailedTier = ["1vi", "2vi", "3vi", "4vi", "5vi", "6vi", "7vi", "8vi", "9vi"]
+        return [self.session.query(CardTemplate).filter_by(tier=(random.choice(tailedTier))).first()]
+    
     def getRandomByTierAndPosition(
         self, tier: str, first_position: bool) -> Optional[CardTemplate]:
         cards = (
