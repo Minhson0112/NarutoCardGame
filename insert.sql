@@ -30,4 +30,5 @@ VALUES
 ('Thu phục vĩ thú 6', 600, '6vi', 'kiêu chiến lục vĩ', 750000),
 ('Thu phục vĩ thú 7', 620, '7vi', 'kiêu chiến thất vĩ', 800000),
 ('Thu phục vĩ thú 8', 640, '8vi', 'kiêu chiến bát vĩ', 850000),
-('Thu phục vĩ thú 9', 660, '9vi', 'kiêu chiến cửu vĩ', 900000);
+('Thu phục vĩ thú 9', 660, '9vi', 'kiêu chiến cửu vĩ', 900000),
+('hết', 99999999, 'hết', 'chúng tôi sẽ cập nhật thêm trong tương lai', 0);

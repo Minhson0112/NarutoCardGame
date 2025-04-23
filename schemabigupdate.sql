@@ -1,3 +1,4 @@
+USE naruto_card_game;
 SET FOREIGN_KEY_CHECKS=0;
 -- MySQL dump 10.13  Distrib 8.0.41, for Linux (x86_64)
 --
