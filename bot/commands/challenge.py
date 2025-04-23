@@ -12,7 +12,8 @@ from bot.repository.dailyTaskRepository import DailyTaskRepository
 from bot.config.config import VS_IMAGE, NONE_CARD_IMAGE_URL, NONE_WEAPON_IMAGE_URL
 from bot.config.imageMap import CARD_IMAGE_MAP, WEAPON_IMAGE_MAP, STORY_IMAGE_MAP
 from bot.entity.challenge import Challenge
-
+from bot.services.help import get_battle_card_params
+from bot.services.createCard import create_card
 class ChallengeGame(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -37,31 +38,46 @@ class ChallengeGame(commands.Cog):
                     await interaction.followup.send("⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!")
                     return
 
-                # Kiểm tra active setup của người chơi (phải đã lắp thẻ chiến đấu)
-                activeSetup = activeSetupRepo.getByPlayerId(player_id)
-                if not activeSetup or activeSetup.active_card_id is None:
-                    await interaction.followup.send("⚠️ Bạn chưa lắp thẻ chiến đấu. Hãy dùng /setcard trước khi thử thách.")
+                # Lấy active setup của người tấn công
+                attackerSetup = activeSetupRepo.getByPlayerId(player_id)
+                # Kiểm 3 slot thẻ
+                slots = [
+                    attackerSetup.card_slot1,
+                    attackerSetup.card_slot2,
+                    attackerSetup.card_slot3,
+                ]
+                if any(slot is None for slot in slots):
+                    await interaction.followup.send(
+                        "⚠️ Bạn phải lắp đủ 3 thẻ (Tanker, Middle, Back) mới có thể tham gia đấu!"
+                    )
                     return
 
-                # Lấy thẻ chiến đấu và vũ khí của người chơi
-                attackerCard = cardRepo.getById(activeSetup.active_card_id)
-                attackerWeapon = None
-                if activeSetup.weapon_slot1 is not None:
-                    attackerWeapon = weaponRepo.getById(activeSetup.weapon_slot1)
+                # Nếu đầy đủ, lấy ra các đối tượng PlayerCard
+                attacker_cards = [
+                    cardRepo.getById(slot_id)
+                    for slot_id in slots
+                ]
 
-                # Tính sức mạnh của người chơi
-                try:
-                    attackerCardStrength = attackerCard.template.base_power * attackerCard.level
-                except Exception:
-                    attackerCardStrength = 0
-                attackerWeaponStrength = 0
-                if attackerWeapon:
-                    try:
-                        attackerWeaponStrength = attackerWeapon.template.bonus_power * attackerWeapon.level
-                    except Exception:
-                        attackerWeaponStrength = 0
-                attackerTotalStrength = attackerCardStrength + attackerWeaponStrength
+                # lấy vũ khí
+                attacker_weapon_slots = [
+                    attackerSetup.weapon_slot1,
+                    attackerSetup.weapon_slot2,
+                    attackerSetup.weapon_slot3,
+                ]
+                attacker_weapons = [
+                    weaponRepo.getById(wsid) if wsid is not None else None
+                    for wsid in attacker_weapon_slots
+                ]
 
+                battle_attacker_team = []
+                for pc, pw in zip(attacker_cards, attacker_weapons):
+                    # Lấy tuple params đã buff level + bonus vũ khí
+                    params = get_battle_card_params(pc, pw)
+                    # Create đúng subclass dựa trên element và tier
+                    battle_card = create_card(*params)
+                    battle_attacker_team.append(battle_card)
+
+                total_damage = sum(card.base_damage for card in battle_attacker_team)
                 # Xác định challenge hiện tại của người chơi:
                 # Nếu player.challenge_id là null thì currentChallengeId = 1; ngược lại, dùng giá trị của player.challenge_id.
                 currentChallengeId = player.challenge_id if player.challenge_id is not None else 1
@@ -77,9 +93,8 @@ class ChallengeGame(commands.Cog):
 
                 # So sánh sức mạnh: nếu attackerTotalStrength > challenge.card_strength => thắng;
                 # nếu attackerTotalStrength <= challenge.card_strength => thua (không mất gì)
-                if attackerTotalStrength > challenge.card_strength:
+                if total_damage > challenge.card_strength:
                     result = "win"
-                    dailyTaskRepo.updateStageClear(player_id)
                     outcome_text = (
                         f"🥳 Chúc mừng! Bạn đã vượt qua thử thách **{challenge.card_name}**.\n"
                         f"Nhận thưởng: **{challenge.bonus_ryo} Ryo**!"
@@ -105,41 +120,20 @@ class ChallengeGame(commands.Cog):
                     # Nếu thua, không cập nhật số dư hay challenge_id
 
                 session.commit()
+                dailyTaskRepo.updateStageClear(player_id)
 
                 # --- Embed thông tin người tấn công (Embed 1) ---
-                attackerCardInfo = (
-                    f"• 🥷 **Tên thẻ:** {attackerCard.template.name}\n"
-                    f"  ┣ **Bậc:** {attackerCard.template.tier}\n"
-                    f"  ┣ **Hệ:** {attackerCard.template.element}\n"
-                    f"  ┗ **Level:** {attackerCard.level}"
-                )
-                if attackerWeapon:
-                    attackerWeaponInfo = (
-                        f"• 🔪 **Tên vũ khí:** {attackerWeapon.template.name}\n"
-                        f"  ┣ **Bậc:** {attackerWeapon.template.grade}\n"
-                        f"  ┗ **Level:** {attackerWeapon.level}"
-                    )
-                else:
-                    attackerWeaponInfo = "• 🔪 **Vũ khí:** Chưa cài đặt"
-                attackerDescription = (
-                    f"**Thông tin Thẻ Chiến Đấu:**\n{attackerCardInfo}\n\n"
-                    f"**Thông tin Vũ Khí:**\n{attackerWeaponInfo}\n\n"
-                    f"**Tổng Sức Mạnh:** {attackerTotalStrength}"
-                )
+                initial_desc = []
+                initial_desc.append("**Team tham gia thử thách**\n")
+                for c in battle_attacker_team:
+                    initial_desc.append(
+                        f"{c.name}"
+                        f"  ⚔️{c.base_damage}\n")
                 embedAttacker = discord.Embed(
                     title=f"Tham gia thử thách: {player.username}",
-                    description=attackerDescription,
+                    description="\n".join(initial_desc),
                     color=discord.Color.gold()
                 )
-                # Hiển thị ảnh thẻ ở phần image
-                embedAttacker.set_image(url=CARD_IMAGE_MAP.get(attackerCard.template.image_url, NONE_CARD_IMAGE_URL))
-                # Hiển thị ảnh vũ khí ở phần thumbnail (nếu có)
-                if attackerWeapon:
-                    embedAttacker.set_thumbnail(url=WEAPON_IMAGE_MAP.get(attackerWeapon.template.image_url, NONE_WEAPON_IMAGE_URL))
-                else:
-                    embedAttacker.set_thumbnail(url=NONE_WEAPON_IMAGE_URL)
-                embedAttacker.set_footer(text=f"Điểm rank: {player.rank_points}")
-
                 # --- Embed VS (Embed 2) ---
                 embedVs = discord.Embed(color=discord.Color.dark_red())
                 embedVs.set_image(url=VS_IMAGE)
@@ -164,7 +158,7 @@ class ChallengeGame(commands.Cog):
                     title="Kết quả Thử Thách",
                     description=(
                         f"**Kết quả:** {result.upper()}\n"
-                        f"Sức mạnh của bạn: **{attackerTotalStrength}**\n"
+                        f"Sức mạnh của bạn: **{total_damage}**\n"
                         f"Sức mạnh thử thách: **{challenge.card_strength}**\n\n"
                         f"{outcome_text}"
                     ),

@@ -1,8 +1,8 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
+from discord.app_commands import checks, CommandOnCooldown
 import random
-
 
 from bot.config.database import getDbSession
 from bot.repository.playerRepository import PlayerRepository
@@ -28,7 +28,8 @@ class BuyCard(commands.Cog):
         app_commands.Choice(name="card_advanced", value="card_advanced"),
         app_commands.Choice(name="card_elite", value="card_elite")
     ])
-    async def buyCard(self, interaction: discord.Interaction, pack: str):
+    @checks.cooldown(1, 2.0, key=lambda interaction: interaction.user.id)
+    async def buyCard(self,interaction: discord.Interaction, pack: str):
         await interaction.response.defer(thinking=True)
         playerId = interaction.user.id
 
@@ -99,9 +100,15 @@ class BuyCard(commands.Cog):
                 embed = discord.Embed(
                     title=f"🎉 Bạn đã mua gói {pack} và mở được thẻ: {card.name}",
                     description=(
-                        f"**Sức mạnh:** {card.base_power}\n"
-                        f"**Bậc:** {card.tier}\n"
-                        f"**Hệ:** {card.element}\n"
+                        f"**Damage:** {card.base_damage}\n"
+                        f"**Hp:** {card.health}\n"
+                        f"**Giáp:** {card.armor}\n"
+                        f"**Tỉ lệ chí mạng:** {card.crit_rate:.0%}\n"
+                        f"**Né:** {card.speed:.0%}\n"
+                        f"**chakra gốc:** {card.chakra}\n"
+                        f"**Tanker:** {'✅' if card.first_position else '❌'}\n"
+                        f"**Bậc:** {card.tier}\n"
+                        f"**Hệ chakra:** {card.element}\n"
                         f"**Giá bán:** {card.sell_price:,} Ryo\n\n"
                         f"Thẻ đã được thêm vào kho của bạn. Kiểm tra kho bằng lệnh `/inventory`."
                     ),
@@ -112,6 +119,17 @@ class BuyCard(commands.Cog):
         except Exception as e:
             print("❌ Lỗi khi xử lý buycard:", e)
             await interaction.followup.send("❌ Có lỗi xảy ra. Vui lòng thử lại sau.")
+        
+    @buyCard.error
+    async def buycard_error(self, interaction: discord.Interaction, error):
+        if isinstance(error, CommandOnCooldown):
+            await interaction.response.send_message(
+                f"⏱️ Bạn phải chờ **{error.retry_after:.1f}** giây nữa mới mở gói tiếp được.",
+                ephemeral=True
+            )
+        else:
+            # Với lỗi khác, ta vẫn raise lên để discord.py xử hoặc log
+            raise error
 
 async def setup(bot):
     await bot.add_cog(BuyCard(bot))

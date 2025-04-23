@@ -81,11 +81,16 @@ class BuyWeapon(commands.Cog):
                 # Tạo embed hiển thị thông tin của vũ khí nhận được
                 embed = discord.Embed(
                     title=f"🎉 Bạn đã mua gói {pack} và mở được vũ khí: {weapon.name}",
-                    description=(
-                        f"**Bonus Power:** {weapon.bonus_power}\n"
-                        f"**Bậc:** {weapon.grade}\n"
+                     description=(
+                        f"**Damage cộng thêm:** {weapon.bonus_damage or 0}\n"
+                        f"**Hp cộng thêm:** {weapon.bonus_health or 0}\n"
+                        f"**Giáp cộng thêm:** {weapon.bonus_armor or 0}\n"
+                        f"**Tỉ lệ chí mạng cộng thêm:** {(weapon.bonus_crit_rate or 0):.0%}\n"
+                        f"**Né cộng thêm:** {(weapon.bonus_speed or 0):.0%}\n"
+                        f"**Chakra cộng thêm:** {weapon.bonus_chakra or 0}\n"
+                        f"**Bậc:** {weapon.grade}\n"
                         f"**Giá bán:** {weapon.sell_price:,} Ryo\n\n"
-                        f"Vũ khí đã được thêm vào kho của bạn. Kiểm tra kho bằng lệnh `/inventory`."
+                        "Vũ khí đã được thêm vào kho của bạn. Kiểm tra kho bằng lệnh `/inventory`."
                     ),
                     color=discord.Color.green()
                 )
