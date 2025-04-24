@@ -271,22 +271,22 @@ class TailedBoss(commands.Cog):
                 bonus_reward = 0  # số tiền thưởng dựa trên việc đánh bại đối thủ
                 damageDead = 0 # sát thương gây ra lên boss
                 
-                session.expire(attackerSetup)
-                session.refresh(attackerSetup)
+                session.expire(attacker)
+                session.refresh(attacker)
                 # xác định người thắng
                 if turn > MAX_ROUNDS:
                     result = "🏳️ Hoà"
                     outcome_text = f"⚔️ sau 200 lượt bạn không hạ được {list_cards[0].name} nên hòa, hãy quay lại sau 1 tiếng"
                     damageDead = battle_defender_team[0].max_health - battle_defender_team[0].health
                     bonus_reward = damageDead * 50
-                    attackerSetup.coin_balance += bonus_reward
+                    attacker.coin_balance += bonus_reward
                     damageDeadTxt = f"bạn đã gây ra {damageDead} sát thương lên {list_cards[0].name}"
                     thuong = f"💰**Thưởng:** {bonus_reward:,} Ryo"
                 elif is_team_alive(battle_attacker_team):
                     result = "Chiến Thắng"
                     damageDead = battle_defender_team[0].max_health
                     bonus_reward = damageDead * 50
-                    attackerSetup.coin_balance += bonus_reward
+                    attacker.coin_balance += bonus_reward
 
                     if list_cards[0].tier in type1OfTailed:
                         rates = GACHA_DROP_RATE["card_advanced"]
@@ -313,7 +313,7 @@ class TailedBoss(commands.Cog):
                     outcome_text = f"bạn đã bị {list_cards[0].name} đấm chết và nhận thưởng, hãy quay lại sau 1 tiếng."
                     damageDead = battle_defender_team[0].max_health - battle_defender_team[0].health
                     bonus_reward = damageDead * 50
-                    attackerSetup.coin_balance += bonus_reward
+                    attacker.coin_balance += bonus_reward
                     damageDeadTxt = f"bạn đã gây ra {damageDead} sát thương lên {list_cards[0].name}"
                     thuong = f"💰**Thưởng:** {bonus_reward:,} Ryo"
 
@@ -321,7 +321,7 @@ class TailedBoss(commands.Cog):
 
                 # 3) Gửi embed kết quả cuối cùng
                 result_embed = discord.Embed(
-                    title=f"🏁 Kết quả trận chiến của {attackerSetup.username} VS {list_cards[0].name}",
+                    title=f"🏁 Kết quả trận chiến của {attacker.username} VS {list_cards[0].name}",
                     description=(
                         f"🎖️ **Kết quả:** {result}\n"
                         f"{thuong}\n\n"
@@ -330,7 +330,7 @@ class TailedBoss(commands.Cog):
                     ),
                     color=discord.Color.green() if result == "Chiến Thắng" else discord.Color.red()
                 )
-                result_embed.set_footer(text=f"Điểm Rank: {attackerSetup.rank_points}")
+                result_embed.set_footer(text=f"Điểm Rank: {attacker.rank_points}")
                 await interaction.followup.send(embed=result_embed)
 
         except Exception as e:
