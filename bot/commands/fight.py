@@ -316,47 +316,48 @@ class Fight(commands.Cog):
 
                 bonus_reward = 0  # số tiền thưởng dựa trên việc đánh bại đối thủ
                 bonus_highest = 0 # thưởng khi đạt được thành tích cao mới
-                session.expire(attacker)
-                session.refresh(attacker)
+            with getDbSession() as session2:
+                playerRepo2 = PlayerRepository(session2)
+                fresh_attacker = playerRepo2.getById(attacker_id) 
                 # xác định người thắng
                 if turn > MAX_ROUNDS:
                     result = "🏳️ Hoà"
-                    attacker.winning_streak = 0
+                    fresh_attacker.winning_streak = 0
                     outcome_text = "⚔️ Hai đội quá cân sức (120 vòng) nên hoà! không bên nào được thưởng."
                 elif is_team_alive(battle_attacker_team):
-                    dailyTaskRepo.updateFightWin(attacker.player_id)
-                    attacker.rank_points += 10
+                    dailyTaskRepo.updateFightWin(fresh_attacker.player_id)
+                    fresh_attacker.rank_points += 10
                     defender.rank_points = max(0, defender.rank_points - 5)
                     defender.winning_streak = 0
-                    attacker.winning_streak += 1
-                    bonus_reward = 500 * attacker.winning_streak
-                    if attacker.rank_points > attacker.highest_rank_points:
+                    fresh_attacker.winning_streak += 1
+                    bonus_reward = 500 * fresh_attacker.winning_streak
+                    if fresh_attacker.rank_points > fresh_attacker.highest_rank_points:
                         bonus_highest = 5000
-                        attacker.highest_rank_points = attacker.rank_points
-                    attacker.coin_balance += bonus_reward + bonus_highest
+                        fresh_attacker.highest_rank_points = fresh_attacker.rank_points
+                    fresh_attacker.coin_balance += bonus_reward + bonus_highest
                     result = "Chiến Thắng"
-                    outcome_text = f"**Điểm Rank:**{attacker.username} +10 điểm, {defender.username} -5 điểm"
+                    outcome_text = f"**Điểm Rank:**{fresh_attacker.username} +10 điểm, {defender.username} -5 điểm"
                 else:
-                    attacker.rank_points = max(0, attacker.rank_points - 10)
+                    fresh_attacker.rank_points = max(0, fresh_attacker.rank_points - 10)
                     defender.rank_points += 5
-                    attacker.winning_streak = 0
+                    fresh_attacker.winning_streak = 0
                     result = "Thất Bại"
-                    outcome_text = f" **Điểm Rank:** {attacker.username} -10 điểm, {defender.username} +5 điểm"
+                    outcome_text = f" **Điểm Rank:** {fresh_attacker.username} -10 điểm, {defender.username} +5 điểm"
 
-                session.commit()
+                session2.commit()
 
                 # 3) Gửi embed kết quả cuối cùng
                 result_embed = discord.Embed(
-                    title=f"🏁 Kết quả trận chiến của {attacker.username} VS {defender.username}",
+                    title=f"🏁 Kết quả trận chiến của {fresh_attacker.username} VS {defender.username}",
                     description=(
                         f"🎖️ **Kết quả:** {result}\n"
                         f"💰**Thưởng:** {bonus_reward + bonus_highest:,} Ryo\n"
-                        f"🏆**Chuỗi thắng:** {attacker.winning_streak}\n"
+                        f"🏆**Chuỗi thắng:** {fresh_attacker.winning_streak}\n"
                         f"{outcome_text}"
                     ),
                     color=discord.Color.green() if bonus_reward != 0 else discord.Color.red()
                 )
-                result_embed.set_footer(text=f"Điểm Rank: {attacker.rank_points}")
+                result_embed.set_footer(text=f"Điểm Rank: {fresh_attacker.rank_points}")
                 await interaction.followup.send(embed=result_embed)
 
         except Exception as e:
