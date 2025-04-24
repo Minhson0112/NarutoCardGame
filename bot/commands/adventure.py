@@ -269,7 +269,7 @@ class Adventure(commands.Cog):
                         break
 
                 bonus_reward = 0  # số tiền thưởng dựa trên việc đánh bại đối thủ
-                user = playerRepo.getById(attacker_id)
+                session.refresh(attacker)
                 # xác định người thắng
                 if turn > MAX_ROUNDS:
                     result = "🏳️ Hoà"
@@ -278,7 +278,7 @@ class Adventure(commands.Cog):
                 elif is_team_alive(battle_attacker_team):
                     result = "Chiến Thắng"
                     bonus_reward = random.randint(30000, 50000)
-                    user.coin_balance += bonus_reward
+                    attacker.coin_balance += bonus_reward
                     outcome_text = f"bạn đã chiến thắng {teamName} và đã nhận thưởng, hãy quay lại sau 5 phút."
                     thuong = f"💰**Thưởng:** nhặt được {bonus_reward:,} Ryo từ xác của {teamName}"
                 else:
@@ -290,7 +290,7 @@ class Adventure(commands.Cog):
 
                 # 3) Gửi embed kết quả cuối cùng
                 result_embed = discord.Embed(
-                    title=f"🏁 Kết quả trận chiến của {user.username} VS {teamName}",
+                    title=f"🏁 Kết quả trận chiến của {attacker.username} VS {teamName}",
                     description=(
                         f"🎖️ **Kết quả:** {result}\n"
                         f"{thuong}\n\n"
@@ -298,7 +298,7 @@ class Adventure(commands.Cog):
                     ),
                     color=discord.Color.green() if bonus_reward != 0 else discord.Color.red()
                 )
-                result_embed.set_footer(text=f"Điểm Rank: {user.rank_points}")
+                result_embed.set_footer(text=f"Điểm Rank: {attacker.rank_points}")
                 await interaction.followup.send(embed=result_embed)
 
         except Exception as e:
