@@ -51,7 +51,7 @@ VALUES
   ('Kyuubi_Naruto', 'Kyuubi Naruto', 'Jounin', 'Phong', '9naruto', 80000, 1308, 11, 104, 0.29, 0.10, 40, FALSE),
 
 
-  ('Hokage_Kakashi', 'Hokage Kakashi', 'Kage', 'Thổ', 'hiruzen', 200000, 2437, 24, 116, 0.26, 0.10, 60, TRUE),
+  ('Hokage_Kakashi', 'Hokage Kakashi', 'Kage', 'Thổ', 'hokagekakashi', 200000, 2437, 24, 116, 0.26, 0.10, 60, TRUE),
   ('Might_Guy', 'Might Guy', 'Kage', 'Thể', 'guy', 200000, 2502, 22, 119, 0.22, 0.12, 0, TRUE),
   ('Uzumaki_Nagato', 'Uzumaki Nagato', 'Kage', 'Thủy', 'nagato', 200000, 2101, 18, 127, 0.30, 0.09, 40, FALSE),
   ('Onoki', 'Onoki', 'Kage', 'Thổ', 'onoki', 200000, 2297, 17, 123, 0.28, 0.09, 20, FALSE),
