@@ -102,13 +102,13 @@ class WeaponInventoryView(View):
                     # lấy ra những key,val mà val!=None và !=0
                     buffs = [
                         (k.replace("bonus_", "").replace("_", " ").title(),
-                         f"{v:.0%}" if isinstance(v, float) else str(v))
+                        f"{v:.0%}" if isinstance(v, float) else str(v))
                         for k, v in stats.items() if v
                     ]
 
                     # header + bậc
                     block = [
-                        f"•🔪 **{weapon.template.name}** (Lv {weapon.level})",
+                        f"•🔪 **{weapon.template.name}** (Lv: {weapon.level}), (sl: {weapon.quantity})",
                         f"  ┣ **Bậc:** {weapon.template.grade}"
                     ]
                     # thêm danh sách buffs
