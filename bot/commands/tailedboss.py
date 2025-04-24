@@ -270,6 +270,8 @@ class TailedBoss(commands.Cog):
 
                 bonus_reward = 0  # số tiền thưởng dựa trên việc đánh bại đối thủ
                 damageDead = 0 # sát thương gây ra lên boss
+                
+                session.expire(attackerSetup)
                 session.refresh(attackerSetup)
                 # xác định người thắng
                 if turn > MAX_ROUNDS:

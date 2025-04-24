@@ -316,7 +316,7 @@ class Fight(commands.Cog):
 
                 bonus_reward = 0  # số tiền thưởng dựa trên việc đánh bại đối thủ
                 bonus_highest = 0 # thưởng khi đạt được thành tích cao mới
-                
+                session.expire(attackerSetup)
                 session.refresh(attacker)
                 # xác định người thắng
                 if turn > MAX_ROUNDS:

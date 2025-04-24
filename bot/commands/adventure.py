@@ -269,6 +269,7 @@ class Adventure(commands.Cog):
                         break
 
                 bonus_reward = 0  # số tiền thưởng dựa trên việc đánh bại đối thủ
+                session.expire(attackerSetup)
                 session.refresh(attacker)
                 # xác định người thắng
                 if turn > MAX_ROUNDS:
