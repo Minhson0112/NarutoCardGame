@@ -316,7 +316,8 @@ class Fight(commands.Cog):
 
                 bonus_reward = 0  # số tiền thưởng dựa trên việc đánh bại đối thủ
                 bonus_highest = 0 # thưởng khi đạt được thành tích cao mới
-
+                
+                attacker = playerRepo.getById(attacker_id)
                 # xác định người thắng
                 if turn > MAX_ROUNDS:
                     result = "🏳️ Hoà"

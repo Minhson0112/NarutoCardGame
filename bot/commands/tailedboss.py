@@ -270,6 +270,7 @@ class TailedBoss(commands.Cog):
 
                 bonus_reward = 0  # số tiền thưởng dựa trên việc đánh bại đối thủ
                 damageDead = 0 # sát thương gây ra lên boss
+                attacker = playerRepo.getById(attacker_id)
                 # xác định người thắng
                 if turn > MAX_ROUNDS:
                     result = "🏳️ Hoà"
