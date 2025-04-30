@@ -136,8 +136,8 @@ class Fight(commands.Cog):
                     battle_attacker_team.append(battle_card)
                 
                 # Tìm các đối thủ có rank_points trong khoảng [attacker.rank_points - 50, attacker.rank_points + 50] (ngoại trừ attacker)
-                minRank = attacker.rank_points - 50
-                maxRank = attacker.rank_points + 50
+                minRank = attacker.rank_points - 20
+                maxRank = attacker.rank_points + 20
                 opponents = session.query(Player).filter(
                     Player.player_id != attacker_id,
                     Player.rank_points >= minRank,

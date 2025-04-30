@@ -16,7 +16,7 @@ bot = commands.Bot(command_prefix="/", intents=intents)
 async def update_status():
     guild_count = len(bot.guilds)
     await bot.change_presence(
-        activity=discord.Game(name=f"trong {guild_count} server | ``/help``")
+        activity=discord.Game(name=f"trong {guild_count} server | /help")
     )
 
 
