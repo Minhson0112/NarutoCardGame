@@ -66,7 +66,7 @@ async def main():
         "bot.commands.challenge",
         "bot.commands.gifcode",
         "bot.commands.help",
-        #"bot.commands.narutotrap",
+        "bot.commands.narutotrap",
         "bot.commands.dailyTask",
         "bot.commands.sellAllCard",
         "bot.commands.unequipweapon",

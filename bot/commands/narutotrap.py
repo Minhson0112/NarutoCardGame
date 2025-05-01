@@ -25,11 +25,17 @@ class NarutoTrapGame:
             for c in range(self.cols)
             if (r, c) != (self.player_pos[0], self.player_pos[1])
         ]
-        self.bombs = random.sample(possible_positions, 3)
+        self.bombs = random.sample(possible_positions, 4)
     
     def grid_to_str(self) -> str:
         """Chuyển grid thành chuỗi hiển thị."""
         return "\n".join("".join(row) for row in self.grid)
+
+    def reveal_bombs(self):
+        """Hiển thị tất cả vị trí bom còn lại trên grid."""
+        for r, c in self.bombs:
+            if self.grid[r][c] == "🌳":
+                self.grid[r][c] = "💣"
     
     def move_player(self, direction: str) -> (bool, str):
         """
@@ -77,32 +83,31 @@ class NarutoTrap(commands.Cog):
     @app_commands.command(name="narutotrap", description="Chơi minigame Naruto Trap với tiền cược")
     @app_commands.describe(bet="Số tiền cược bạn muốn đặt")
     async def narutotrap(self, interaction: discord.Interaction, bet: int):
-        # Sử dụng defer để báo cho Discord biết bot đang xử lý
-        await interaction.response.defer(thinking=True)
-
         # Kiểm tra tài khoản và số dư
         with getDbSession() as session:
             playerRepo = PlayerRepository(session)
             player = playerRepo.getById(interaction.user.id)
             if not player:
-                await interaction.followup.send("⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!")
+                await interaction.response.send_message("⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!", ephemeral=True)
                 return
             if bet <= 0:
-                await interaction.followup.send("⚠️ Số tiền cược phải lớn hơn 0.")
+                await interaction.response.send_message("⚠️ Số tiền cược phải lớn hơn 0.", ephemeral=True)
+                return
+            if bet > 1000000:
+                await interaction.response.send_message("⚠️ Số tiền cược không được quá 1 triệu.", ephemeral=True)
                 return
             if player.coin_balance < bet:
-                await interaction.followup.send("⚠️ Số dư của bạn không đủ.")
+                await interaction.response.send_message("⚠️ Số dư của bạn không đủ.", ephemeral=True)
                 return
 
-        # Khởi tạo game (không cần session ở đây)
+        # Khởi tạo game
         game = NarutoTrapGame(interaction.user, bet)
-        initial_embed = discord.Embed(
+        embed = discord.Embed(
             title="🔥 Naruto Trap Game 🔥",
             description=f"Tiền cược: **{bet} Ryo**\n\n{game.grid_to_str()}\n\nDi chuyển bằng emoji: ⬆️, ➡️, ⬅️",
             color=discord.Color.gold()
         )
-        # Gửi tin nhắn phản hồi ban đầu
-        await interaction.response.send_message(embed=initial_embed)
+        await interaction.response.send_message(embed=embed)
         message = await interaction.original_response()
 
         # Thêm reaction cho các hướng di chuyển
@@ -126,13 +131,13 @@ class NarutoTrap(commands.Cog):
             try:
                 reaction, user = await self.bot.wait_for("reaction_add", timeout=30.0, check=check)
             except asyncio.TimeoutError:
-                # Nếu hết thời gian chờ, edit tin nhắn với thông báo timeout và kết thúc game
-                final_embed = discord.Embed(
+                # Hết thời gian chờ
+                timeout_embed = discord.Embed(
                     title="⏰ Naruto Trap Game",
                     description=f"Hết thời gian chờ. Trò chơi kết thúc!\n\n{game.grid_to_str()}",
                     color=discord.Color.greyple()
                 )
-                await message.edit(embed=final_embed)
+                await message.edit(embed=timeout_embed)
                 break
 
             direction = directions[str(reaction.emoji)]
@@ -144,43 +149,48 @@ class NarutoTrap(commands.Cog):
             except discord.HTTPException:
                 pass
 
-            # Cập nhật tin nhắn với grid mới
-            new_content = f"🔥 Naruto Trap Game 🔥\nTiền cược: **{bet} Ryo**\n\n{game.grid_to_str()}\n\nDi chuyển: ⬆️, ➡️, ⬅️"
-            await message.edit(content=new_content)
+            # Cập nhật embed mới sau mỗi lần di chuyển
+            updated_embed = discord.Embed(
+                title="🔥 Naruto Trap Game 🔥",
+                description=f"Tiền cược: **{bet} Ryo**\n\n{game.grid_to_str()}\n\nDi chuyển: ⬆️, ➡️, ⬅️",
+                color=discord.Color.gold()
+            )
+            await message.edit(embed=updated_embed)
 
             if not valid:
-                # Nếu di chuyển không hợp lệ, chỉ thông báo và tiếp tục vòng lặp
                 continue
 
             if result == "bomb":
-                # Nếu người chơi bị bom, cập nhật DB: trừ tiền cược
+                game.reveal_bombs()
+                # Người chơi dính bẫy: trừ tiền cược
                 with getDbSession() as session:
                     playerRepo = PlayerRepository(session)
                     player = playerRepo.getById(interaction.user.id)
                     player.coin_balance -= bet
                     session.commit()
-                final_embed = discord.Embed(
+                lose_embed = discord.Embed(
                     title="💣 Naruto Trap Game",
-                    description=f"Bạn rơi vào bẫy!\n\n{game.grid_to_str()}\n\nBạn mất hết **{bet} Ryo**.",
+                    description=f"Bạn rơi vào bẫy!\n\n{game.grid_to_str()}\n\n💥 Tất cả bẫy đã được tiết lộ.\n\nBạn mất **{bet} Ryo**.",
                     color=discord.Color.red()
                 )
-                await message.edit(embed=final_embed)
+                await message.edit(embed=lose_embed)
                 break
             elif result == "win":
-                # Nếu người chơi thắng, cập nhật DB: trừ tiền cược, cộng thưởng x2
+                game.reveal_bombs()
+                # Người chơi thắng: cộng x2 tiền cược
                 with getDbSession() as session:
                     playerRepo = PlayerRepository(session)
                     player = playerRepo.getById(interaction.user.id)
                     player.coin_balance = player.coin_balance - bet + (bet * 2)
                     session.commit()
-                final_embed = discord.Embed(
+                win_embed = discord.Embed(
                     title="🎉 Naruto Trap Game",
-                    description=f"Chúc mừng! Bạn đã vượt qua chướng ngại và nhận thưởng: x2 tiền cược!\n\n{game.grid_to_str()}",
+                    description=f"Chúc mừng! Bạn đã vượt qua chướng ngại và nhận thưởng: x2 tiền cược!\n\n{game.grid_to_str()}\n\n💥 Tất cả bẫy đã được tiết lộ.",
                     color=discord.Color.green()
                 )
-                await message.edit(embed=final_embed)
+                await message.edit(embed=win_embed)
                 break
-            # Nếu kết quả là "moved", vòng lặp tiếp tục cập nhật grid
+            # Nếu "moved", tiếp tục vòng lặp
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(NarutoTrap(bot))
