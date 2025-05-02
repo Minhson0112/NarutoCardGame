@@ -100,3 +100,13 @@ def get_battle_card_params(
         player_card.template.element,
         player_card.template.tier
     )
+    
+def render_team_status(team, title=""):
+    lines = [title]
+    for c in team:
+        lines.append(
+            f"{c.name}"
+            f"⚔️{c.base_damage}  🛡️{c.armor}  💥{c.crit_rate:.0%}  🏃{c.speed:.0%}  🔋{c.chakra}"
+        )
+        lines.append(c.health_bar() + "\n")
+    return lines

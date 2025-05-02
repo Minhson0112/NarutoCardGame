@@ -1,5 +1,5 @@
 from bot.services.cardBase import Card
-
+from bot.services.effect import Effect
 class FireCard(Card):
     def special_skills(self):
         logs: list[str] = []
@@ -7,7 +7,27 @@ class FireCard(Card):
 
         alive_enemies = [c for c in self.enemyTeam if c.is_alive()]
         damage = int(self.base_damage * 5)
+        
+        if self.name == "Uchiha Madara":
+            for target in alive_enemies:
+                # Thêm hiệu ứng stun 2 turn
+                stun_effect = Effect(
+                    name="Stun",
+                    duration=2,
+                    effect_type="debuff",
+                    value=None,
+                    description="Không thể hành động trong 2 lượt."
+                )
+                target.effects.append(stun_effect)
+                # Gây sát thương chuẩn (bạn không nói rõ có qua giáp hay không, mặc định là thường)
+                dealt, new_logs = target.receive_damage(damage, true_damage=True)
+                logs.extend(new_logs)
 
+            logs.append(
+                f"💥 Madara dùng Susano đập mạnh gây sát thương chuẩn và làm choáng cả team địch trong 2 turn!"
+            )
+            return logs
+        
         if self.tier == "Genin":
             # Tấn công hàng đầu tiên còn sống
             for i in range(3):
