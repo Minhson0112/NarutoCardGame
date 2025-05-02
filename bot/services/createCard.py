@@ -5,6 +5,7 @@ from bot.services.waterCard import WaterCard
 from bot.services.taijutsuCard import TaijutsuCard
 from bot.services.lightningCard import LightningCard
 from bot.services.earthCard import EarthCard
+from bot.services.tailedCard import TailedBeastCard
 
 ELEMENT_CLASS_MAP = {
     "Hỏa": FireCard,
@@ -12,7 +13,8 @@ ELEMENT_CLASS_MAP = {
     "Thổ": EarthCard,
     "Phong": WindCard,
     "Lôi": LightningCard,
-    "Thể": TaijutsuCard
+    "Thể": TaijutsuCard,
+    "vi": TailedBeastCard
 }
 
 def create_card(name, health, armor, base_damage, crit_rate, speed, chakra, element, tier):

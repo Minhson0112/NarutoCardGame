@@ -45,7 +45,7 @@ def get_weapon_effective_stats(weapon):
       - Các trường có giá trị sẽ × (1 + 0.1*(level-1))
     """
     lvl = weapon.level or 1
-    multiplier = 1 + 0.1 * (lvl - 1)
+    multiplier = 1 + 0.4 * (lvl - 1)
 
     tmpl = weapon.template
     def buff(attr):

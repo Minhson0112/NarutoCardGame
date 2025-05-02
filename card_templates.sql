@@ -6,7 +6,7 @@ INSERT INTO `card_templates`
   (card_key, name, tier, element, image_url, sell_price,
    health, armor, base_damage, crit_rate, speed, chakra, first_position)
 VALUES
-  /* ========== Genin ========== */
+
   ('Yamanaka_Ino',    'Yamanaka Ino',       'Genin',    'Thủy', 'ino',      3000, 765,  10, 24, 0.03, 0.02, 40, FALSE),
   ('TenTen',          'TenTen',              'Genin',    'Phong','tenten',   3000, 770,  7, 31, 0.04, 0.05, 20, FALSE),
   ('Kankuro',         'Kankuro',             'Genin',    'Hỏa',  'kankuro',  3000, 742,  11, 42, 0.07, 0.04, 60, FALSE),
@@ -20,7 +20,6 @@ VALUES
   ('Momochi_Zabuza',  'Momochi Zabuza',      'Genin',    'Thủy','zabuza',    3000, 1121,  17, 27, 0.03, 0.05, 40, TRUE),
   ('Konohamaru',      'Konohamaru',          'Genin',    'Hỏa',  'konohamaru',3000, 758,  6, 41, 0.08, 0.06, 0, FALSE),
 
-  /* ========== Chunin ========== */
   ('Hyuga_Neji', 'Hyuga Neji', 'Chunin', 'Thể', 'neji', 20000, 1339, 18, 43, 0.09, 0.06, 20, TRUE),
   ('Nara_Shikamaru', 'Nara Shikamaru', 'Chunin', 'Thổ', 'shikamaru', 20000, 1074, 12, 58, 0.07, 0.05, 20, FALSE),
   ('Nohara_Rin', 'Nohara Rin', 'Chunin', 'Thủy', 'rin', 20000, 1024, 12, 51, 0.08, 0.03, 60, FALSE),
@@ -38,9 +37,8 @@ VALUES
   ('Gaara', 'Gaara', 'Chunin', 'Thổ', 'gaara', 20000, 1072, 14, 62, 0.19, 0.07, 0, FALSE),
   ('Chunin_Kakashi', 'Chunin Kakashi', 'Chunin', 'Lôi', 'chuninkakashi', 20000, 1035, 12, 65, 0.25, 0.08, 20, FALSE),
   ('Kakuzu', 'Kakuzu', 'Chunin', 'Thổ', 'kakuzu', 20000, 1326, 17, 47, 0.06, 0.03, 0, TRUE),
-  ('Kushina', 'Kushina', 'Chunin', 'Phong', 'kushina', 20000, 1061, 14, 68, 0.15, 0.06, 40, FALSE);
+  ('Kushina', 'Kushina', 'Chunin', 'Phong', 'kushina', 20000, 1061, 14, 68, 0.15, 0.06, 40, FALSE),
 
-  /* ========== Jounin ========== */
   ('Konan', 'Konan', 'Jounin', 'Hỏa', 'konan', 80000, 1419, 15, 81, 0.19, 0.10, 40, FALSE),
   ('Kisame', 'Kisame', 'Jounin', 'Thủy', 'kisame', 80000, 1878, 21, 72, 0.25, 0.10, 60, TRUE),
   ('Uchiha_Obito', 'Uchiha Obito', 'Jounin', 'Hỏa', 'obito', 80000, 1475, 14, 80, 0.28, 0.10, 20, FALSE),
@@ -52,8 +50,8 @@ VALUES
   ('Uchiha_Sasuke', 'Uchiha Sasuke', 'Jounin', 'Hỏa', 'sasuke', 80000, 1253, 13, 101, 0.26, 0.09, 20, FALSE),
   ('Kyuubi_Naruto', 'Kyuubi Naruto', 'Jounin', 'Phong', '9naruto', 80000, 1308, 11, 104, 0.29, 0.10, 40, FALSE),
 
-  /* ========== Kage ========== */
-  ('Hokage_Kakashi', 'Hokage Kakashi', 'Kage', 'Thổ', 'hiruzen', 200000, 2437, 24, 116, 0.26, 0.10, 60, TRUE),
+
+  ('Hokage_Kakashi', 'Hokage Kakashi', 'Kage', 'Thổ', 'hokagekakashi', 200000, 2437, 24, 116, 0.26, 0.10, 60, TRUE),
   ('Might_Guy', 'Might Guy', 'Kage', 'Thể', 'guy', 200000, 2502, 22, 119, 0.22, 0.12, 0, TRUE),
   ('Uzumaki_Nagato', 'Uzumaki Nagato', 'Kage', 'Thủy', 'nagato', 200000, 2101, 18, 127, 0.30, 0.09, 40, FALSE),
   ('Onoki', 'Onoki', 'Kage', 'Thổ', 'onoki', 200000, 2297, 17, 123, 0.28, 0.09, 20, FALSE),
@@ -67,7 +65,6 @@ VALUES
   ('Uchiha_Madara', 'Uchiha Madara', 'Kage', 'Hỏa', 'madara', 200000, 2174, 14, 129, 0.28, 0.10, 0, FALSE),
   ('Senju_Hashirama', 'Senju Hashirama', 'Kage', 'Hỏa', 'hashirama', 200000, 2249, 13, 121, 0.25, 0.10, 0, FALSE),
 
-  /* ========== Legendary ========== */
   ('Shimura_Danzo', 'Shimura Danzo', 'Legendary', 'Hỏa', 'danzo', 500000, 2924, 21, 138, 0.27, 0.09, 0, FALSE),
   ('Haku', 'Haku', 'Legendary', 'Thủy', 'haku', 500000, 3224, 32, 112, 0.24, 0.08, 40, TRUE),
   ('Hatake_Kakashi', 'Hatake Kakashi', 'Legendary', 'Lôi', 'kakashi', 500000, 3021, 21, 134, 0.28, 0.10, 60, FALSE),
@@ -75,3 +72,22 @@ VALUES
   ('Susanoo_Sasuke', 'Susanoo Sasuke', 'Legendary', 'Hỏa', 'susanoosasuke', 500000, 2802, 21, 140, 0.30, 0.10, 0, FALSE),
   ('Six_Paths_Pain', 'Six Paths Pain', 'Legendary', 'Phong', '6pain', 500000, 2798, 23, 145, 0.26, 0.10, 20, FALSE),
   ('Akatsuki_Itachi', 'Akatsuki Itachi', 'Legendary', 'Hỏa', 'akatsukiitachi', 500000, 2963, 20, 153, 0.30, 0.10, 20, FALSE);
+
+
+ALTER TABLE `card_templates`
+MODIFY COLUMN `tier` VARCHAR(20) NOT NULL;
+
+
+INSERT INTO `card_templates`
+  (card_key, name, tier, element, image_url, sell_price,
+  health, armor, base_damage, crit_rate, speed, chakra, first_position)
+VALUES
+('1vi', 'Nhất Vĩ', '1vi', 'vi', '1vi', 0, 12000, 25, 300, 0.05, 0.05, 0, FALSE),
+('2vi', 'Nhị Vĩ', '2vi', 'vi', '2vi', 0, 14000, 30, 350, 0.10, 0.10, 0, FALSE),
+('3vi', 'Tam Vĩ', '3vi', 'vi', '3vi', 0, 15000, 35, 400, 0.15, 0.15, 0, FALSE),
+('4vi', 'Tứ Vĩ', '4vi', 'vi', '4vi', 0, 16000, 40, 450, 0.20, 0.20, 0, FALSE),
+('5vi', 'Ngũ Vĩ', '5vi', 'vi', '5vi', 0, 17000, 45, 500, 0.25, 0.25, 0, FALSE),
+('6vi', 'Lục Vĩ', '6vi', 'vi', '6vi', 0, 18000, 50, 550, 0.30, 0.30, 0, FALSE),
+('7vi', 'Thất Vĩ', '7vi', 'vi', '7vi', 0, 19000, 55, 600, 0.35, 0.35, 0, FALSE),
+('8vi', 'Bát Vĩ', '8vi', 'vi', '8vi', 0, 20000, 60, 660, 0.40, 0.40, 0, FALSE),
+('9vi', 'Cửu Vĩ', '9vi', 'vi', '9vi', 0, 21000, 65, 700, 0.45, 0.45, 0, FALSE);

@@ -48,7 +48,7 @@ class SellWeapon(commands.Cog):
                 for w in matching_weapons:
                     if w.equipped:
                         await interaction.followup.send(
-                            f"⚠️ Vũ khí **{w.template.name}** đang được dùng làm vũ khí chính, hãy tháo vũ khí đó ra bằng lệnh /setweapon trước khi bán."
+                            f"⚠️ Vũ khí **{w.template.name}** đang được dùng làm vũ khí chính, hãy tháo vũ khí đó ra bằng lệnh /unequipweapon trước khi bán."
                         )
                         return
 

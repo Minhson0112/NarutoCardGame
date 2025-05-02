@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
+from discord.app_commands import checks, CommandOnCooldown
 import random
 import asyncio
 import traceback
@@ -10,8 +11,9 @@ from bot.repository.playerRepository import PlayerRepository
 from bot.repository.playerCardRepository import PlayerCardRepository
 from bot.repository.playerWeaponRepository import PlayerWeaponRepository
 from bot.repository.playerActiveSetupRepository import PlayerActiveSetupRepository
+from bot.repository.cardTemplateRepository import CardTemplateRepository
 from bot.repository.dailyTaskRepository import DailyTaskRepository
-from bot.config.imageMap import CARD_IMAGE_LOCAL_PATH_MAP, BG_FIGHT, NON_CARD_PATH
+from bot.config.imageMap import CARD_IMAGE_LOCAL_PATH_MAP, BG_ADVENTURE, NON_CARD_PATH
 from bot.entity.player import Player
 from bot.services.fightRender import renderImageFight
 from bot.services.help import get_battle_card_params
@@ -64,23 +66,22 @@ def battle_turn(attacker_team, enemy_team):
         atk.chakra += 20
     return logs
 
-
-class Fight(commands.Cog):
+class Adventure(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.active_fights: set[int] = set()
-
-    @app_commands.command(name="fight", description="Thách đấu người chơi cùng trình độ")
-    async def fight(self, interaction: discord.Interaction):
+    @app_commands.command(name= "adventure", description= "đi thám hiểm, dẹp loạn, nhận ryo nếu thắng")
+    @checks.cooldown(1, 300, key=lambda interaction: interaction.user.id)
+    async def adventure(self, interaction: discord.Interaction):
         attacker_id = interaction.user.id
-        if attacker_id in self.active_fights:
-            await interaction.response.send_message(
-            "⚠️ Bạn đang trong trận đấu, vui lòng chờ cho trận trước kết thúc rồi mới /fight tiếp!",
-            ephemeral=True
-            )
-            return
-        
         await interaction.response.defer(thinking=True)
+        
+        teamNames = ["Team thích thể hiện", "Team phổi to", "Team phá làng phá xóm", "Team giang hồ mõm",
+                    "Team cung bọ cạp", "Team biết bố mày là ai không", "Team chọc gậy bánh xe", "Team nghiện cờ bạc",
+                    "Team con nhà người ta", "Team thì ra mày chọn cái chết", "Team mình tao chấp hết",
+                    "Team tao có kiên", "Team hacker lỏ", "Team Không trượt phát lào", "Team tuổi l sánh vai", "Team đầu chộm đuôi cướp",
+                    "Team buôn hàng nóng", "Team gấu tró", "Team máu dồn lên não", "Team wibu", "Team fan mu", "Team đáy xã hội", 
+                    "Team phụ hồ", "Team Ca sĩ hàn quốc", "Team đom đóm", "Team hội mê peter"]
+        teamName = random.choice(teamNames)
         try:
             with getDbSession() as session:
                 # Lấy các repository cần thiết
@@ -89,6 +90,7 @@ class Fight(commands.Cog):
                 weaponRepo = PlayerWeaponRepository(session)
                 activeSetupRepo = PlayerActiveSetupRepository(session)
                 dailyTaskRepo = DailyTaskRepository(session)
+                cardtemplaterepo = CardTemplateRepository(session)
                 
                 # Lấy thông tin người tấn công
                 attacker = playerRepo.getById(attacker_id)
@@ -134,77 +136,31 @@ class Fight(commands.Cog):
                     # Create đúng subclass dựa trên element và tier
                     battle_card = create_card(*params)
                     battle_attacker_team.append(battle_card)
-                
-                # Tìm các đối thủ có rank_points trong khoảng [attacker.rank_points - 50, attacker.rank_points + 50] (ngoại trừ attacker)
-                minRank = attacker.rank_points - 20
-                maxRank = attacker.rank_points + 20
-                opponents = session.query(Player).filter(
-                    Player.player_id != attacker_id,
-                    Player.rank_points >= minRank,
-                    Player.rank_points <= maxRank
-                ).all()
-                
-                # Lọc lại chỉ những người đã lắp thẻ
-                valid_opponents = []
-                for opp in opponents:
-                    oppSetup = activeSetupRepo.getByPlayerId(opp.player_id)
-                    # chỉ lấy những ai đã lắp đủ 3 thẻ (card_slot1/2/3 đều khác None)
-                    if (
-                        oppSetup
-                        and oppSetup.card_slot1 is not None
-                        and oppSetup.card_slot2 is not None
-                        and oppSetup.card_slot3 is not None
-                    ):
-                        valid_opponents.append(opp)
-
-                if not valid_opponents:
-                    await interaction.followup.send("⚠️ Chưa tìm thấy đối thủ cùng trình độ.")
-                    return
-
-                defender = random.choice(valid_opponents)
-
-                defenderSetup = activeSetupRepo.getByPlayerId(defender.player_id)
-                # Lấy ra list 3 PlayerCard của defender
-                defender_slots = [
-                    defenderSetup.card_slot1,
-                    defenderSetup.card_slot2,
-                    defenderSetup.card_slot3,
-                ]
-                defender_cards = [cardRepo.getById(cid) for cid in defender_slots]
-
-                # lấy vũ khí 
-                defender_weapon_slots = [
-                    defenderSetup.weapon_slot1,
-                    defenderSetup.weapon_slot2,
-                    defenderSetup.weapon_slot3,
-                ]
-                defender_weapons = [
-                    weaponRepo.getById(wsid) if wsid is not None else None
-                    for wsid in defender_weapon_slots
-                ]
 
                 battle_defender_team = []
-                for pc, pw in zip(defender_cards, defender_weapons):
-                    params = get_battle_card_params(pc, pw)
-                    battle_defender_team.append(create_card(*params))
+                defenderCardImgPaths = []
+                list_card = cardtemplaterepo.getFormationTemplates()
+                for card in list_card:
+                    img_path = CARD_IMAGE_LOCAL_PATH_MAP.get(card.image_url, NON_CARD_PATH)
+                    battle_card = create_card(card.name, card.health, card.armor, card.base_damage, card.crit_rate, card.speed, card.chakra, card.element, card.tier)
+                    battle_defender_team.append(battle_card)
+                    defenderCardImgPaths.append(img_path)
 
-                paths = []
-                for pc in attacker_cards + defender_cards:
+                attackCardImgpaths = []
+                for pc in attacker_cards:
                     key = pc.template.image_url
                     # nếu không tìm thấy key trong map thì fallback sang NON_CARD_PATH nếu bạn có
                     img_path = CARD_IMAGE_LOCAL_PATH_MAP.get(key, NON_CARD_PATH)
-                    paths.append(img_path)
+                    attackCardImgpaths.append(img_path)
 
-                # paths bây giờ là [a1, a2, a3, d1, d2, d3]
-
-                # 2) Gọi renderImageFight
+                paths = attackCardImgpaths + defenderCardImgPaths
                 buffer = renderImageFight(
                     paths[0], paths[1], paths[2],
                     paths[3], paths[4], paths[5],
-                    BG_FIGHT
+                    BG_ADVENTURE
                 )
                 filename = f"battle_{attacker_id}.png"
-                battle_file = discord.File(buffer, filename=filename)  
+                battle_file = discord.File(buffer, filename=filename)
 
                 for c in battle_attacker_team:
                     c.team      = battle_attacker_team
@@ -214,8 +170,6 @@ class Fight(commands.Cog):
                 for c in battle_defender_team:
                     c.team      = battle_defender_team
                     c.enemyTeam = battle_attacker_team
-
-                self.active_fights.add(attacker_id)
 
                 # 1) Gửi embed log ban đầu kèm ảnh
                 initial_desc = []
@@ -239,7 +193,7 @@ class Fight(commands.Cog):
                 battle_file = discord.File(buffer, filename=filename)
 
                 log_embed = discord.Embed(
-                    title=f"🔥 Battle Log {attacker.username} VS {defender.username}",
+                    title=f"🔎 {attacker.username} đi khám phá và bị {teamName} phục kích",
                     description="\n".join(initial_desc),
                     color=discord.Color.blurple()
                 )
@@ -295,7 +249,7 @@ class Fight(commands.Cog):
                             desc += "\n".join(logs)
 
                             edit_embed = discord.Embed(
-                                title=f"🔥 Battle Log {attacker.username} VS {defender.username}",
+                                title=f"🔎 {attacker.username} đi khám phá và bị {teamName} phục kích",
                                 description=desc,
                                 color=discord.Color.blurple()
                             )
@@ -314,45 +268,33 @@ class Fight(commands.Cog):
                     if not (is_team_alive(battle_attacker_team) and is_team_alive(battle_defender_team)):
                         break
 
-                bonus_reward = 0  # số tiền thưởng dựa trên việc đánh bại đối thủ
-                bonus_highest = 0 # thưởng khi đạt được thành tích cao mới
+            bonus_reward = 0  # số tiền thưởng dựa trên việc đánh bại đối thủ
             with getDbSession() as session2:
                 playerRepo2 = PlayerRepository(session2)
                 fresh_attacker = playerRepo2.getById(attacker_id) 
                 # xác định người thắng
                 if turn > MAX_ROUNDS:
                     result = "🏳️ Hoà"
-                    fresh_attacker.winning_streak = 0
-                    outcome_text = "⚔️ Hai đội quá cân sức (120 vòng) nên hoà! không bên nào được thưởng."
+                    outcome_text = "⚔️ Hai đội đều rút lui nên hoà! không nhận được thưởng, hãy quay lại sau 5 phút."
+                    thuong = f"💰**Thưởng:** {bonus_reward:,} Ryo"
                 elif is_team_alive(battle_attacker_team):
-                    dailyTaskRepo.updateFightWin(fresh_attacker.player_id)
-                    fresh_attacker.rank_points += 10
-                    defender.rank_points = max(0, defender.rank_points - 5)
-                    defender.winning_streak = 0
-                    fresh_attacker.winning_streak += 1
-                    bonus_reward = 500 * fresh_attacker.winning_streak
-                    if fresh_attacker.rank_points > fresh_attacker.highest_rank_points:
-                        bonus_highest = 5000
-                        fresh_attacker.highest_rank_points = fresh_attacker.rank_points
-                    fresh_attacker.coin_balance += bonus_reward + bonus_highest
                     result = "Chiến Thắng"
-                    outcome_text = f"**Điểm Rank:**{fresh_attacker.username} +10 điểm, {defender.username} -5 điểm"
+                    bonus_reward = random.randint(30000, 50000)
+                    fresh_attacker.coin_balance += bonus_reward
+                    outcome_text = f"bạn đã chiến thắng {teamName} và đã nhận thưởng, hãy quay lại sau 5 phút."
+                    thuong = f"💰**Thưởng:** nhặt được {bonus_reward:,} Ryo từ xác của {teamName}"
                 else:
-                    fresh_attacker.rank_points = max(0, fresh_attacker.rank_points - 10)
-                    defender.rank_points += 5
-                    fresh_attacker.winning_streak = 0
                     result = "Thất Bại"
-                    outcome_text = f" **Điểm Rank:** {fresh_attacker.username} -10 điểm, {defender.username} +5 điểm"
+                    outcome_text = f"bạn đã thất bại trước {teamName} và không nhận được gì, hãy quay lại sau 5 phút."
+                    thuong = f"💰**Thưởng:** bọn {teamName} nói bạn quá non và không thèm lấy tiền của bạn"
 
                 session2.commit()
-
                 # 3) Gửi embed kết quả cuối cùng
                 result_embed = discord.Embed(
-                    title=f"🏁 Kết quả trận chiến của {fresh_attacker.username} VS {defender.username}",
+                    title=f"🏁 Kết quả trận chiến của {fresh_attacker.username} VS {teamName}",
                     description=(
                         f"🎖️ **Kết quả:** {result}\n"
-                        f"💰**Thưởng:** {bonus_reward + bonus_highest:,} Ryo\n"
-                        f"🏆**Chuỗi thắng:** {fresh_attacker.winning_streak}\n"
+                        f"{thuong}\n\n"
                         f"{outcome_text}"
                     ),
                     color=discord.Color.green() if bonus_reward != 0 else discord.Color.red()
@@ -366,8 +308,15 @@ class Fight(commands.Cog):
                 f"❌ Có lỗi xảy ra:\n```{tb}```",
                 ephemeral=True
             )
-        finally:
-            self.active_fights.remove(attacker_id)
-
+    @adventure.error
+    async def buycard_error(self, interaction: discord.Interaction, error):
+        if isinstance(error, CommandOnCooldown):
+            await interaction.response.send_message(
+                f"⏱️ Bạn phải chờ **{error.retry_after:.1f}** giây nữa mới đi khám phá được.",
+                ephemeral=True
+            )
+        else:
+            # Với lỗi khác, ta vẫn raise lên để discord.py xử hoặc log
+            raise error
 async def setup(bot):
-    await bot.add_cog(Fight(bot))
+    await bot.add_cog(Adventure(bot))

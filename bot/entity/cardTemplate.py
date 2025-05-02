@@ -7,7 +7,7 @@ class CardTemplate(Base):
     card_key = Column(String(50), primary_key=True)
     name = Column(String(100), nullable=False)
 
-    tier = Column(Enum('Genin', 'Chunin', 'Jounin', 'Kage', 'Legendary', name="card_tier_enum"), nullable=False)
+    tier = Column(String(20), nullable=False)
     element = Column(String(20))  # Phong, Lôi, Thổ, Thủy, Hỏa, Thể
 
     # === Các chỉ số cơ bản để scale lên khi chiến đấu ===

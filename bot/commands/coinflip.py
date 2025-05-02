@@ -37,6 +37,10 @@ class CoinFlip(commands.Cog):
                 if bet <= 0:
                     await interaction.followup.send("⚠️ Số tiền cược phải lớn hơn 0.")
                     return
+                
+                if bet > 1000000:
+                    await interaction.followup.send("⚠️ Số tiền cược không được quá 1m.")
+                    return
 
                 if player.coin_balance < bet:
                     await interaction.followup.send("⚠️ Số dư của bạn không đủ.")

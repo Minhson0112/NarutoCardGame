@@ -1,14 +1,24 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 import asyncio
 from bot.config.config import DISCORD_TOKEN
 
 # Định nghĩa intents – bắt buộc nếu muốn bot đọc tin nhắn hoặc phản hồi người dùng
 intents = discord.Intents.default()
 intents.message_content = True  # Cho phép đọc nội dung tin nhắn (bật trong Discord Dev Portal nữa)
+intents.guilds = True  # BẮT BUỘC để đếm số server
 
 # Tạo bot instance với prefix "/"
 bot = commands.Bot(command_prefix="/", intents=intents)
+
+# TASK LOOP cập nhật status
+@tasks.loop(minutes=10)
+async def update_status():
+    guild_count = len(bot.guilds)
+    await bot.change_presence(
+        activity=discord.Game(name=f"trong {guild_count} server | /help")
+    )
+
 
 # Sự kiện khi bot sẵn sàng
 @bot.event
@@ -19,6 +29,9 @@ async def on_ready():
         print(f"🔧 Slash commands đã sync: {len(synced)} lệnh")
     except Exception as e:
         print(f"❌ Lỗi sync commands: {e}")
+
+    update_status.start()
+
 
 # Hàm main để load các extension
 async def main():
@@ -53,11 +66,14 @@ async def main():
         "bot.commands.challenge",
         "bot.commands.gifcode",
         "bot.commands.help",
-        #"bot.commands.narutotrap",
+        "bot.commands.narutotrap",
         "bot.commands.dailyTask",
         "bot.commands.sellAllCard",
         "bot.commands.unequipweapon",
         "bot.commands.battlerule",
+        "bot.commands.adventure",
+        "bot.commands.tailedboss",
+        "bot.commands.resetrank",
     ]
 
     # Load từng extension
