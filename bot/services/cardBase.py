@@ -15,6 +15,58 @@ class Card:
         self.enemyTeam = None
         self.effects: list = []
 
+    def get_effective_base_damage(self):
+        multiplier = 1.0
+        flat_bonus = 0
+        for effect in self.effects:
+            if effect.name == "BuffDamage":
+                multiplier *= (1 + effect.value)
+                flat_bonus += effect.flat_bonus
+            elif effect.name == "DebuffDamage":
+                multiplier *= (1 - effect.value)
+                flat_bonus -= effect.flat_bonus
+        result = self.base_damage * multiplier + flat_bonus
+        return max(1, int(result))
+
+    def get_effective_armor(self):
+        multiplier = 1.0
+        flat_bonus = 0
+        for effect in self.effects:
+            if effect.name == "BuffArmor":
+                multiplier *= (1 + effect.value)
+                flat_bonus += effect.flat_bonus
+            elif effect.name == "DebuffArmor":
+                multiplier *= (1 - effect.value)
+                flat_bonus -= effect.flat_bonus
+        result = self.armor * multiplier + flat_bonus
+        return max(0, int(result))
+    
+    def get_effective_crit_rate(self):
+        multiplier = 1.0
+        flat_bonus = 0
+        for effect in self.effects:
+            if effect.name == "BuffCrit":
+                multiplier *= (1 + effect.value)
+                flat_bonus += effect.flat_bonus
+            elif effect.name == "DebuffCrit":
+                multiplier *= (1 - effect.value)
+                flat_bonus -= effect.flat_bonus
+        result = self.crit_rate * multiplier + flat_bonus
+        return max(0.0, min(1.0, result))
+
+    def get_effective_speed(self):
+        multiplier = 1.0
+        flat_bonus = 0
+        for effect in self.effects:
+            if effect.name == "BuffSpeed":
+                multiplier *= (1 + effect.value)
+                flat_bonus += effect.flat_bonus
+            elif effect.name == "DebuffSpeed":
+                multiplier *= (1 - effect.value)
+                flat_bonus -= effect.flat_bonus
+        result = self.speed * multiplier + flat_bonus
+        return max(0.0, min(0.7, result))
+    
     def is_alive(self):
         return self.health > 0
     

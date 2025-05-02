@@ -10,16 +10,27 @@ class FireCard(Card):
         
         if self.name == "Uchiha Madara":
             for target in alive_enemies:
-                # Thêm hiệu ứng stun 2 turn
-                stun_effect = Effect(
-                    name="Stun",
-                    duration=2,
-                    effect_type="debuff",
-                    value=None,
-                    description="Không thể hành động trong 2 lượt."
-                )
-                target.effects.append(stun_effect)
-                # Gây sát thương chuẩn (bạn không nói rõ có qua giáp hay không, mặc định là thường)
+                new_stun_duration = 2
+                exist_stun = next((e for e in target.effects if e.name == "Stun"), None)
+
+                if exist_stun:
+                    if new_stun_duration > exist_stun.duration:
+                        exist_stun.duration = new_stun_duration
+                        logs.append(f"⚡ {target.name} bị làm mới thời gian choáng (2 lượt).")
+                    else:
+                        logs.append(f"⚡ {target.name} đã bị dính hiệu ứng choáng lâu hơn, không thay đổi.")
+                else:
+                    stun_effect = Effect(
+                        name="Stun",
+                        duration=new_stun_duration,
+                        effect_type="debuff",
+                        value=None,
+                        description="Không thể hành động trong 2 lượt."
+                    )
+                    target.effects.append(stun_effect)
+                    logs.append(f"⚡ {target.name} bị choáng 2 lượt.")
+
+                # Gây sát thương chuẩn
                 dealt, new_logs = target.receive_damage(damage, true_damage=True)
                 logs.extend(new_logs)
 

@@ -1,9 +1,10 @@
 class Effect:
-    def __init__(self, name, duration, effect_type, value, description=""):
+    def __init__(self, name, duration, effect_type, value, flat_bonus = 0, description=""):
         self.name = name
         self.duration = duration
         self.effect_type = effect_type
         self.value = value
+        self.flat_bonus = flat_bonus 
         self.description = description
 
     def apply(self, card):
