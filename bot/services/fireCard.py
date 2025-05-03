@@ -6,7 +6,7 @@ class FireCard(Card):
         logs.append(f"{self.name} kích hoạt kỹ năng đặc biệt hệ Hỏa! 🔥")
 
         alive_enemies = [c for c in self.enemyTeam if c.is_alive()]
-        damage = int(self.base_damage * 5)
+        damage = int(self.get_effective_base_damage * 5)
         
         if self.name == "Uchiha Madara":
             for target in alive_enemies:
@@ -16,7 +16,7 @@ class FireCard(Card):
                 if exist_stun:
                     if new_stun_duration > exist_stun.duration:
                         exist_stun.duration = new_stun_duration
-                        logs.append(f"⚡ {target.name} bị làm mới thời gian choáng (2 lượt).")
+                        logs.append(f"⚡ {target.name} bị làm mới thời gian choáng ({new_stun_duration} lượt).")
                     else:
                         logs.append(f"⚡ {target.name} đã bị dính hiệu ứng choáng lâu hơn, không thay đổi.")
                 else:
@@ -25,7 +25,7 @@ class FireCard(Card):
                         duration=new_stun_duration,
                         effect_type="debuff",
                         value=None,
-                        description="Không thể hành động trong 2 lượt."
+                        description="Choáng của Madara"
                     )
                     target.effects.append(stun_effect)
                     logs.append(f"⚡ {target.name} bị choáng 2 lượt.")
@@ -44,48 +44,38 @@ class FireCard(Card):
             for i in range(3):
                 if self.enemyTeam[i].is_alive():
                     target = self.enemyTeam[i]
-                    target.health -= max(damage - target.armor, 0)
-                    if target.health < 0:
-                        target.health = 0
-                    logs.append(f"🔥 {target.name} bị tấn công bằng hỏa thuật! Gây {max(damage - target.armor, 0)} sát thương.")
+                    dealt, new_logs = target.receive_damage(damage)
+                    logs.extend(new_logs)
                     break
 
         elif self.tier == "Chunin":
             # Tấn công 2 kẻ địch đầu tiên còn sống
             targets = alive_enemies[:2]
             for target in targets:
-                dealt = max(damage - target.armor, 0)
-                target.health -= dealt
-                if target.health < 0:
-                    target.health = 0
-                logs.append(f"🔥 {target.name} nhận {dealt} sát thương từ hỏa thuật!")
+                dealt, new_logs = target.receive_damage(damage)
+                logs.extend(new_logs)
 
         elif self.tier == "Jounin":
             # Tấn công toàn bộ kẻ địch còn sống
             for target in alive_enemies:
-                dealt = max(damage - target.armor, 0)
-                target.health -= dealt
-                if target.health < 0:
-                    target.health = 0
-                logs.append(f"🔥 {target.name} bị thiêu đốt! Gây {dealt} sát thương.")
+                dealt, new_logs = target.receive_damage(damage)
+                logs.extend(new_logs)
 
         elif self.tier == "Kage":
             # Sát thương chuẩn: bỏ qua giáp
             for target in alive_enemies:
-                target.health -= damage
-                if target.health < 0:
-                    target.health = 0
-                logs.append(f"🔥🔥 {target.name} nhận {damage} sát thương chuẩn (bỏ qua giáp)!")
+                dealt, new_logs = target.receive_damage(damage, true_damage=True)
+                logs.extend(new_logs)
 
         elif self.tier == "Legendary":
-            # Sát thương chuẩn + giảm giáp 30%
             for target in alive_enemies:
-                target.health -= damage
-                armor_reduction = int(target.armor * 0.3)
-                target.armor = max(target.armor - armor_reduction, 0)
-                if target.health < 0:
-                    target.health = 0
-                logs.append(f"🌋 {target.name} bị hủy diệt! Gây {damage} sát thương chuẩn và giảm giáp {armor_reduction}!")
+                # Gây sát thương chuẩn
+                dealt, new_logs = target.receive_damage(damage, true_damage=True)
+                logs.extend(new_logs)
+                
+                # Giảm giáp 30%
+                armor_logs = target.reduce_armor_direct(percent_reduce=0.3)
+                logs.extend(armor_logs)
 
         else:
             logs.append(f"{self.name} không có kỹ năng đặc biệt phù hợp.")

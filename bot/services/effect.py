@@ -17,7 +17,7 @@ class Effect:
         return logs
 
     def on_expire(self, card):
-        return [f"⏳ {self.name} trên {card.name} đã hết hiệu lực."]
+        return [f"⏳ {self.description} trên {card.name} đã hết hiệu lực."]
     
     def on_receive_damage(self, card, damage):
         if self.name == "Immune":
