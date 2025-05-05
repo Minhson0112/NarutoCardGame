@@ -1,22 +1,41 @@
 from bot.services.cardBase import Card
-from bot.services.fireCard import FireCard
-from bot.services.windCard import WindCard
-from bot.services.waterCard import WaterCard
-from bot.services.taijutsuCard import TaijutsuCard
-from bot.services.lightningCard import LightningCard
-from bot.services.earthCard import EarthCard
 from bot.services.tailedCard import TailedBeastCard
+from bot.services.character.yamanakaIno import YamanakaIno
+from bot.services.character.tenTen import TenTen
+from bot.services.character.kankuro import Kankuro
+from bot.services.character.aburameShino import AburameShino
+from bot.services.character.harunoSakura import HarunoSakura
+from bot.services.character.hyugaHinata import HyugaHinata
+from bot.services.character.temari import Temari
+from bot.services.character.inuzukaKiba import InuzukaKiba
+from bot.services.character.akimichiChoji import AkimichiChoji
+from bot.services.character.uminoIruka import UminoIruka
+from bot.services.character.momochiZabuza import MomochiZabuza
+from bot.services.character.uchihaMadara import UchihaMadara
 
-ELEMENT_CLASS_MAP = {
-    "Hỏa": FireCard,
-    "Thủy": WaterCard,
-    "Thổ": EarthCard,
-    "Phong": WindCard,
-    "Lôi": LightningCard,
-    "Thể": TaijutsuCard,
-    "vi": TailedBeastCard
+SPECIAL_CARD_CLASS_MAP = {
+    "Uchiha Madara": UchihaMadara,
+    "Yamanaka Ino": YamanakaIno,
+    "TenTen": TenTen,
+    "Kankuro" : Kankuro,
+    "Aburame Shino" : AburameShino,
+    "Haruno Sakura": HarunoSakura,
+    "Hyuga Hinata": HyugaHinata,
+    "Temari": Temari,
+    "Inuzuka Kiba": InuzukaKiba,
+    "Akimichi Choji": AkimichiChoji,
+    "Umino Iruka": UminoIruka,
+    "Momochi Zabuza": MomochiZabuza,
+
+
+    # ... thêm các tướng khác
 }
 
 def create_card(name, health, armor, base_damage, crit_rate, speed, chakra, element, tier):
-    card_class = ELEMENT_CLASS_MAP.get(element, Card)
+    # Nếu là vĩ thú thì dùng class riêng cho vĩ thú
+    if element == "vi":
+        card_class = TailedBeastCard
+    else:
+        # Ưu tiên tìm theo tên trong map tướng đặc biệt
+        card_class = SPECIAL_CARD_CLASS_MAP.get(name, Card)
     return card_class(name, health, armor, base_damage, crit_rate, speed, chakra, element, tier)

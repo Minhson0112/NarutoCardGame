@@ -157,7 +157,7 @@ class Adventure(commands.Cog):
                         for c in atk_team:
                             if not c.is_alive():
                                 continue
-                            logs = battle.battle_turn_one_card(c, def_team)
+                            logs = battle.battle_turn_one_card(c)
                             static_lines = []
                             static_lines += render_team_status(battle_attacker_team, "**Team Tấn Công**")
                             static_lines += render_team_status(battle_defender_team, "**Team Phòng Thủ**")
@@ -184,7 +184,7 @@ class Adventure(commands.Cog):
                 playerRepo2 = PlayerRepository(session2)
                 fresh_attacker = playerRepo2.getById(attacker_id) 
                 # xác định người thắng
-                if battle.turn > battle.maxturn:
+                if battle.turn >= battle.maxturn:
                     result = "🏳️ Hoà"
                     outcome_text = "⚔️ Hai đội đều rút lui nên hoà! không nhận được thưởng, hãy quay lại sau 5 phút."
                     thuong = f"💰**Thưởng:** {bonus_reward:,} Ryo"

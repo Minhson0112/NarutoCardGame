@@ -95,47 +95,73 @@ class Card:
             self.effects.remove(effect)
 
         return logs
+    
+    def process_pre_action_effects(self):
+        """Chạy effect đặc biệt TRƯỚC khi hành động (ví dụ Illusion)."""
+        logs = []
+        for effect in self.effects:
+            if getattr(effect, "trigger_on_pre_action", False):
+                logs.extend(effect.apply(self))
+        return logs
 
-    def receive_damage(self, damage, true_damage=False, execute_threshold=None):
+    def receive_damage(self, damage, true_damage=False, execute_threshold=None, attacker=None):
         """
         Nhận sát thương:
         - damage: số damage gây ra
         - true_damage: nếu True → bỏ qua giáp (sát thương chuẩn)
+        - execute_threshold: nếu HP sau đòn đánh ≤ % này thì bị kết liễu ngay
+        - attacker: thẻ đã gây sát thương (dùng cho phản damage)
+        - reflect_percent: % damage bị phản lại vào attacker (0.0 = không phản)
         """
         logs = []
 
         # Hook hiệu ứng miễn nhiễm
         for effect in self.effects:
-            if hasattr(effect, "on_receive_damage"):
-                new_damage, log = effect.on_receive_damage(self, damage)
-                if log:
-                    logs.append(log)
-                damage = new_damage
+            if any(effect.name == "Immune" for effect in self.effects):
+                logs.append(f"🛡️ {self.name} miễn nhiễm sát thương!")
+                return 0, logs
 
         if damage == 0:
             return 0, logs
 
+        # --- TÍNH SAT THUONG ---
         if true_damage:
             # Sát thương chuẩn: bỏ qua giáp
             self.health -= damage
             if self.health < 0:
                 self.health = 0
-            logs.append(f" {self.name} nhận {damage} sát thương chuẩn (bỏ qua giáp).")
-            return damage, logs
+            logs.append(f"{self.name} nhận {damage} sát thương chuẩn (bỏ qua giáp).")
+            dealt_damage = damage
+        else:
+            # Áp dụng giáp
+            dealt_damage = max(damage - self.armor, 0)
+            self.health -= dealt_damage
+            if self.health < 0:
+                self.health = 0
+            logs.append(f"{self.name} nhận {dealt_damage} sát thương.")
 
-        # Áp dụng giáp
-        dealt_damage = max(damage - self.armor, 0)
-        self.health -= dealt_damage
-        if self.health < 0:
-            self.health = 0
-        logs.append(f"{self.name} nhận {dealt_damage} sát thương.")
-
-        # hiệu ứng kết liễu % máu
+        # --- KẾT LIỄU ---
         if execute_threshold is not None:
             hp_ratio = self.health / self.max_health if self.max_health else 0
             if self.is_alive() and hp_ratio <= execute_threshold:
                 self.health = 0
                 logs.append(f"💀 {self.name} bị kết liễu do HP xuống dưới {int(execute_threshold * 100)}% sau đòn đánh.")
+
+        # --- PHẢN DAMAGE ---
+        if attacker and dealt_damage > 0:
+            # Check xem có hiệu ứng Reflect không
+            for effect in self.effects:
+                if effect.name == "Reflect":
+                    reflect_percent = max(0, effect.value)  # VD: 0.25 nếu phản 25%
+                    reflect_damage = int(dealt_damage * reflect_percent)
+                    if reflect_damage > 0:
+                        attacker.health -= reflect_damage
+                        if attacker.health < 0:
+                            attacker.health = 0
+                        logs.append(
+                            f"🌀 {attacker.name} bị phản lại {reflect_damage} sát thương "
+                            f"({int(reflect_percent * 100)}% của {dealt_damage})."
+                        )
 
         return dealt_damage, logs
     
@@ -167,6 +193,19 @@ class Card:
         logs.append(f"💚 {self.name} hồi {actual_healed} HP.")
         return logs
     
+    def receive_base_damage_buff(self, damage_increase: int):
+        """
+        Tăng sát thương cơ bản trực tiếp (buff tức thời, không phải hiệu ứng theo lượt).
+
+        Args:
+            damage_increase (int): Số sát thương cơ bản cộng thêm ngay lập tức.
+
+        Returns:
+            list[str]: Log hiển thị thông tin buff.
+        """
+        self.base_damage += damage_increase
+        return [f"⚔️ {self.name} nhận buff +{damage_increase} sát thương cơ bản (hiện tại: {self.base_damage})."]
+        
     def receive_armor_buff(self, armor_increase: int):
         """
         Tăng giáp trực tiếp (buff tức thời, không phải hiệu ứng theo lượt).
@@ -330,5 +369,3 @@ class Card:
         filled = int(ratio * bar_length)
         bar = '█' * filled + '░' * (bar_length - filled)
         return f"HP: [{bar}] {self.health}/{self.max_health}"
-
-

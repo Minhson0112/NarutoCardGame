@@ -32,22 +32,27 @@ class Battle:
     def get_team_total_speed(self, team):
         return sum(card.speed for card in team if card.is_alive())
 
-    def battle_turn_one_card(self, atk, enemy_team):
+    def battle_turn_one_card(self, atk):
         logs = []
-        if not atk.is_alive():
-            return logs
+
+        logs.extend(atk.process_pre_action_effects())
 
         if atk.has_effect("Stun"):
             logs.append(f"⚡ {atk.name} đang bị khống chế, không thể hành động.")
             logs.extend(atk.process_effects())
             return logs
 
-        if atk.chakra >= 100:
+        is_rooted = atk.has_effect("Root")  # Hiệu ứng "trói chân"
+
+        if atk.chakra >= 100 and not is_rooted:
             logs.append(f"{atk.name} dùng kỹ năng đặc biệt!")
             logs += atk.special_skills()
             atk.chakra = 0
         else:
-            tgt = atk.target if atk.target and atk.target.is_alive() else self.get_default_target(enemy_team)
+            if atk.chakra >= 100 and is_rooted:
+                logs.append(f"🚫 {atk.name} đang bị trói chân, không thể dùng kỹ năng!")
+
+            tgt = atk.target if atk.target and atk.target.is_alive() else self.get_default_target(atk.enemyTeam)
             if not tgt:
                 logs.append(f"{atk.name} không có mục tiêu.")
                 return logs
@@ -57,12 +62,15 @@ class Battle:
                 logs.append(f"→ {tgt.name} né thành công! ({tgt.speed:.0%})")
             else:
                 crit = random.random() < atk.crit_rate
-                crit = random.random() < atk.crit_rate
                 dmg = atk.base_damage * (2 if crit else 1)
-                dealt, new_logs = tgt.receive_damage(dmg)
+                dealt, new_logs = tgt.receive_damage(dmg, true_damage=False, execute_threshold=None, attacker=atk)
                 if crit:
                     logs.append(f"💥 ĐÒN CHÍ MẠNG của {atk.name}!")
                 logs.extend(new_logs)
+
         logs.extend(atk.process_effects())
-        atk.chakra += 20
+        if not atk.has_effect("SealChakra"):
+            atk.chakra += 20
+        else:
+            logs.append(f"🚫 {atk.name} bị phong ấn chakra, không nhận được chakra.")
         return logs
