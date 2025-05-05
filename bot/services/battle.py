@@ -47,7 +47,7 @@ class Battle:
         if atk.chakra >= 100 and not is_rooted:
             logs.append(f"{atk.name} dùng kỹ năng đặc biệt!")
             logs += atk.special_skills()
-            atk.chakra = 0
+            atk.chakra -= 100
         else:
             if atk.chakra >= 100 and is_rooted:
                 logs.append(f"🚫 {atk.name} đang bị trói chân, không thể dùng kỹ năng!")
