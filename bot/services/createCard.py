@@ -11,6 +11,19 @@ from bot.services.character.inuzukaKiba import InuzukaKiba
 from bot.services.character.akimichiChoji import AkimichiChoji
 from bot.services.character.uminoIruka import UminoIruka
 from bot.services.character.momochiZabuza import MomochiZabuza
+from bot.services.character.konohamaru import Konohamaru
+from bot.services.character.hyugaNeji import HyugaNeji
+from bot.services.character.naraShikamaru import NaraShikamaru
+from bot.services.character.noharaRin import NoharaRin
+from bot.services.character.yagura import Yagura
+from bot.services.character.rockLee import RockLee
+from bot.services.character.yuhiKurenai import YuhiKurenai
+from bot.services.character.sarutobiAsuma import SarutobiAsuma
+from bot.services.character.hidan import Hidan
+from bot.services.character.kimimaro import Kimimaro
+from bot.services.character.sasori import Sasori
+from bot.services.character.yamanakaSai import YamanakaSai
+
 from bot.services.character.uchihaMadara import UchihaMadara
 
 SPECIAL_CARD_CLASS_MAP = {
@@ -26,6 +39,21 @@ SPECIAL_CARD_CLASS_MAP = {
     "Akimichi Choji": AkimichiChoji,
     "Umino Iruka": UminoIruka,
     "Momochi Zabuza": MomochiZabuza,
+    "Konohamaru": Konohamaru,
+    "Hyuga Neji": HyugaNeji,
+    "Nara Shikamaru": NaraShikamaru,
+    "Nohara Rin": NoharaRin,
+    "Yagura": Yagura,
+    "Rock_Lee": RockLee,
+    "Yuhi Kurenai": YuhiKurenai,
+    "Sarutobi Asuma": SarutobiAsuma,
+    "Hidan": Hidan,
+    "Kimimaro": Kimimaro,
+    "Sasori": Sasori,
+    "Yamanaka Sai": YamanakaSai,
+
+
+
 
 
     # ... thêm các tướng khác
