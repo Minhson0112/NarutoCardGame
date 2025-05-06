@@ -35,7 +35,7 @@ def get_card_effective_stats(card):
         "armor":     int(base.armor      * multiplier),
         "crit_rate": base.crit_rate      * multiplier,
         "speed":     base.speed          * multiplier,
-        "chakra":    int(base.chakra     * multiplier),
+        "chakra":    base.chakra,
     }
 
 def get_weapon_effective_stats(weapon):
