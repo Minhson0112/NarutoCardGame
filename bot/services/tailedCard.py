@@ -20,7 +20,7 @@ class TailedBeastCard(Card):
         for target in alive_enemies:
             # Tính sát thương có xét giáp
             
-            dealt, new_logs = target.receive_damage(self, damage, true_damage=False, execute_threshold=None, attacker=self)
+            dealt, new_logs = target.receive_damage(damage, true_damage=False, execute_threshold=None, attacker=self)
             logs.extend(new_logs)
             # Giảm giáp theo phần trăm
             reduction_amount = int(target.armor * armor_reduction_percent)
