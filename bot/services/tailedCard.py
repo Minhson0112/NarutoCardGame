@@ -7,7 +7,7 @@ class TailedBeastCard(Card):
 
         # Lấy danh sách kẻ địch còn sống
         alive_enemies = [c for c in self.enemyTeam if c.is_alive()]
-        damage = int(self.get_effective_base_damage() * 3)
+        damage = int(self.get_effective_base_damage() * 2)
 
         # Xác định phần trăm giảm giáp theo tier (1vi -> 5%, 2vi -> 10%, ...)
         try:
