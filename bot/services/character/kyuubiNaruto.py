@@ -9,7 +9,7 @@ class KyuubiNaruto(Card):
         # 1️⃣ Buff sát thương +300% trong 3 lượt
         berserk = BuffDamageEffect(
             duration=3,
-            value=3.0,  # +300% sát thương cơ bản
+            value=2.0,  # +300% sát thương cơ bản
             description="Cuồng hóa Vĩ Thú của Naruto"
         )
         self.effects.append(berserk)
