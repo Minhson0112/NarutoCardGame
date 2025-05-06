@@ -38,7 +38,7 @@ SKILL_MAP = {
     "itachi": "Dùng ảo thuật khiến 2 kẻ địch hàng đầu tự tấn công đồng minh trong 2 turn, gây 200% sát thương cơ bản.",
     "pain": "Thần La Thiên Trinh, gây 500% sát thương cơ bản lên toàn đội địch và giảm tốc 100% trong 3 turn.",
     "sasuke": "Dùng Amaterasu thiêu đốt 2 kẻ địch tuyến sau bằng 100% sát thương cơ bản trong 4 turn.",
-    "9naruto": "Dạng Vĩ Thú điên cuồng, tăng 300% sát thương bản thân trong 3 turn, tấn công toàn bộ địch bằng 200% sát thương cơ bản.",
+    "9naruto": "Dạng Vĩ Thú điên cuồng, tăng 200% sát thương bản thân trong 3 turn, tấn công toàn bộ địch bằng 200% sát thương cơ bản.",
     "hokagekakashi": "Sao chép tất cả buff của địch áp dụng lên bản thân và tấn công toàn đội địch bằng 400% sát thương cơ bản.",
     "guy": "Hi sinh 10% máu hiện tại để tăng toàn bộ chỉ số bản thân lên 250% (cộng dồn vĩnh viễn).",
     "nagato": "Hồi sinh 1 đồng minh đã chết với 100% máu nhưng giảm một nửa toàn bộ chỉ số. Nếu không có ai chết, hồi máu cho đồng minh thấp máu nhất bằng 400% sát thương cơ bản.",
@@ -55,7 +55,7 @@ SKILL_MAP = {
     "danzo": "Dùng Sharingan gây 300% sát thương cơ bản lên toàn đội địch và khiến chúng bị câm lặng trong 2 turn.",
     "haku": "Dùng Băng Thuật, buff phản damage 70% cho toàn bộ đồng minh trong 2 turn.",
     "kakashi": "Dùng Chidori cực mạnh gây 500% sát thương chuẩn lên toàn bộ địch và phá 80% giáp trong 2 turn.",
-    "naruto": "Kết hợp Rasenshuriken và Bom Vĩ Thú, gây 400% sát thương cơ bản lên toàn đội địch và xóa toàn bộ chakra của chúng.",
+    "naruto": "Kết hợp Rasenshuriken và Bom Vĩ Thú, gây 400% sát thương cơ bản lên toàn đội địch và làm kẻ địch mất 40 charka.",
     "susanoosasuke": "Dùng Susanoo bắn cung tên, gây 600% sát thương cơ bản lên mục tiêu đầu tiên và choáng 1 turn.",
     "6pain": "Dùng Thần La Thiên Trinh cực mạnh, gây 500% sát thương cơ bản, kết liễu ngay nếu địch dưới 25% máu và choáng 1 turn.",
     "akatsukiitachi": "Dùng ảo thuật cực mạnh, khiến kẻ địch tự đánh nhau trong 2 turn."

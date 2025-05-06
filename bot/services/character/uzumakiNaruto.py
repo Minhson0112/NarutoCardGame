@@ -27,7 +27,7 @@ class UzumakiNaruto(Card):
 
             # 2️⃣ Làm mất hết chakra của mục tiêu
             if target.chakra > 0:
-                reduce_logs = target.reduce_chakra_direct(target.chakra)
+                reduce_logs = target.reduce_chakra_direct(40)
                 logs.extend(reduce_logs)
             else:
                 logs.append(f"🔋 {target.name} đã hết chakra.")
