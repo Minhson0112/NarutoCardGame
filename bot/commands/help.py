@@ -61,7 +61,7 @@ class HelpCommand(commands.Cog):
             title="🌐 Máy chủ cộng đồng",
             color=discord.Color.teal(),
             description=(
-                "• Tham gia [máy chủ cộng đồng](https://discord.gg/Tbm2xuA2) của chúng ta để nhận thông báo về **gifcode** và các event hấp dẫn của bot.\n\n"
+                "• Tham gia [máy chủ cộng đồng](https://discord.gg/narutodaichien) của chúng ta để nhận thông báo về **gifcode** và các event hấp dẫn của bot.\n\n"
             )
         )
 

@@ -134,7 +134,7 @@ class Card:
             dealt_damage = damage
         else:
             # Áp dụng giáp
-            dealt_damage = max(damage - self.armor, 0)
+            dealt_damage = max(damage - self.get_effective_armor(), 0)
             self.health -= dealt_damage
             if self.health < 0:
                 self.health = 0

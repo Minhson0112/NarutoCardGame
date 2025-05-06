@@ -14,6 +14,7 @@ from bot.services.playerService import PlayerService
 from bot.config.gachaConfig import GACHA_PRICES, PITY_LIMIT, PITY_PROTECTION, GACHA_DROP_RATE
 from bot.config.imageMap import CARD_IMAGE_MAP
 from bot.entity.cardTemplate import CardTemplate
+from bot.config.characterSkill import SKILL_MAP
 
 class BuyCard(commands.Cog):
     def __init__(self, bot):
@@ -96,6 +97,8 @@ class BuyCard(commands.Cog):
                 # Lấy URL ảnh thực từ CARD_IMAGE_MAP (card.image_url lưu key)
                 imageUrl = CARD_IMAGE_MAP.get(card.image_url, card.image_url)
 
+                skillDescription = SKILL_MAP.get(card.image_url, "Chưa có skill đặc biệt.")
+
                 # Tạo embed hiển thị thông tin của thẻ nhận được
                 embed = discord.Embed(
                     title=f"🎉 Bạn đã mua gói {pack} và mở được thẻ: {card.name}",
@@ -110,7 +113,8 @@ class BuyCard(commands.Cog):
                         f"**Bậc:** {card.tier}\n"
                         f"**Hệ chakra:** {card.element}\n"
                         f"**Giá bán:** {card.sell_price:,} Ryo\n\n"
-                        f"Thẻ đã được thêm vào kho của bạn. Kiểm tra kho bằng lệnh `/inventory`."
+                        f"Thẻ đã được thêm vào kho của bạn. Kiểm tra kho bằng lệnh `/inventory`.\n\n\n\n"
+                        f"📜 **Skill đặc biệt:**\n{skillDescription}\n\n"
                     ),
                     color=discord.Color.green()
                 )

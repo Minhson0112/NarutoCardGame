@@ -23,11 +23,45 @@ from bot.services.character.hidan import Hidan
 from bot.services.character.kimimaro import Kimimaro
 from bot.services.character.sasori import Sasori
 from bot.services.character.yamanakaSai import YamanakaSai
-
+from bot.services.character.yakushiKabuto import YakushiKabuto
+from bot.services.character.yamato import Yamato
+from bot.services.character.deidara import Deidara
+from bot.services.character.gaara import Gaara
+from bot.services.character.chuninKakashi import ChuninKakashi
+from bot.services.character.kakuzu import Kakuzu
+from bot.services.character.kushina import Kushina
+from bot.services.character.konan import Konan
+from bot.services.character.kisame import Kisame
+from bot.services.character.uchihaObito import UchihaObito
+from bot.services.character.gengetsu import Gengetsu
+from bot.services.character.killerBee import KillerBee
+from bot.services.character.raikageIII import RaikageIII
+from bot.services.character.uchihaItachi import UchihaItachi
+from bot.services.character.pain import Pain
+from bot.services.character.uchihaSasuke import UchihaSasuke
+from bot.services.character.kyuubiNaruto import KyuubiNaruto
+from bot.services.character.hokageKakashi import HokageKakashi
+from bot.services.character.mightGuy import MightGuy
+from bot.services.character.uzumakiNagato import UzumakiNagato
+from bot.services.character.onoki import Onoki
+from bot.services.character.terumiMei import TerumiMei
+from bot.services.character.tsunade import Tsunade
+from bot.services.character.orochimaru import Orochimaru
+from bot.services.character.jiraiya import Jiraiya
+from bot.services.character.minato import Minato
+from bot.services.character.sarutobiHiruzen import SarutobiHiruzen
+from bot.services.character.senjuTobirama import SenjuTobirama
 from bot.services.character.uchihaMadara import UchihaMadara
+from bot.services.character.senjuHashirama import SenjuHashirama
+from bot.services.character.shimuraDanzo import ShimuraDanzo
+from bot.services.character.haku import Haku
+from bot.services.character.hatakeKakashi import HatakeKakashi
+from bot.services.character.uzumakiNaruto import UzumakiNaruto
+from bot.services.character.susanooSasuke import SusanooSasuke
+from bot.services.character.sixPathsPain import SixPathsPain
+from bot.services.character.akatsukiItachi import AkatsukiItachi
 
 SPECIAL_CARD_CLASS_MAP = {
-    "Uchiha Madara": UchihaMadara,
     "Yamanaka Ino": YamanakaIno,
     "TenTen": TenTen,
     "Kankuro" : Kankuro,
@@ -51,12 +85,43 @@ SPECIAL_CARD_CLASS_MAP = {
     "Kimimaro": Kimimaro,
     "Sasori": Sasori,
     "Yamanaka Sai": YamanakaSai,
-
-
-
-
-
-    # ... thêm các tướng khác
+    "Yakushi Kabuto": YakushiKabuto,
+    "Yamato": Yamato,
+    "Deidara": Deidara,
+    "Gaara": Gaara,
+    "Chunin Kakashi": ChuninKakashi,
+    "Kakuzu": Kakuzu,
+    "Kushina": Kushina,
+    "Konan": Konan,
+    "Kisame": Kisame,
+    "Uchiha Obito": UchihaObito,
+    "Gengetsu": Gengetsu,
+    "Killer Bee": KillerBee,
+    "RaikageIII": RaikageIII,
+    "Uchiha Itachi": UchihaItachi,
+    "Pain": Pain,
+    "Uchiha Sasuke": UchihaSasuke,
+    "Kyuubi Naruto": KyuubiNaruto,
+    "Hokage Kakashi": HokageKakashi,
+    "Might Guy": MightGuy,
+    "Uzumaki Nagato": UzumakiNagato,
+    "Onoki": Onoki,
+    "Terumi Mei": TerumiMei,
+    "Tsunade": Tsunade,
+    "Orochimaru": Orochimaru,
+    "Jiraiya": Jiraiya,
+    "Minato": Minato,
+    "Sarutobi Hiruzen": SarutobiHiruzen,
+    "Senju Tobirama": SenjuTobirama,
+    "Uchiha Madara": UchihaMadara,
+    "Senju Hashirama": SenjuHashirama,
+    "Shimura Danzo": ShimuraDanzo,
+    "Haku": Haku,
+    "Hatake Kakashi": HatakeKakashi,
+    "Uzumaki Naruto": UzumakiNaruto,
+    "Susanoo Sasuke": SusanooSasuke,
+    "Six Paths Pain": SixPathsPain,
+    "Akatsuki Itachi": AkatsukiItachi,
 }
 
 def create_card(name, health, armor, base_damage, crit_rate, speed, chakra, element, tier):

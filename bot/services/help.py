@@ -105,8 +105,13 @@ def render_team_status(team, title=""):
     lines = [title]
     for c in team:
         lines.append(
-            f"{c.name}"
-            f"⚔️{c.get_effective_base_damage}  🛡️{c.get_effective_armor}  💥{c.get_effective_crit_rate:.0%}  🏃{c.get_effective_speed:.0%}  🔋{c.chakra}"
+            # Gọi các phương thức để lấy giá trị, không phải tham chiếu tới method
+            f"{c.name}  "
+            f"⚔️{c.get_effective_base_damage()}  "
+            f"🛡️{c.get_effective_armor()}  "
+            f"💥{c.get_effective_crit_rate():.0%}  "
+            f"🏃{c.get_effective_speed():.0%}  "
+            f"🔋{c.chakra}"
         )
         lines.append(c.health_bar() + "\n")
     return lines

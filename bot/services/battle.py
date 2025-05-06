@@ -50,7 +50,7 @@ class Battle:
             atk.chakra -= 100
         else:
             if atk.chakra >= 100 and is_rooted:
-                logs.append(f"🚫 {atk.name} đang bị trói chân, không thể dùng kỹ năng!")
+                logs.append(f"🚫 {atk.name} đang bị khống chế, không thể dùng kỹ năng!")
 
             tgt = atk.target if atk.target and atk.target.is_alive() else self.get_default_target(atk.enemyTeam)
             if not tgt:
@@ -58,11 +58,11 @@ class Battle:
                 return logs
 
             logs.append(f"**{atk.name}** tấn công **{tgt.name}**")
-            if random.random() < tgt.speed:
+            if random.random() < tgt.get_effective_speed():
                 logs.append(f"→ {tgt.name} né thành công! ({tgt.speed:.0%})")
             else:
-                crit = random.random() < atk.crit_rate
-                dmg = atk.base_damage * (2 if crit else 1)
+                crit = random.random() < atk.get_effective_crit_rate()
+                dmg = atk.get_effective_base_damage() * (2 if crit else 1)
                 dealt, new_logs = tgt.receive_damage(dmg, true_damage=False, execute_threshold=None, attacker=atk)
                 if crit:
                     logs.append(f"💥 ĐÒN CHÍ MẠNG của {atk.name}!")
