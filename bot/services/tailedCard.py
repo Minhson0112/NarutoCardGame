@@ -7,7 +7,7 @@ class TailedBeastCard(Card):
 
         # Lấy danh sách kẻ địch còn sống
         alive_enemies = [c for c in self.enemyTeam if c.is_alive()]
-        damage = int(self.base_damage * 2)
+        damage = int(self.get_effective_base_damage * 3)
 
         # Xác định phần trăm giảm giáp theo tier (1vi -> 5%, 2vi -> 10%, ...)
         try:
@@ -19,14 +19,9 @@ class TailedBeastCard(Card):
         # Áp dụng sát thương và giảm giáp cho tất cả kẻ địch
         for target in alive_enemies:
             # Tính sát thương có xét giáp
-            dealt = max(damage - target.armor, 0)
-            target.health -= dealt
-            if target.health < 0:
-                target.health = 0
-            logs.append(
-                f"💥 {target.name} nhận {dealt} sát thương từ bom vĩ thú!"
-            )
-
+            
+            dealt, new_logs = target.receive_damage(self, damage, true_damage=False, execute_threshold=None, attacker=self)
+            logs.extend(new_logs)
             # Giảm giáp theo phần trăm
             reduction_amount = int(target.armor * armor_reduction_percent)
             target.armor = max(target.armor - reduction_amount, 0)

@@ -8,7 +8,7 @@ class UzumakiNaruto(Card):
         )
 
         # 600% sát thương cơ bản
-        damage = int(self.get_effective_base_damage() * 6)
+        damage = int(self.get_effective_base_damage() * 4)
         alive_enemies = [c for c in self.enemyTeam if c.is_alive()]
 
         if not alive_enemies:

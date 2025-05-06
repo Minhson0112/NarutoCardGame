@@ -12,7 +12,7 @@ class Deidara(Card):
             return logs
 
         # 2️⃣ Gây 600% sát thương chuẩn (bỏ qua giáp)
-        damage = int(self.get_effective_base_damage() * 6)
+        damage = int(self.get_effective_base_damage() * 5)
         dealt, new_logs = target.receive_damage(
             damage,
             true_damage=True,

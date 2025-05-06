@@ -6,8 +6,8 @@ class TerumiMei(Card):
         logs: list[str] = []
         logs.append(f"🌋 {self.name} phun dung nham nóng, thiêu đốt toàn bộ kẻ địch trong 3 lượt!")
 
-        # 300% sát thương cơ bản làm giá trị burn mỗi lượt
-        burn_damage = int(self.get_effective_base_damage() * 3)
+        # 200% sát thương cơ bản làm giá trị burn mỗi lượt
+        burn_damage = int(self.get_effective_base_damage() * 2)
         alive_enemies = [c for c in self.enemyTeam if c.is_alive()]
 
         if not alive_enemies:

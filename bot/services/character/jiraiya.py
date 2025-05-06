@@ -6,7 +6,7 @@ class Jiraiya(Card):
         logs.append(f"📜 {self.name} thi triển Đại Chí Kim: càn quét toàn bộ kẻ địch bằng sát thương chuẩn!")
 
         # 800% sát thương cơ bản (bỏ qua giáp)
-        damage = int(self.get_effective_base_damage() * 8)
+        damage = int(self.get_effective_base_damage() * 500)
         alive_enemies = [c for c in self.enemyTeam if c.is_alive()]
 
         if not alive_enemies:

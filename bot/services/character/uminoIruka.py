@@ -3,7 +3,7 @@ from bot.services.cardBase import Card
 class UminoIruka(Card):
     def special_skills(self):
         logs: list[str] = []
-        damage = int(self.get_effective_base_damage() * 5)
+        damage = int(self.get_effective_base_damage() * 3)
         alive_enemies = [c for c in self.enemyTeam if c.is_alive()]
 
         logs.append(f"🍥 {self.name} tung chiêu tấn công 2 kẻ địch đầu tiên!")

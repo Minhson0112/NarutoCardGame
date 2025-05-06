@@ -5,8 +5,8 @@ class Konan(Card):
         logs: list[str] = []
         logs.append(f"🗡️ {self.name} tung Chiến Thuật Giấy, tấn công hai thành viên tuyến sau địch!")
 
-        # Tính 800% sát thương cơ bản
-        damage = int(self.get_effective_base_damage() * 8)
+        # Tính 500% sát thương cơ bản
+        damage = int(self.get_effective_base_damage() * 5)
         # Lấy hai thành viên tuyến sau (chỉ số 1 và 2)
         backline = self.enemyTeam[1:3]
         targets = [c for c in backline if c.is_alive()]

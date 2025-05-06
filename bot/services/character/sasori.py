@@ -23,8 +23,8 @@ class Sasori(Card):
         target.effects.append(armor_debuff)
         logs.append(f"🛡️ {target.name} bị giảm 50% giáp trong 3 lượt.")
 
-        # 3️⃣ Gây Độc: 300% sát thương cơ bản mỗi lượt trong 3 lượt
-        burn_amount = int(self.get_effective_base_damage() * 3)
+        # 3️⃣ Gây Độc: 200% sát thương cơ bản mỗi lượt trong 3 lượt
+        burn_amount = int(self.get_effective_base_damage() * 2)
         burn_effect = BurnEffect(
             duration=3,
             value=burn_amount,

@@ -7,7 +7,7 @@ class SixPathsPain(Card):
         logs.append("☯️ Six Paths Pain tung ra Thần La Thiên Trinh Cực Mạnh: gây 700% SMKK, kết liễu nếu dưới 25% HP và choáng 1 lượt!")
 
         # 700% sát thương cơ bản
-        damage = int(self.get_effective_base_damage() * 7)
+        damage = int(self.get_effective_base_damage() * 5)
         alive_enemies = [c for c in self.enemyTeam if c.is_alive()]
 
         if not alive_enemies:

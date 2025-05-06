@@ -5,8 +5,8 @@ class ChuninKakashi(Card):
         logs: list[str] = []
         logs.append(f"⚡️ {self.name} sử dụng Lôi Độn: Chidori Đột Phát!")
 
-        # Tính sát thương chính: 600% SMKK
-        primary_damage = int(self.get_effective_base_damage() * 6)
+        # Tính sát thương chính: 400% SMKK
+        primary_damage = int(self.get_effective_base_damage() * 4)
         alive_enemies = [c for c in self.enemyTeam if c.is_alive()]
 
         if not alive_enemies:

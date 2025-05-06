@@ -7,7 +7,7 @@ class HatakeKakashi(Card):
         logs.append(f"⚡️ {self.name} sử dụng Chidori Cực Mạnh: càn quét toàn bộ kẻ địch với sát thương chuẩn!")
 
         # Tính 800% sát thương cơ bản
-        damage = int(self.get_effective_base_damage() * 8)
+        damage = int(self.get_effective_base_damage() * 5)
         alive_enemies = [c for c in self.enemyTeam if c.is_alive()]
 
         if not alive_enemies:
