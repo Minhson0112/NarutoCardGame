@@ -8,15 +8,31 @@ class YuhiKurenai(Card):
 
         # 1️⃣ Xác định mục tiêu tuyến đầu (đầu tiên còn sống)
         target = next((c for c in self.enemyTeam if c.is_alive()), None)
-
         if not target:
             logs.append("❌ Không tìm thấy mục tiêu để áp dụng Ảo Thuật.")
             return logs
 
-        # 2️⃣ Tạo hiệu ứng Illusion 2 turn
-        illusion = IllusionEffect(duration=2)
-        target.effects.append(illusion)
-
-        logs.append(f"🎭 {target.name} bị trúng Ảo Thuật và sẽ nhầm lẫn đồng minh với kẻ địch trong 2 lượt!")
+        # 2️⃣ Cộng dồn hoặc khởi tạo IllusionEffect
+        stack_turns = 2
+        existing = next(
+            (e for e in target.effects if isinstance(e, IllusionEffect)),
+            None
+        )
+        if existing:
+            existing.duration += stack_turns
+            logs.append(
+                f"🔄 Ảo Thuật trên {target.name} được cộng dồn thành "
+                f"{existing.duration} lượt."
+            )
+        else:
+            illusion = IllusionEffect(
+                duration=stack_turns,
+                description=f"Ảo Thuật của {self.name}"
+            )
+            target.effects.append(illusion)
+            logs.append(
+                f"🎭 {target.name} bị trúng Ảo Thuật trong {stack_turns} lượt "
+                "và sẽ nhầm lẫn đồng minh với kẻ địch!"
+            )
 
         return logs

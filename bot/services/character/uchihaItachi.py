@@ -17,15 +17,22 @@ class UchihaItachi(Card):
             return logs
 
         for target in front_two:
-            # Áp dụng IllusionEffect trong 2 lượt
-            illusion = IllusionEffect(
-                duration=2,
-                description=f"Ảo Thuật của {self.name}"
-            )
-            target.effects.append(illusion)
-            logs.append(f"🎭 {target.name} bị trúng Ảo Thuật trong 2 lượt và sẽ nhầm đồng minh thành kẻ địch!")
+            # 1️⃣ Nếu đã có IllusionEffect, chỉ refresh duration; ngược lại append mới
+            new_duration = 2
+            existing = next((e for e in target.effects if isinstance(e, IllusionEffect)), None)
+            if existing:
+                # thêm thời gian hiệu ứng
+                existing.duration += new_duration
+                logs.append(f"🔄 Ảo Thuật trên {target.name} được cộng dồn thành {existing.duration} lượt.")
+            else:
+                illusion = IllusionEffect(
+                    duration=new_duration,
+                    description=f"Ảo Thuật của {self.name}"
+                )
+                target.effects.append(illusion)
+                logs.append(f"🎭 {target.name} bị trúng Ảo Thuật trong {new_duration} lượt và sẽ nhầm đồng minh thành kẻ địch!")
 
-            # Gây sát thương thường
+            # 2️⃣ Gây sát thương thường
             dealt, dmg_logs = target.receive_damage(
                 damage,
                 true_damage=False,

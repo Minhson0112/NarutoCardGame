@@ -22,10 +22,19 @@ class SenjuTobirama(Card):
                 logs.extend(dmg_logs)
 
         # 2️⃣ Giải trừ mọi hiệu ứng bất lợi trên bản thân
-        removed = [e for e in self.effects if e.effect_type == 'debuff']
-        self.effects = [e for e in self.effects if e.effect_type != 'debuff']
-        for e in removed:
-            logs.append(f"❎ Hiệu ứng '{e.description}' trên {self.name} đã bị giải trừ.")
+        expired_logs = []
+        new_effects = []
+        for effect in self.effects:
+            if effect.effect_type == 'debuff':
+                # gọi on_expire để chạy cleanup (ví dụ IllusionEffect sẽ swap back)
+                expired_logs.extend(effect.on_expire(self))
+            else:
+                new_effects.append(effect)
+
+        self.effects = new_effects
+
+        for log in expired_logs:
+            logs.append(f"❎ {log}")
 
         # 3️⃣ Phong ấn miễn nhiễm sát thương trong 3 lượt
         immune = ImmuneEffect(duration=3, description="Miễn nhiễm sát thương từ Cấm Thuật của Tobirama")
