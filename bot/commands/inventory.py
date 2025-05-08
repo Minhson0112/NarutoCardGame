@@ -39,8 +39,9 @@ class CardInventoryView(View):
                 lines = []
                 for card in subset:
                     stats = get_card_effective_stats(card)
+                    nameMsg = f"•🥷 **{card.template.name}** (Lv {card.level}) (🔒)\n" if card.locked else f"•🥷 **{card.template.name}** (Lv {card.level})\n"
                     lines.append(
-                        f"•🥷 **{card.template.name}** (Lv {card.level})\n"
+                        f"{nameMsg}"
                         f"  ┣ **Bậc:** {card.template.tier}\n"
                         f"  ┣ **Damage:** {stats['strength']}\n"
                         f"  ┣ **HP:** {stats['hp'] or 'N/A'}\n"
