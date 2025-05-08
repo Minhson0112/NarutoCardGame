@@ -124,6 +124,7 @@ class Card:
         if damage == 0:
             return 0, logs
 
+
         # --- TÍNH SAT THUONG ---
         if true_damage:
             # Sát thương chuẩn: bỏ qua giáp
@@ -140,12 +141,24 @@ class Card:
                 self.health = 0
             logs.append(f"{self.name} nhận {dealt_damage} sát thương.")
 
+        # --- CỘNG CHAKRA THEO % MÁU BỊ MẤT ---
+         # --- Cộng chakra theo % máu mất (nếu không bị SealChakra) ---
+        if self.max_health and not self.has_effect("SealChakra"):
+            percent_lost = dealt_damage / self.max_health
+            gained_chakra = int(percent_lost * 100)
+            if gained_chakra > 0:
+                self.chakra += gained_chakra
+
         # --- KẾT LIỄU ---
         if execute_threshold is not None:
             hp_ratio = self.health / self.max_health if self.max_health else 0
             if self.is_alive() and hp_ratio <= execute_threshold:
                 self.health = 0
                 logs.append(f"💀 {self.name} bị kết liễu do HP xuống dưới {int(execute_threshold * 100)}% sau đòn đánh.")
+
+        # --- Thưởng chakra cho attacker nếu nó hạ kill được self ---
+        if attacker and dealt_damage > 0 and self.health == 0 and not attacker.has_effect("SealChakra"):
+            attacker.chakra += 20
 
         # --- PHẢN DAMAGE ---
         if attacker and dealt_damage > 0:
@@ -164,7 +177,7 @@ class Card:
                         )
 
         return dealt_damage, logs
-    
+
     def receive_healing(self, amount=None, percent_of_max=None):
         """
         Hồi máu cho thẻ:

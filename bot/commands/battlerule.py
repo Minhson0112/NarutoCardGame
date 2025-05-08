@@ -21,9 +21,9 @@ class BattleRule(commands.Cog):
             "🏎️ Team nào có tổng **Tốc độ** lớn hơn sẽ được quyền đánh **trước**\n"
             "🎯 Đòn tấn công cơ bản ưu tiên mục tiêu: **Tanker → Middle → Back**\n"
             "💧 Nếu **Chakra** của thẻ lên **100**, lượt kế nó sẽ dùng **Skill Đặc Biệt**\n"
+            "💧 **Chakra** của thẻ sẽ tăng 20 sau mỗi lần ra đòn hoặc kết liễu tướng đối phương, tăng khi nhận sát thương theo % máu tối đa bị mất\n"
             "💀 Trận đấu kết thúc khi một bên có cả **3 thẻ đều chết**\n"
             "⏳ Nếu quá **120 lượt** mà chưa phân thắng bại thì **hòa**\n"
-            "🦊 Vĩ thú sẽ miễn nhiễm hiệu ứng debuff\n"
             "⚔️ Xem kĩ năng đặc biệt tướng bằng lệnh `showcard`"
         )
 
