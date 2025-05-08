@@ -88,7 +88,7 @@ SPECIAL_CARD_CLASS_MAP = {
     "Nara Shikamaru": NaraShikamaru,
     "Nohara Rin": NoharaRin,
     "Yagura": Yagura,
-    "Rock_Lee": RockLee,
+    "Rock Lee": RockLee,
     "Yuhi Kurenai": YuhiKurenai,
     "Sarutobi Asuma": SarutobiAsuma,
     "Hidan": Hidan,
