@@ -51,7 +51,7 @@ SKILL_MAP = {
     "hiruzen": "Dùng Thuật Phong Ấn, gây sát thương tuyến đầu bằng 30% máu tối đa + 200% sát thương cơ bản. Kết liễu ngay nếu đối phương dưới 10% máu (sát thương chuẩn).",
     "tobirama": "Dùng cấm thuật gây 400% sát thương cơ bản lên toàn đội địch, giải toàn bộ debuff và miễn nhiễm sát thương trong 3 turn.",
     "madara": "Dùng Susanoo đập mạnh, gây 400% sát thương chuẩn và choáng toàn đội địch trong 2 turn.",
-    "hashirama": "Phật nghìn tayy Hồi máu cho toàn đội bằng 500% sát thương cơ bản và buff miễn nhiễm sát thương trong 2 turn.",
+    "hashirama": "Phật nghìn tay Hồi máu cho toàn đội bằng 500% sát thương cơ bản và buff miễn nhiễm sát thương trong 2 turn, giải mọi loại hiệu ứng bất lợi cho tất cả đồng minh",
     "danzo": "Dùng Sharingan gây 300% sát thương cơ bản lên toàn đội địch và khiến chúng bị câm lặng trong 2 turn.",
     "haku": "Dùng Băng Thuật, buff phản damage 70% cho toàn bộ đồng minh trong 2 turn.",
     "kakashi": "Dùng Chidori cực mạnh gây 500% sát thương chuẩn lên toàn bộ địch và phá 80% giáp trong 2 turn.",
