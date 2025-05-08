@@ -6,7 +6,7 @@ class UchihaMadara(Card):
         logs: list[str] = []
         logs.append("💥 Madara dùng Susano đập mạnh gây sát thương chuẩn và làm choáng cả team địch trong 2 turn!")
         alive_enemies = [c for c in self.enemyTeam if c.is_alive()]
-        damage = int(self.get_effective_base_damage() * 6)
+        damage = int(self.get_effective_base_damage() * 4)
 
         for target in alive_enemies:
             new_stun_duration = 2
