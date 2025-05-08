@@ -60,6 +60,16 @@ from bot.services.character.uzumakiNaruto import UzumakiNaruto
 from bot.services.character.susanooSasuke import SusanooSasuke
 from bot.services.character.sixPathsPain import SixPathsPain
 from bot.services.character.akatsukiItachi import AkatsukiItachi
+from bot.services.character.nhatVi import NhatVi
+from bot.services.character.nhiVi import NhiVi
+from bot.services.character.tamVi import TamVi
+from bot.services.character.tuVi import TuVi
+from bot.services.character.NguVi import NguVi
+from bot.services.character.lucVi import LucVi
+from bot.services.character.thatVi import ThatVi
+from bot.services.character.batVi import BatVi
+from bot.services.character.cuuVi import CuuVi
+
 
 SPECIAL_CARD_CLASS_MAP = {
     "Yamanaka Ino": YamanakaIno,
@@ -78,7 +88,7 @@ SPECIAL_CARD_CLASS_MAP = {
     "Nara Shikamaru": NaraShikamaru,
     "Nohara Rin": NoharaRin,
     "Yagura": Yagura,
-    "Rock_Lee": RockLee,
+    "Rock Lee": RockLee,
     "Yuhi Kurenai": YuhiKurenai,
     "Sarutobi Asuma": SarutobiAsuma,
     "Hidan": Hidan,
@@ -122,13 +132,18 @@ SPECIAL_CARD_CLASS_MAP = {
     "Susanoo Sasuke": SusanooSasuke,
     "Six Paths Pain": SixPathsPain,
     "Akatsuki Itachi": AkatsukiItachi,
+    "Nhất Vĩ": NhatVi,
+    "Nhị Vĩ": NhiVi,
+    "Tam Vĩ": TamVi,
+    "Tứ Vĩ": TuVi,
+    "Ngũ Vĩ": NguVi,
+    "Lục Vĩ": LucVi,
+    "Thất Vĩ": ThatVi,
+    "Bát Vĩ": BatVi,
+    "Cửu Vĩ": CuuVi,
 }
 
 def create_card(name, health, armor, base_damage, crit_rate, speed, chakra, element, tier):
-    # Nếu là vĩ thú thì dùng class riêng cho vĩ thú
-    if element == "vi":
-        card_class = TailedBeastCard
-    else:
-        # Ưu tiên tìm theo tên trong map tướng đặc biệt
-        card_class = SPECIAL_CARD_CLASS_MAP.get(name, Card)
+    # Ưu tiên tìm theo tên trong map tướng đặc biệt (bao gồm cả vĩ thú)
+    card_class = SPECIAL_CARD_CLASS_MAP.get(name, Card)
     return card_class(name, health, armor, base_damage, crit_rate, speed, chakra, element, tier)

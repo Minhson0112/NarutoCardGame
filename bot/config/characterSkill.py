@@ -2,7 +2,7 @@ SKILL_MAP = {
     "ino": "Đọc suy nghĩ của kẻ địch, tăng tối đa 70% né tránh skill cho tuyến đầu và buff tốc độ cho đồng minh tuyến đầu trong 2 turn.",
     "tenten": "Bậc thầy vũ khí, tấn công toàn bộ kẻ địch, gây 200% sát thương cơ bản.",
     "kankuro": "Điều khiển rối tấn công toàn bộ kẻ địch, gây sát thương cơ bản và hiệu ứng độc trong 1 turn bằng 100% sát thương cơ bản.",
-    "shino": "điều khiển bọ kí sinh hút chakra của tuyến đầu đối phương (50% sát thương cơ bản) và truyền cho đồng minh có chakra nhiều nhất.",
+    "shino": "điều khiển bọ kí sinh hút chakra của kẻ địch có nhiều chakra nhất bằng 50% sát thương cơ bản và truyền cho đồng minh có chakra nhiều nhất.",
     "sakura": "nhẫn thuật trị thương hồi máu cho đồng minh thấp máu nhất bằng 500% sát thương cơ bản và buff giáp 50% trong 3 turn.",
     "hinata": "Bát Quái Trận Tăng giáp bản thân bằng 100% sát thương cơ bản trong 3 turn.",
     "temari": "Dùng quạt tạo phong thuật, gây 500% sát thương cơ bản lên tuyến đầu và phá 30% giáp trong 2 turn.",
