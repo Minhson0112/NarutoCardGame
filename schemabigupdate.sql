@@ -303,3 +303,6 @@ CREATE TABLE `weapon_templates` (
 
 -- Dump completed on 2025-04-21  4:01:48
 SET FOREIGN_KEY_CHECKS=1;
+
+ALTER TABLE `player_cards`
+ADD COLUMN `locked` TINYINT(1) NOT NULL DEFAULT 0 AFTER `equipped`;
