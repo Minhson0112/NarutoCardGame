@@ -14,7 +14,7 @@ class SarutobiHiruzen(Card):
         # Tính sát thương: 30% máu tối đa của mục tiêu + 200% sát thương cơ bản
         percent_damage = int(target.max_health * 0.3)
         base_damage = int(self.get_effective_base_damage() * 2)
-        total_damage = percent_damage + base_damage
+        total_damage = min(2500,(percent_damage + base_damage))
 
         # Gây sát thương chuẩn và kết liễu nếu dưới 10% HP tối đa
         dealt, dmg_logs = target.receive_damage(

@@ -30,7 +30,7 @@ class AburameShino(Card):
             return logs
 
         # 3️⃣ Tìm đồng minh nhiều chakra nhất để nhận
-        allies_alive = [c for c in self.team if c.is_alive()]
+        allies_alive = [c for c in self.team if c.is_alive() and c is not self]
         if not allies_alive:
             logs.append("❌ Không tìm thấy đồng minh nào còn sống để nhận chakra.")
             return logs
@@ -38,5 +38,6 @@ class AburameShino(Card):
         max_chakra_ally = max(allies_alive, key=lambda c: c.chakra)
         buff_logs = max_chakra_ally.receive_chakra_buff(actual_drained)
         logs.extend(buff_logs)
+
 
         return logs

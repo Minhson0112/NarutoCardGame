@@ -1,3 +1,5 @@
+from bot.services.effectBase import Effect
+
 class Card:
     def __init__(self, name, health, armor, base_damage, crit_rate, speed, chakra, element, tier):
         self.name = name
@@ -13,7 +15,8 @@ class Card:
         self.target = None
         self.team = None
         self.enemyTeam = None
-        self.effects: list = []
+        self.effects: list[Effect] = []
+        self.passives: list[Effect] = []
 
     def get_effective_base_damage(self):
         multiplier = 1.0

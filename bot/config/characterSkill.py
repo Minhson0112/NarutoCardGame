@@ -1,7 +1,7 @@
 SKILL_MAP = {
-    "ino": "Đọc suy nghĩ của kẻ địch, tăng tối đa 70% né tránh skill cho tuyến đầu và buff tốc độ cho đồng minh tuyến đầu trong 2 turn.",
+    "ino": "Đọc suy nghĩ của kẻ địch, tăng tối đa 70% né tránh skill cho tuyến đầu trong 2 turn.",
     "tenten": "Bậc thầy vũ khí, tấn công toàn bộ kẻ địch, gây 200% sát thương cơ bản.",
-    "kankuro": "Điều khiển rối tấn công toàn bộ kẻ địch, gây sát thương cơ bản và hiệu ứng độc trong 1 turn bằng 100% sát thương cơ bản.",
+    "kankuro": "Điều khiển rối tấn công toàn bộ kẻ địch, gây sát thương cơ bản và hiệu ứng độc trong 1 turn bằng 100% sát thương cơ bản lên tất cả kẻ địch.",
     "shino": "điều khiển bọ kí sinh hút chakra của kẻ địch có nhiều chakra nhất bằng 50% sát thương cơ bản và truyền cho đồng minh có chakra nhiều nhất.",
     "sakura": "nhẫn thuật trị thương hồi máu cho đồng minh thấp máu nhất bằng 500% sát thương cơ bản và buff giáp 50% trong 3 turn.",
     "hinata": "Bát Quái Trận Tăng giáp bản thân bằng 100% sát thương cơ bản trong 3 turn.",
@@ -31,7 +31,7 @@ SKILL_MAP = {
     "kushina": "Thuật phong ấn cực mạnh, khóa chakra toàn bộ địch trong 2 turn và gây 300% sát thương cơ bản lên toàn đội.",
     "konan": "Gây sát thương cực mạnh lên 2 kẻ địch tuyến sau bằng 500% sát thương cơ bản.",
     "kisame": "Dùng Thủy Ngục, giam cầm tuyến đầu địch trong 3 turn, tăng giáp bản thân 200% trong 2 turn.",
-    "obito": "Tăng 100% tỉ lệ chí mạng và 200% sát thương cơ bản trong 6 turn.",
+    "obito": "Tăng 100% tỉ lệ chí mạng và 200% sát thương cơ bản của bản thân trong 6 turn.",
     "gengetsu": "Dùng Thủy Độn xuyên giáp tuyến đầu, gây 300% sát thương chuẩn và giảm 50% giáp đối phương trong 2 turn.",
     "bee": "Bắn Bom Vĩ Thú vào toàn đội địch, gây 200% sát thương cơ bản và choáng trong 1 turn.",
     "raikage": "Tăng né tránh lên 70% trong 2 turn, tấn công kẻ địch đầu tiên với 500% sát thương chuẩn.",
@@ -48,7 +48,7 @@ SKILL_MAP = {
     "orochimaru": "Dược sĩ điên, tự hồi phục mỗi turn bằng 200% sát thương cơ bản trong 5 turn.",
     "jiraiya": "Hỏa độn Gây 500% sát thương chuẩn lên toàn bộ địch.",
     "minato": "Tăng né tránh bản thân lên 70% trong 3 turn, gây 500% sát thương toàn đội địch và kết liễu nếu dưới 20% máu tối đa.",
-    "hiruzen": "Dùng Thuật Phong Ấn, gây sát thương tuyến đầu bằng 30% máu tối đa + 200% sát thương cơ bản. Kết liễu ngay nếu đối phương dưới 10% máu (sát thương chuẩn).",
+    "hiruzen": "Dùng Thuật Phong Ấn, gây sát thương tuyến đầu bằng 30% máu tối đa của mục tiêu + 200% sát thương cơ bản. Kết liễu ngay nếu đối phương dưới 10% máu (sát thương chuẩn max 2500 damage chuẩn).",
     "tobirama": "Dùng cấm thuật gây 400% sát thương cơ bản lên toàn đội địch, giải toàn bộ debuff và miễn nhiễm sát thương trong 3 turn.",
     "madara": "Dùng Susanoo đập mạnh, gây 400% sát thương chuẩn và choáng toàn đội địch trong 2 turn.",
     "hashirama": "Phật nghìn tay Hồi máu cho toàn đội bằng 500% sát thương cơ bản và buff miễn nhiễm sát thương trong 2 turn, giải mọi loại hiệu ứng bất lợi cho tất cả đồng minh",
@@ -57,6 +57,6 @@ SKILL_MAP = {
     "kakashi": "Dùng Chidori cực mạnh gây 500% sát thương chuẩn lên toàn bộ địch và phá 80% giáp trong 2 turn.",
     "naruto": "Kết hợp Rasenshuriken và Bom Vĩ Thú, gây 400% sát thương cơ bản lên toàn đội địch và làm kẻ địch mất 40 charka.",
     "susanoosasuke": "Dùng Susanoo bắn cung tên, gây 800% sát thương cơ bản lên mục tiêu đầu tiên và choáng 1 turn.",
-    "6pain": "Dùng Thần La Thiên Trinh cực mạnh, gây 500% sát thương cơ bản, kết liễu ngay nếu địch dưới 25% máu và choáng 1 turn.",
+    "6pain": "Dùng Thần La Thiên Trinh cực mạnh, gây 500% sát thương cơ bản lên toàn bộ địch, kết liễu ngay nếu địch dưới 25% máu và choáng 1 turn.",
     "akatsukiitachi": "Dùng ảo thuật cực mạnh, khiến kẻ địch tự đánh nhau trong 2 turn."
 }

@@ -144,7 +144,7 @@ class TailedBoss(commands.Cog):
                 )
 
                 #..........................battle.................................
-                battle = Battle(battle_attacker_team, battle_defender_team, maxturn=120)
+                battle = Battle(battle_attacker_team, battle_defender_team, maxturn=200)
                 while (
                     battle.is_team_alive(battle.attacker_team) and
                     battle.is_team_alive(battle.defender_team) and

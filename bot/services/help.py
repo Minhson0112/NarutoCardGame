@@ -62,12 +62,13 @@ def get_weapon_effective_stats(weapon):
         "bonus_crit_rate":  buff("bonus_crit_rate"),
         "bonus_speed":      buff("bonus_speed"),
         "bonus_chakra":     buff("bonus_chakra"),
+        "name":             tmpl.name,
     }
 
 def get_battle_card_params(
     player_card,                      # instance PlayerCard
     player_weapon: Optional[object] = None,  # instance PlayerWeapon hoặc None
-) -> Tuple[str, int, int, int, float, float, int, str, str]:
+) -> Tuple[str, int, int, int, float, float, int, str, str, str]:
     """
     Trả về tuple:
       (name, health, armor, base_damage, crit_rate, speed, chakra, position, element, tier)
@@ -98,7 +99,8 @@ def get_battle_card_params(
         stats["speed"],
         stats["chakra"],
         player_card.template.element,
-        player_card.template.tier
+        player_card.template.tier,
+        wstats.get("name")
     )
     
 def render_team_status(team, title=""):
