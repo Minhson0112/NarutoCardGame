@@ -98,7 +98,7 @@ class TailedBoss(commands.Cog):
                 list_cards = cardtemplaterepo.getRandomTailedCard()
                 for card in list_cards:
                     img_path = TAILED_IMAGE_LOCAL_PATH_MAP.get(card.image_url, NON_CARD_PATH)
-                    battle_card = create_card(card.name, card.health, card.armor, card.base_damage, card.crit_rate, card.speed, card.chakra, card.element, card.tier)
+                    battle_card = create_card(card.name, card.health, card.armor, card.base_damage, card.crit_rate, card.speed, card.chakra, card.element, card.tier, level=1, weapon_name=None)
                     battle_defender_team.append(battle_card)
                     defenderCardImgPaths.append(img_path)
                 
