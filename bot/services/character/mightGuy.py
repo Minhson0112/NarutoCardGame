@@ -12,8 +12,8 @@ class MightGuy(Card):
 
         # 2️⃣ Buff vĩnh viễn: tăng toàn bộ chỉ số lên 250% (tức x2.5, thêm 1.5 lần giá trị hiện tại)
         # Tính phần cần buff thêm để đạt 2.5× so với hiện tại
-        base_increase  = int(self.base_damage * 1.5)
-        armor_increase = int(self.armor      * 1.5)
+        base_increase  = min(int(self.base_damage * 1.5), 5000)
+        armor_increase = min(int(self.armor      * 1.5), 800)
         crit_increase  = self.crit_rate      * 1.5
         speed_increase = self.speed          * 1.5
 

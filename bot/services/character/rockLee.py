@@ -14,8 +14,8 @@ class RockLee(Card):
 
         # 2️⃣ Buff: nhân đôi tất cả chỉ số (có cộng dồn)
         # Tính phần cần buff thêm để đạt x2 (vd: buff thêm đúng base_damage hiện tại)
-        base_buff = self.base_damage
-        armor_buff = self.armor
+        base_buff = min(self.base_damage, 3500)
+        armor_buff = min(self.armor, 600)
         crit_buff = self.crit_rate
         speed_buff = self.speed
 

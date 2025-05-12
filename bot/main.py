@@ -77,6 +77,7 @@ async def main():
         "bot.commands.showcard",
         "bot.commands.lockcard",
         "bot.commands.unlockcard",
+        "bot.commands.showweapon",
     ]
 
     # Load từng extension
