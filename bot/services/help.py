@@ -78,6 +78,7 @@ def get_battle_card_params(
     stats = get_card_effective_stats(player_card)
 
     # 2) Nếu có vũ khí, cộng thêm từng bonus_* đã buff
+    weapon_name = None
     if player_weapon:
         wstats = get_weapon_effective_stats(player_weapon)
         stats["hp"]       += wstats.get("bonus_health")    or 0
@@ -86,6 +87,7 @@ def get_battle_card_params(
         stats["crit_rate"]+= wstats.get("bonus_crit_rate") or 0
         stats["speed"]    += wstats.get("bonus_speed")     or 0
         stats["chakra"]   += wstats.get("bonus_chakra")    or 0
+        weapon_name = wstats.get("name")
 
 
 
@@ -100,7 +102,7 @@ def get_battle_card_params(
         stats["chakra"],
         player_card.template.element,
         player_card.template.tier,
-        wstats.get("name")
+        weapon_name,
     )
     
 def render_team_status(team, title=""):
