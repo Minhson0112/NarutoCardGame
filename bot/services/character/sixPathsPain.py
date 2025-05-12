@@ -29,7 +29,14 @@ class SixPathsPain(Card):
                 duration=1,
                 description=f"Choáng từ Thần La Thiên Trinh của {self.name}"
             )
-            target.effects.append(stun)
-            logs.append(f"⚡ {target.name} bị choáng 1 lượt!")
+            blocked = False
+            for p in target.passives:
+                if p.name == "unStun":
+                    logs.extend(p.apply(target))
+                    blocked = True
+                    break
+            if not blocked:
+                target.effects.append(stun)
+                logs.append(f"⚡ {target.name} bị choáng 1 lượt!")
 
         return logs

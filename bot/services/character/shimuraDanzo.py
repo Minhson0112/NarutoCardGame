@@ -29,7 +29,14 @@ class ShimuraDanzo(Card):
                 duration=2,
                 description="Câm lặng từ Saringan của Danzo"
             )
-            target.effects.append(silence)
-            logs.append(f"🔇 {target.name} bị câm lặng 2 lượt, không thể dùng kỹ năng!")
+            blocked = False
+            for p in target.passives:
+                if p.name == "unEffect":
+                    logs.extend(p.apply(target))
+                    blocked = True
+                    break
+            if not blocked:
+                target.effects.append(silence)
+                logs.append(f"🔇 {target.name} bị câm lặng 2 lượt, không thể dùng kỹ năng!")
 
         return logs

@@ -20,7 +20,14 @@ class Flail(Effect):
                     duration=self.flat_bonus,
                     description=f"Choáng từ vũ khí Flail của {card.name}"
                 )
-            target.effects.append(stun_effect)
-            logs.append(f"⚡ {target.name} bị choáng {self.flat_bonus} lượt từ vũ khí Flail của {card.name}.")
+            blocked = False
+            for p in target.passives:
+                if p.name == "unStun":
+                    logs.extend(p.apply(target))
+                    blocked = True
+                    break
+            if not blocked:
+                target.effects.append(stun_effect)
+                logs.append(f"⚡ {target.name} bị choáng {self.flat_bonus} lượt từ vũ khí Flail của {card.name}.")
 
         return logs

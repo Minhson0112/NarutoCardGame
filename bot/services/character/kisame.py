@@ -5,7 +5,7 @@ from bot.services.effect.stunEffect import StunEffect
 class Kisame(Card):
     def special_skills(self):
         logs: list[str] = []
-        logs.append(f"💧 {self.name} sử dụng Thủy Ngục, trói chân tuyến đầu địch và gia tăng giáp bản thân!")
+        logs.append(f"💧 {self.name} sử dụng Thủy Ngục, giam cầm tuyến đầu địch và gia tăng giáp bản thân!")
 
         # 1️⃣ Trói chân tuyến đầu địch (stun) trong 3 lượt
         front = next((c for c in self.enemyTeam if c.is_alive()), None)
@@ -14,8 +14,16 @@ class Kisame(Card):
                 duration=3,
                 description="Thủy Ngục của Kisame"
             )
-            front.effects.append(stun)
-            logs.append(f"⚡ {front.name} bị mất 3 lượt!")
+            
+            blocked = False
+            for p in front.passives:
+                if p.name == "unStun":
+                    logs.extend(p.apply(front))
+                    blocked = True
+                    break
+            if not blocked:
+                front.effects.append(stun)
+                logs.append(f"⚡ {front.name} bị giam trong thuỷ ngục và bị mất 3 lượt!")
         else:
             logs.append("❌ Không tìm thấy mục tiêu tuyến đầu để trói chân.")
 

@@ -1,6 +1,6 @@
 from bot.services.effectBase import Effect
 from bot.services.effect.immuneEffect import ImmuneEffect
-class Kibaku(Effect):
+class Tansa(Effect):
     def __init__(self):
         super().__init__(
             name="protection",
@@ -17,10 +17,10 @@ class Kibaku(Effect):
             card.health = 1
             immune = ImmuneEffect(
                     duration=2,
-                    description=f"Miễn nhiễm sát thương từ vũ khí Kibaku"
+                    description=f"Miễn nhiễm sát thương từ vũ khí Tansa"
                 )
             card.effects.append(immune)
-            logs.append(f"🛡️ {card.name} được hồi sinh với 1 máu và Miễn nhiễm sát thương 2 turn từ vũ khí Kibaku!")
+            logs.append(f"🛡️ {card.name} được hồi sinh với 1 máu và Miễn nhiễm sát thương 2 turn từ vũ khí Tansa!")
             card.passives.remove(self)
         return logs
 

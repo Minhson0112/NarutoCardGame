@@ -11,18 +11,18 @@ class NaraShikamaru(Card):
 
         # Trói toàn bộ kẻ địch
         for target in alive_enemies:
-            exist_stun = next((e for e in target.effects if e.name == "Stun"), None)
-            if exist_stun:
-                if stun_duration > exist_stun.duration:
-                    exist_stun.duration = stun_duration
-                    logs.append(f"⚡ {target.name} bị làm mới thời gian choáng ({stun_duration} lượt).")
-                else:
-                    logs.append(f"⚡ {target.name} đã bị dính choáng lâu hơn, không thay đổi.")
-            else:
-                stun_effect = StunEffect(
-                    duration=stun_duration,
-                    description="Trói bóng của Shikamaru"
-                )
+
+            stun_effect = StunEffect(
+                duration=stun_duration,
+                description="Trói bóng của Shikamaru"
+            )
+            blocked = False
+            for p in target.passives:
+                if p.name == "unStun":
+                    logs.extend(p.apply(target))
+                    blocked = True
+                    break
+            if not blocked:
                 target.effects.append(stun_effect)
                 logs.append(f"⚡ {target.name} bị trói bóng {stun_duration} lượt.")
 

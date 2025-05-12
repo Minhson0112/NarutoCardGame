@@ -31,7 +31,14 @@ class Yamato(Card):
                 duration=2,
                 description="Mộc Độn của Yamato"
             )
-            front.effects.append(root_effect)
-            logs.append(f"🌿 {front.name} bị trói chân 2 lượt, không thể dùng kỹ năng!")
+            blocked = False
+            for p in target.passives:
+                if p.name == "unEffect":
+                    logs.extend(p.apply(target))
+                    blocked = True
+                    break
+            if not blocked:
+                front.effects.append(root_effect)
+                logs.append(f"🌿 {front.name} bị trói chân 2 lượt, không thể dùng kỹ năng!")
 
         return logs

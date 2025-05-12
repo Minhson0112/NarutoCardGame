@@ -1,6 +1,6 @@
 from bot.services.effectBase import Effect
 
-class ChakraKnife(Effect):
+class Katana(Effect):
     def __init__(self):
         super().__init__(
             name="MaxHpDamageEffect",

@@ -1,5 +1,5 @@
 import random
-
+from bot.services.cardBase import Card
 class Battle:
     def __init__(self, attacker_team, defender_team, maxturn):
         self.attacker_team = attacker_team
@@ -20,6 +20,13 @@ class Battle:
             if enemy_team[idx].is_alive():
                 return enemy_team[idx]
         return None
+    
+    def get_default_target_reversed(self, enemy_team):
+        # duyệt 2 → 1 → 0
+        for idx in reversed(range(3)):
+            if enemy_team[idx].is_alive():
+                return enemy_team[idx]
+        return None
 
     def is_team_alive(self, team):
         return any(card.is_alive() for card in team)
@@ -32,8 +39,19 @@ class Battle:
     def get_team_total_speed(self, team):
         return sum(card.speed for card in team if card.is_alive())
 
-    def battle_turn_one_card(self, atk):
+    def battle_turn_one_card(self, atk: Card):
         logs = []
+        true_damage=False
+        execute_threshold=None
+
+        if atk.has_passives_effect("TrueDamage"):
+            true_damage = True
+
+        if atk.has_passives_effect("ExecuteThreshold"):
+            execute_threshold = 0.03
+
+        if atk.has_passives_effect("changeTarget"):
+            atk.target = self.get_default_target_reversed(atk.enemyTeam)
 
         logs.extend(atk.process_pre_action_effects())
 
@@ -63,14 +81,15 @@ class Battle:
             else:
                 crit = random.random() < atk.get_effective_crit_rate()
                 dmg = atk.get_effective_base_damage() * (2 if crit else 1)
-                dealt, new_logs = tgt.receive_damage(dmg, true_damage=False, execute_threshold=None, attacker=atk)
+                dealt, new_logs = tgt.receive_damage(dmg, true_damage, execute_threshold, attacker=atk)
                 if crit:
                     logs.append(f"💥 ĐÒN CHÍ MẠNG của {atk.name}!")
                 logs.extend(new_logs)
 
+            for e in atk.passives:
+                if e.effect_type == "AfterBasicAttack":
+                    logs.extend(e.apply(atk, tgt))
+
         logs.extend(atk.process_effects())
-        if not atk.has_effect("SealChakra"):
-            atk.chakra += 20
-        else:
-            logs.append(f"🚫 {atk.name} bị phong ấn chakra, không nhận được chakra.")
+        logs.extend(atk.receive_chakra_buff(20))
         return logs

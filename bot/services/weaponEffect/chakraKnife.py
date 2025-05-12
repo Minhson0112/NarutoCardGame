@@ -20,7 +20,14 @@ class ChakraKnife(Effect):
                 duration=1,
                 description=f"Câm lặng từ vũ khí ChakraKnife của {card.name}"
             )
-            target.effects.append(silence)
-            logs.append(f"🔪 {target.name} bị câm lặng 1 turn từ vũ khí ChakraKnife! (15%)")
+            blocked = False
+            for p in target.passives:
+                if p.name == "unEffect":
+                    logs.extend(p.apply(target))
+                    blocked = True
+                    break
+            if not blocked:
+                target.effects.append(silence)
+                logs.append(f"🔪 {target.name} bị câm lặng 1 turn từ vũ khí ChakraKnife! (15%)")
 
         return logs

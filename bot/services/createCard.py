@@ -71,6 +71,24 @@ from bot.services.character.batVi import BatVi
 from bot.services.character.cuuVi import CuuVi
 
 
+from bot.services.weaponEffect.kunai import kunai
+from bot.services.weaponEffect.knife import knife
+from bot.services.weaponEffect.chakraKnife import ChakraKnife
+from bot.services.weaponEffect.guandao import Guandao
+from bot.services.weaponEffect.katana import Katana
+from bot.services.weaponEffect.shuriken import Shuriken
+from bot.services.weaponEffect.bow import Bow
+from bot.services.weaponEffect.flail import Flail
+from bot.services.weaponEffect.kibaku import Kibaku
+from bot.services.weaponEffect.tansa import Tansa
+from bot.services.weaponEffect.tessen import Tessen
+from bot.services.weaponEffect.sansaju import Sansaju
+from bot.services.weaponEffect.suna import Suna
+from bot.services.weaponEffect.enma import Enma
+from bot.services.weaponEffect.samehada import Samehada
+from bot.services.weaponEffect.rinnegan import Rinnegan
+from bot.services.weaponEffect.gudodama import Gudodama
+
 SPECIAL_CARD_CLASS_MAP = {
     "Yamanaka Ino": YamanakaIno,
     "TenTen": TenTen,
@@ -143,20 +161,33 @@ SPECIAL_CARD_CLASS_MAP = {
     "Cửu Vĩ": CuuVi,
 }
 
+WEAPON_NAME_MAP = {
+    "Kunai": kunai,
+    "Knife": knife,
+    "ChakraKnife": ChakraKnife,
+    "Guandao": Guandao,
+    "Katana": Katana,
+    "Shuriken": Shuriken,
+    "Bow": Bow,
+    "Flail": Flail,
+    "Kibaku": Kibaku,
+    "Tansa": Tansa,
+    "Tessen": Tessen,
+    "Sansaju": Sansaju,
+    "Suna": Suna,
+    "Enma": Enma,
+    "Samehada": Samehada,
+    "Rinnegan": Rinnegan,
+    "Gudodama": Gudodama,
+}
+
 def create_card(name, health, armor, base_damage, crit_rate, speed, chakra, element, tier, weapon_name = None):
 
+    weapon_passive = None
+
     if weapon_name:
-        pass
-    #todo khởi tạo vũ khí
+        weapon_class = WEAPON_NAME_MAP.get(weapon_name)
+        weapon_passive = weapon_class()
 
     card_class = SPECIAL_CARD_CLASS_MAP.get(name, Card)
-    return card_class(name, health, armor, base_damage, crit_rate, speed, chakra, element, tier, weapon_name)
-
-
-#tesen : đòn đánh có 15% nhận được thêm 40 mana
-#sansaju : đòn đánh có 15% tỉ lệ cho phản 100% sát thương trong 1 turn
-# suna: nếu máu xuống dưới 20% > cho 1 lớp giáp 300 giáp trong 3 turn
-# ema, cho hút máu vĩnh viễn 20%
-# Samehada: đòn đánh thường làm mất của kẻ địch 5 charka
-# rinnegan : miẽn nhiễm hiệu ứng choáng 2 lần
-# miễn nhiễm câm lặng, trói chân, ảo thuật 2 lần.
+    return card_class(name, health, armor, base_damage, crit_rate, speed, chakra, element, tier, weapon_passive)

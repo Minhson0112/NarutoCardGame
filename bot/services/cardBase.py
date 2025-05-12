@@ -1,7 +1,7 @@
 from bot.services.effectBase import Effect
 
 class Card:
-    def __init__(self, name, health, armor, base_damage, crit_rate, speed, chakra, element, tier):
+    def __init__(self, name, health, armor, base_damage, crit_rate, speed, chakra, element, tier, weapon_passive):
         self.name = name
         self.health = health
         self.max_health = health
@@ -17,6 +17,8 @@ class Card:
         self.enemyTeam = None
         self.effects: list[Effect] = []
         self.passives: list[Effect] = []
+        if weapon_passive:
+            self.passives.append(weapon_passive)
 
     def get_effective_base_damage(self):
         multiplier = 1.0
@@ -75,6 +77,9 @@ class Card:
     
     def has_effect(self, effect_name):
         return any(effect.name == effect_name for effect in self.effects)
+    
+    def has_passives_effect(self, effect_name):
+        return any(effect.name == effect_name for effect in self.passives)
     
     def has_buff(self):
         return any(e.effect_type == 'buff' for e in self.effects)
@@ -145,12 +150,12 @@ class Card:
             logs.append(f"{self.name} nhận {dealt_damage} sát thương.")
 
         # --- CỘNG CHAKRA THEO % MÁU BỊ MẤT ---
-         # --- Cộng chakra theo % máu mất (nếu không bị SealChakra) ---
-        if self.max_health and not self.has_effect("SealChakra"):
+        # --- Cộng chakra theo % máu mất (nếu không bị SealChakra) ---
+        if self.max_health:
             percent_lost = dealt_damage / self.max_health
             gained_chakra = int(percent_lost * 100)
             if gained_chakra > 0:
-                self.chakra += gained_chakra
+                self.receive_chakra_buff(gained_chakra)
 
         # --- KẾT LIỄU ---
         if execute_threshold is not None:
@@ -160,8 +165,8 @@ class Card:
                 logs.append(f"💀 {self.name} bị kết liễu do HP xuống dưới {int(execute_threshold * 100)}% sau đòn đánh.")
 
         # --- Thưởng chakra cho attacker nếu nó hạ kill được self ---
-        if attacker and dealt_damage > 0 and self.health == 0 and not attacker.has_effect("SealChakra"):
-            attacker.chakra += 20
+        if attacker and dealt_damage > 0 and self.health == 0:
+            attacker.receive_chakra_buff(20)
 
         # --- PHẢN DAMAGE ---
         if attacker and dealt_damage > 0:
@@ -178,6 +183,23 @@ class Card:
                             f"🌀 {attacker.name} bị phản lại {reflect_damage} sát thương "
                             f"({int(reflect_percent * 100)}% của {dealt_damage})."
                         )
+
+        #hook các hiệu ứng đặc biệt
+        #tansa
+        if self.health == 0:
+            for p in list(self.passives):
+                if p.name == "protection":
+                    logs.extend(p.apply(self))
+
+        #suna
+        if self.health > 0 and self.max_health and self.health / self.max_health <= 0.2:
+            for p in list(self.passives):
+                if p.name == "armorProtection":
+                    logs.extend(p.apply(self))
+
+        #enma
+        if attacker.has_passives_effect("lifeSteal") and int(dealt_damage * 0.2) > 0:
+            attacker.receive_healing(amount= int(dealt_damage * 0.2))
 
         return dealt_damage, logs
 
@@ -286,12 +308,15 @@ class Card:
         Returns:
             list[str]: Log hiển thị thông tin buff.
         """
-        before = self.chakra
+        if self.has_effect("SealChakra"):
+            return [
+                f"🔋 {self.name} 🚫 đang bị phong ấn chakra, không nhận được chakra."
+            ]
+
         self.chakra += chakra_increase
 
         return [
-            f"🔋 {self.name} nhận buff +{chakra_increase} chakra "
-            f"(từ {before} lên {self.chakra})."
+            f"🔋 {self.name} nhận +{chakra_increase} chakra "
         ]
 
 

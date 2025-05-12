@@ -10,19 +10,17 @@ class UchihaMadara(Card):
 
         for target in alive_enemies:
             new_stun_duration = 2
-            exist_stun = next((e for e in target.effects if e.name == "Stun"), None)
-
-            if exist_stun:
-                if new_stun_duration > exist_stun.duration:
-                    exist_stun.duration = new_stun_duration
-                    logs.append(f"⚡ {target.name} bị làm mới thời gian choáng ({new_stun_duration} lượt).")
-                else:
-                    logs.append(f"⚡ {target.name} đã bị dính hiệu ứng choáng lâu hơn, không thay đổi.")
-            else:
-                stun_effect = StunEffect(
-                    duration=new_stun_duration,
-                    description="Choáng của Madara"
-                )
+            stun_effect = StunEffect(
+                duration=new_stun_duration,
+                description="Choáng của Madara"
+            )
+            blocked = False
+            for p in target.passives:
+                if p.name == "unStun":
+                    logs.extend(p.apply(target))
+                    blocked = True
+                    break
+            if not blocked:
                 target.effects.append(stun_effect)
                 logs.append(f"⚡ {target.name} bị choáng {new_stun_duration} lượt.")
 

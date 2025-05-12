@@ -1,6 +1,6 @@
 from bot.services.effectBase import Effect
 
-class Guandao(Effect):
+class Bow(Effect):
     def __init__(self):
         super().__init__(
             name="changeTarget",

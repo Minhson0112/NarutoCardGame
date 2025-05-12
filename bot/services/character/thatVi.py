@@ -27,8 +27,15 @@ class ThatVi(Card):
                     duration=4,
                     description="Choáng từ bom vĩ thú"
                 )
-            target.effects.append(stun_effect)
-            logs.append(f"⚡ {target.name} bị choáng 4 lượt.")
+            blocked = False
+            for p in target.passives:
+                if p.name == "unStun":
+                    logs.extend(p.apply(target))
+                    blocked = True
+                    break
+            if not blocked:
+                target.effects.append(stun_effect)
+                logs.append(f"⚡ {target.name} bị choáng 4 lượt.")
 
 
         return logs
