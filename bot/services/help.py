@@ -16,11 +16,11 @@ def get_card_effective_stats(card):
 
     # Định nghĩa tỉ lệ buff theo từng tier
     buff_rates = {
-        "Genin":     0.30,
-        "Chunin":    0.25,
-        "Jounin":    0.20,
+        "Genin":     0.10,
+        "Chunin":    0.15,
+        "Jounin":    0.15,
         "Kage":      0.15,
-        "Legendary": 0.10,
+        "Legendary": 0.20,
     }
     tier = card.template.tier
     tier_rate = buff_rates.get(tier, 0.10)  # nếu không tìm thấy thì mặc định 10%

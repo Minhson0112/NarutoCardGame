@@ -288,8 +288,6 @@ class Card:
         """
         before = self.chakra
         self.chakra += chakra_increase
-        if self.chakra > 100:
-            self.chakra = 100  # Clamp tối đa 100 (nếu game bạn dùng kiểu này)
 
         return [
             f"🔋 {self.name} nhận buff +{chakra_increase} chakra "

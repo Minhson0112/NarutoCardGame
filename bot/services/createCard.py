@@ -157,6 +157,6 @@ def create_card(name, health, armor, base_damage, crit_rate, speed, chakra, elem
 #sansaju : đòn đánh có 15% tỉ lệ cho phản 100% sát thương trong 1 turn
 # suna: nếu máu xuống dưới 20% > cho 1 lớp giáp 300 giáp trong 3 turn
 # ema, cho hút máu vĩnh viễn 20%
-# Samehada: đòn đánh thường làm mất của kẻ địch 5 charka 
-# rinnegan : miẽn nhiễm hiệu ứng choáng vĩnh viễn
-# miễn nhiễm câm lặng, trói chân.
+# Samehada: đòn đánh thường làm mất của kẻ địch 5 charka
+# rinnegan : miẽn nhiễm hiệu ứng choáng 2 lần
+# miễn nhiễm câm lặng, trói chân, ảo thuật 2 lần.

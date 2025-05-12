@@ -16,13 +16,11 @@ class MightGuy(Card):
         armor_increase = int(self.armor      * 1.5)
         crit_increase  = self.crit_rate      * 1.5
         speed_increase = self.speed          * 1.5
-        chakra_increase = int(self.chakra     * 1.5)
 
         # Áp dụng buff trực tiếp
         logs.extend(self.receive_base_damage_buff(base_increase))
         logs.extend(self.receive_armor_buff(armor_increase))
         logs.extend(self.receive_crit_buff(crit_increase))
         logs.extend(self.receive_speed_buff(speed_increase))
-        logs.extend(self.receive_chakra_buff(chakra_increase))
 
         return logs
