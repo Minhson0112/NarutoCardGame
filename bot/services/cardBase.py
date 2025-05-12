@@ -1,7 +1,7 @@
 from bot.services.effectBase import Effect
 
 class Card:
-    def __init__(self, name, health, armor, base_damage, crit_rate, speed, chakra, element, tier, weapon_passive):
+    def __init__(self, name, health, armor, base_damage, crit_rate, speed, chakra, element, tier, level, weapon_passive):
         self.name = name
         self.health = health
         self.max_health = health
@@ -12,6 +12,7 @@ class Card:
         self.chakra = chakra
         self.element = element
         self.tier = tier
+        self.level = level
         self.target = None
         self.team = None
         self.enemyTeam = None
