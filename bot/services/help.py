@@ -112,7 +112,7 @@ def render_team_status(team, title=""):
     for c in team:
         lines.append(
             # Gọi các phương thức để lấy giá trị, không phải tham chiếu tới method
-            f"{c.name}(lv:{c.level})  "
+            f"{c.name} (lv:{c.level})  "
             f"⚔️{c.get_effective_base_damage()}  "
             f"🛡️{c.get_effective_armor()}  "
             f"💥{c.get_effective_crit_rate():.0%}  "
