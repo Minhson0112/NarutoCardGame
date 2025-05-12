@@ -23,9 +23,9 @@ class Battle:
     
     def get_default_target_reversed(self, enemy_team):
         # duyệt 2 → 1 → 0
-        for idx in reversed(range(3)):
-            if enemy_team[idx].is_alive():
-                return enemy_team[idx]
+        for target in reversed(enemy_team):
+            if target.is_alive():
+                return target
         return None
 
     def is_team_alive(self, team):
