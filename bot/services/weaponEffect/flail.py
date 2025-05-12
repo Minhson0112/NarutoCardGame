@@ -8,7 +8,7 @@ class Flail(Effect):
             name="RootEffectOnBasicAttack",
             duration=None,
             effect_type="AfterBasicAttack",
-            value=None,
+            value=0.15,
             flat_bonus=1,
             description="đòn đánh có 15% choáng địch 1 turn"
         )
