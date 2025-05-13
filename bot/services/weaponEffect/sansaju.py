@@ -21,6 +21,6 @@ class Sansaju(Effect):
             reflect_percent=0.7,
             description=f"Phản sát thương từ vũ khí Sansaju của {card.name}"
             )
-        card.effects.append(reflect_effect)
-        logs.append(f"{card.name} nhận được hiệu ứng phản 100% sát thương trong turn tới từ vũ khí Sansaju.")
+            card.effects.append(reflect_effect)
+            logs.append(f"{card.name} nhận được hiệu ứng phản 100% sát thương trong turn tới từ vũ khí Sansaju.")
         return logs
