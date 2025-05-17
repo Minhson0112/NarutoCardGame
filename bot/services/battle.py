@@ -16,9 +16,9 @@ class Battle:
         self.logs = []
 
     def get_default_target(self, enemy_team):
-        for idx in range(3):  # hàng đầu -> giữa -> sau
-            if enemy_team[idx].is_alive():
-                return enemy_team[idx]
+        for target in enemy_team:
+            if target.is_alive():
+                return target
         return None
     
     def get_default_target_reversed(self, enemy_team):
