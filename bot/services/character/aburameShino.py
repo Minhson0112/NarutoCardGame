@@ -15,8 +15,8 @@ class AburameShino(Card):
         target = max(alive_enemies, key=lambda c: c.chakra)
         logs.append(f"🎯 Mục tiêu hút chakra: {target.name} ({target.chakra} chakra).")
 
-        # 2️⃣ Hút chakra = 50% sát thương cơ bản
-        suck_amount = int(self.get_effective_base_damage() * 0.5)
+        # 2️⃣ Hút chakra = 30% sát thương cơ bản
+        suck_amount = int(self.get_effective_base_damage() * 0.3)
         if target.chakra <= 0:
             logs.append(f"⚠️ {target.name} không có chakra để hút.")
             actual_drained = 0

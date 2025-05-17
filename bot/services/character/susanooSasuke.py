@@ -23,9 +23,9 @@ class SusanooSasuke(Card):
         )
         logs.extend(dmg_logs)
 
-        # Áp dụng choáng 1 lượt
+        # Áp dụng choáng 2 lượt
         stun = StunEffect(
-            duration=1,
+            duration=2,
             description=f"Choáng từ Susano'o của {self.name}"
         )
         blocked = False
@@ -36,6 +36,6 @@ class SusanooSasuke(Card):
                 break
         if not blocked:
             target.effects.append(stun)
-            logs.append(f"⚡ {target.name} bị choáng 1 lượt!")
+            logs.append(f"⚡ {target.name} bị choáng 2 lượt!")
 
         return logs

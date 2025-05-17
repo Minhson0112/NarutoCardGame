@@ -13,7 +13,7 @@ class Gaara(Card):
         for ally in self.team:
             if ally.is_alive():
                 buff = BuffArmorEffect(
-                    duration=2,
+                    duration=5,
                     value=0,  # không dùng tỷ lệ %, dùng flat_bonus
                     flat_bonus=armor_buff_amount,
                     description="Phòng thủ tuyệt đối của Gaara"

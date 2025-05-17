@@ -6,9 +6,9 @@ class RaikageIII(Card):
         logs: list[str] = []
         logs.append(f"⚡️ {self.name} kích hoạt Quỷ Mã, tăng né lên tối đa và lao thẳng vào mục tiêu!")
 
-        # 1️⃣ Tăng né lên 70% trong 2 turn
+        # 1️⃣ Tăng né lên 70% trong 4 turn
         speed_buff = BuffSpeedEffect(
-            duration=2,
+            duration=4,
             value=0.7,  # +70% speed, sau đó get_effective_speed sẽ clamp max 0.7
             description="Quỷ Mã tăng né tối đa"
         )
@@ -16,7 +16,7 @@ class RaikageIII(Card):
         logs.append(f"🏃 {self.name} tăng né lên 70% trong 2 lượt.")
 
         # 2️⃣ Tấn công tuyến đầu với 500% SMKK sát thương chuẩn
-        damage = int(self.get_effective_base_damage() * 5)
+        damage = int(self.get_effective_base_damage() * 8)
         front = next((c for c in self.enemyTeam if c.is_alive()), None)
         if not front:
             logs.append("❌ Không tìm thấy mục tiêu tuyến đầu để tấn công.")

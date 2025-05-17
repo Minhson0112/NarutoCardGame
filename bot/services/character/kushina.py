@@ -24,12 +24,12 @@ class Kushina(Card):
             )
             logs.extend(dmg_logs)
 
-            # 2️⃣ Phong ấn chakra 2 lượt
+            # 2️⃣ Phong ấn chakra 3 lượt
             seal = SealChakraEffect(
-                duration=2,
+                duration=3,
                 description="Phong ấn chakra bởi Kushina"
             )
             target.effects.append(seal)
-            logs.append(f"🔒 {target.name} bị phong ấn chakra trong 2 lượt và không thể nhận chakra!")
+            logs.append(f"🔒 {target.name} bị phong ấn chakra trong 3 lượt và không thể nhận chakra!")
 
         return logs

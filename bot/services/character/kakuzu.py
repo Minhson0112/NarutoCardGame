@@ -7,7 +7,7 @@ class Kakuzu(Card):
         logs.append(f"❤️ Kakuzu có 4 trái tim, hồi phục và gia tăng phòng thủ!")
 
         # 1️⃣ Hồi lại 300% SMKK
-        heal_amount = int(self.get_effective_base_damage() * 3)
+        heal_amount = int(self.get_effective_base_damage() * 500)
         heal_logs = self.receive_healing(amount=heal_amount)
         logs.extend(heal_logs)
 

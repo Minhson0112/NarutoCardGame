@@ -7,9 +7,14 @@ class UzumakiNaruto(Card):
             "💥 Rasensuriken kết hợp Bom Vĩ Thú! Một vụ nổ cực lớn san phẳng toàn bộ kẻ địch!"
         )
 
-        # 600% sát thương cơ bản
-        damage = int(self.get_effective_base_damage() * 4)
         alive_enemies = [c for c in self.enemyTeam if c.is_alive()]
+
+        hp_ratio = self.health / self.max_health
+        if hp_ratio < 0.3:
+            damage = int(self.get_effective_base_damage() * 10)
+            logs.append("⚠️ Naruto tiến hóa lên mode lục đạo! Rasensuriken bộc phát với sức mạnh hủy diệt 1000%!")
+        else:
+            damage = int(self.get_effective_base_damage() * 4)
 
         if not alive_enemies:
             logs.append("❌ Không có kẻ địch nào để tấn công.")
