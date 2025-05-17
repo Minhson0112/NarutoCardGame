@@ -90,45 +90,85 @@ class Fight(commands.Cog):
                 
                 # Tìm các đối thủ có rank_points trong khoảng [attacker.rank_points - 50, attacker.rank_points + 50] (ngoại trừ attacker)
                 # Lấy danh sách Top10 (theo rank_points desc)
-                top10 = playerRepo.getTop10()
-                top10_ids = [p.player_id for p in top10]
+                # top10 = playerRepo.getTop10()
+                # top10_ids = [p.player_id for p in top10]
 
-                if attacker_id in top10_ids:
-                    # attacker nằm trong Top10 → dùng index để tìm đối thủ
-                    idx = top10_ids.index(attacker_id)
-                    if idx == 0:
-                        # đứng đầu Top10
-                        await interaction.followup.send("⚠️ Bạn đang ở Top 1, không có đối thủ.")
-                        return
-                    # đối thủ là người đứng ngay trước trong list
-                    defender = top10[idx - 1]
+                # if attacker_id in top10_ids:
+                #     # attacker nằm trong Top10 → dùng index để tìm đối thủ
+                #     idx = top10_ids.index(attacker_id)
+                #     if idx == 0:
+                #         # đứng đầu Top10
+                #         await interaction.followup.send("⚠️ Bạn đang ở Top 1, không có đối thủ.")
+                #         return
+                #     # đối thủ là người đứng ngay trước trong list
+                #     defender = top10[idx - 1]
 
-                    # kiểm tra đã lắp đội hình chưa
-                    oppSetup = activeSetupRepo.getByPlayerId(defender.player_id)
-                    if not (oppSetup and oppSetup.card_slot1 and oppSetup.card_slot2 and oppSetup.card_slot3):
-                        await interaction.followup.send("⚠️ Người chơi xếp trên chưa lắp đủ đội hình.")
-                        return
+                #     # kiểm tra đã lắp đội hình chưa
+                #     oppSetup = activeSetupRepo.getByPlayerId(defender.player_id)
+                #     if not (oppSetup and oppSetup.card_slot1 and oppSetup.card_slot2 and oppSetup.card_slot3):
+                #         await interaction.followup.send("⚠️ Người chơi xếp trên chưa lắp đủ đội hình.")
+                #         return
 
+                # else:
+                #     # attacker không nằm trong Top10 → fallback về logic ±20
+                #     minRank = attacker.rank_points - 30
+                #     maxRank = attacker.rank_points + 30
+                #     opponents = session.query(Player).filter(
+                #         Player.player_id != attacker_id,
+                #         Player.rank_points.between(minRank, maxRank)
+                #     ).all()
+
+                #     valid_opponents = []
+                #     for opp in opponents:
+                #         oppSetup = activeSetupRepo.getByPlayerId(opp.player_id)
+                #         if oppSetup and oppSetup.card_slot1 and oppSetup.card_slot2 and oppSetup.card_slot3:
+                #             valid_opponents.append(opp)
+
+                #     if not valid_opponents:
+                #         await interaction.followup.send("⚠️ Chưa tìm thấy đối thủ cùng trình độ.")
+                #         return
+
+                #     defender = random.choice(valid_opponents)
+
+                minRank = attacker.rank_points - 30
+                maxRank = attacker.rank_points + 30
+                opponents = session.query(Player).filter(
+                    Player.player_id != attacker_id,
+                    Player.rank_points >= minRank,
+                    Player.rank_points <= maxRank
+                ).all()
+                
+                # Lọc lại chỉ những người đã lắp thẻ
+                valid_opponents = []
+                for opp in opponents:
+                    oppSetup = activeSetupRepo.getByPlayerId(opp.player_id)
+                    # chỉ lấy những ai đã lắp đủ 3 thẻ (card_slot1/2/3 đều khác None)
+                    if (
+                        oppSetup
+                        and oppSetup.card_slot1 is not None
+                        and oppSetup.card_slot2 is not None
+                        and oppSetup.card_slot3 is not None
+                    ):
+                        valid_opponents.append(opp)
+
+                if not valid_opponents:
+                    top10 = playerRepo.getTop10()
+                    top10_ids = [p.player_id for p in top10]
+                    
+                    if attacker_id in top10_ids:
+                        # attacker nằm trong Top10 → dùng index để tìm đối thủ
+                        idx = top10_ids.index(attacker_id)
+                        if idx == 0:
+                            # đứng đầu Top10
+                            await interaction.followup.send("⚠️ Bạn đang ở Top 1, không có đối thủ.")
+                            return
+                        # đối thủ là người đứng ngay trước trong list
+                        defender = top10[idx - 1]
                 else:
-                    # attacker không nằm trong Top10 → fallback về logic ±20
-                    minRank = attacker.rank_points - 30
-                    maxRank = attacker.rank_points + 30
-                    opponents = session.query(Player).filter(
-                        Player.player_id != attacker_id,
-                        Player.rank_points.between(minRank, maxRank)
-                    ).all()
-
-                    valid_opponents = []
-                    for opp in opponents:
-                        oppSetup = activeSetupRepo.getByPlayerId(opp.player_id)
-                        if oppSetup and oppSetup.card_slot1 and oppSetup.card_slot2 and oppSetup.card_slot3:
-                            valid_opponents.append(opp)
-
-                    if not valid_opponents:
-                        await interaction.followup.send("⚠️ Chưa tìm thấy đối thủ cùng trình độ.")
-                        return
-
                     defender = random.choice(valid_opponents)
+
+
+                
 
                 defenderSetup = activeSetupRepo.getByPlayerId(defender.player_id)
                 # Lấy ra list 3 PlayerCard của defender
