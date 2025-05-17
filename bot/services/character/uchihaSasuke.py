@@ -11,8 +11,10 @@ class UchihaSasuke(Card):
         # Lấy hai thành viên tuyến sau (chỉ số 1 và 2)
         targets = [c for c in self.enemyTeam[1:3] if c.is_alive()]
 
+        # Fallback: nếu không có ai ở vị trí 1-2, lấy 1 target đầu tiên còn sống
         if not targets:
-            targets = next((c for c in self.enemyTeam if c.is_alive()), None)
+            first_alive = next((c for c in self.enemyTeam if c.is_alive()), None)
+            targets = [first_alive] if first_alive else []
 
         for target in targets:
             # Áp dụng hiệu ứng Burn trong 4 lượt

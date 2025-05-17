@@ -27,7 +27,7 @@ SKILL_MAP = {
     "deidara": "Tạo vụ nổ lớn, gây 500% sát thương chuẩn lên tuyến đầu.",
     "gaara": "Tạo lớp cát phòng thủ tuyệt đối, tăng giáp cho toàn đội bằng 100% sát thương cơ bản trong 5 turn.",
     "chuninkakashi": "Dùng Lôi Độn Chidori cực mạnh lên tuyến đầu, gây 400% sát thương cơ bản và lan sang mục tiêu thứ hai với 50% sát thương.",
-    "kakuzu": "Sở hữu 4 trái tim, hồi máu bằng 300% sát thương cơ bản và tăng giáp 100% trong 4 turn.",
+    "kakuzu": "Sở hữu 4 trái tim, hồi máu bằng 500% sát thương cơ bản và tăng giáp 100% trong 4 turn.",
     "kushina": "Thuật phong ấn cực mạnh, khóa chakra toàn bộ địch trong 3 turn và gây 300% sát thương cơ bản lên toàn đội.",
     "konan": "Gây sát thương cực mạnh lên 2 kẻ địch tuyến sau bằng 500% sát thương cơ bản.",
     "kisame": "Dùng Thủy Ngục, giam cầm tuyến đầu địch trong 3 turn, tăng giáp bản thân 200% trong 5 turn.",
