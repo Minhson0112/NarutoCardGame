@@ -14,7 +14,7 @@ class Katana(Effect):
     def apply(self, card, target = None):
         logs = []
         if target and target.is_alive():
-            bonusDamage = target.max_health * self.value
+            bonusDamage = int(target.max_health * self.value)
             dealt, dmg_logs = target.receive_damage(bonusDamage, true_damage=True, execute_threshold=None, attacker=card)
             logs.extend(dmg_logs)
             if dealt > 0:
