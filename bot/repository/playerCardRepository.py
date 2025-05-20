@@ -38,31 +38,41 @@ class PlayerCardRepository:
 
     def incrementQuantity(self, playerId: int, cardKey: str, increment: int = 1):
         """
-        Thêm thẻ vào kho của người chơi:
-        - Nếu người chơi đã có thẻ với cardKey và cấp (level) là 1, 
-            thì tăng số lượng của thẻ đó.
-        - Nếu không có thẻ nào có level 1, tạo bản ghi mới với level = 1
-            và số lượng là increment.
+        Thêm thẻ level 1 vào kho của người chơi, nhưng nếu đã có
+        bất kỳ bản ghi nào của cardKey này đang bị khóa (locked=True),
+        thì bản level 1 mới cũng sẽ inherit locked=True.
         """
-        # Tìm bản ghi PlayerCard với level 1
-        playerCard = self.session.query(PlayerCard).filter_by(
-            player_id=playerId, 
-            card_key=cardKey, 
-            level=1
-        ).first()
+        # 1) Tìm tất cả các bản PlayerCard của user với cardKey
+        existing_cards = (
+            self.session.query(PlayerCard)
+            .filter_by(player_id=playerId, card_key=cardKey)
+            .all()
+        )
+        # 2) Xem có bản nào locked không
+        locked_flag = any(c.locked for c in existing_cards)
 
-        if playerCard:
-            playerCard.quantity += increment
+        # 3) Tìm riêng bản level 1 nếu đã có
+        level1 = next((c for c in existing_cards if c.level == 1), None)
+
+        if level1:
+            # Nếu đã có, chỉ tăng quantity
+            level1.quantity += increment
+            # Đồng thời nếu locked_flag = True, đảm bảo nó cũng khoá
+            if locked_flag:
+                level1.locked = True
         else:
-            # Tạo bản ghi mới với level 1
-            playerCard = PlayerCard(
-                player_id=playerId, 
-                card_key=cardKey, 
-                level=1, 
-                quantity=increment
+            # Tạo mới bản level 1 với lock flag kế thừa
+            level1 = PlayerCard(
+                player_id=playerId,
+                card_key=cardKey,
+                level=1,
+                quantity=increment,
+                locked=locked_flag,
             )
-            self.session.add(playerCard)
+            self.session.add(level1)
+
         self.session.commit()
+
 
     def getByCardNameAndPlayerId(self, player_id: int, card_name: str):
         """

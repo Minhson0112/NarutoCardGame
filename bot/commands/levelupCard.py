@@ -95,7 +95,8 @@ class LevelUpCard(commands.Cog):
                     card_key=mainCardCandidate.card_key,
                     level=desired_level,
                     quantity=1,
-                    equipped=False
+                    equipped=False,
+                    locked = mainCardCandidate.locked
                 )
                 cardRepo.create(newCard)
 
