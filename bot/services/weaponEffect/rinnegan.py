@@ -15,7 +15,7 @@ class Rinnegan(Effect):
     def apply(self, card, target = None):
             logs = []
             self.duration -= 1
-            logs.extend(f"{card.name} miễn nhiễm hiệu ứng từ vũ khí rinegan còn {self.duration} lần")
+            logs.append(f"{card.name} miễn nhiễm hiệu ứng từ vũ khí rinegan còn {self.duration} lần")
             if self.duration == 0:
                 card.passives.remove(self)
             return logs
