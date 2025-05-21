@@ -19,6 +19,6 @@ class Katana(Effect):
             logs.extend(dmg_logs)
             if dealt > 0:
                 logs.append(
-                    f"🔪 {target.name} nhận thêm {dealt} sát thương (1% max HP) từ ChakraKnife."
+                    f"🔪 {target.name} nhận thêm {dealt} sát thương (1% max HP) từ Katana."
                 )
         return logs

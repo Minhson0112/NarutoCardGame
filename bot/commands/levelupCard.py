@@ -40,6 +40,10 @@ class LevelUpCard(commands.Cog):
                 if desired_level < 2:
                     await interaction.followup.send("⚠️ Cấp nâng phải từ 2 trở lên.")
                     return
+                
+                if desired_level > 50:
+                    await interaction.followup.send("⚠️ cấp thẻ lớn nhất có thể nâng cấp là 50.")
+                    return
 
                 # Kiểm tra: Người chơi chỉ có thể nâng cấp từ thẻ cao nhất
                 # Tìm cấp cao nhất của các thẻ với tên đó

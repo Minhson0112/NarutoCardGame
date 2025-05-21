@@ -309,6 +309,7 @@ class Fight(commands.Cog):
                     outcome_text = f" **Điểm Rank:** {fresh_attacker.username} -10 điểm, {defender.username} +5 điểm"
 
                 session2.commit()
+                session.commit()
 
                 # 3) Gửi embed kết quả cuối cùng
                 result_embed = discord.Embed(
