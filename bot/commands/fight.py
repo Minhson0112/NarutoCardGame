@@ -283,6 +283,7 @@ class Fight(commands.Cog):
             with getDbSession() as session2:
                 playerRepo2 = PlayerRepository(session2)
                 fresh_attacker = playerRepo2.getById(attacker_id) 
+                fresh_defender = playerRepo2.getById(defender.player_id) 
                 # xác định người thắng
                 if battle.turn >= battle.maxturn:
                     result = "🏳️ Hoà"
@@ -291,8 +292,8 @@ class Fight(commands.Cog):
                 elif battle.is_team_alive(battle.attacker_team):
                     dailyTaskRepo.updateFightWin(fresh_attacker.player_id)
                     fresh_attacker.rank_points += 10
-                    defender.rank_points = max(0, defender.rank_points - 5)
-                    defender.winning_streak = 0
+                    fresh_defender.rank_points = max(0, fresh_defender.rank_points - 5)
+                    fresh_defender.winning_streak = 0
                     fresh_attacker.winning_streak += 1
                     bonus_reward = 500 * fresh_attacker.winning_streak
                     if fresh_attacker.rank_points > fresh_attacker.highest_rank_points:
@@ -300,20 +301,19 @@ class Fight(commands.Cog):
                         fresh_attacker.highest_rank_points = fresh_attacker.rank_points
                     fresh_attacker.coin_balance += bonus_reward + bonus_highest
                     result = "Chiến Thắng"
-                    outcome_text = f"**Điểm Rank:**{fresh_attacker.username} +10 điểm, {defender.username} -5 điểm"
+                    outcome_text = f"**Điểm Rank:**{fresh_attacker.username} +10 điểm, {fresh_defender.username} -5 điểm"
                 else:
                     fresh_attacker.rank_points = max(0, fresh_attacker.rank_points - 10)
-                    defender.rank_points += 5
+                    fresh_defender.rank_points += 5
                     fresh_attacker.winning_streak = 0
                     result = "Thất Bại"
-                    outcome_text = f" **Điểm Rank:** {fresh_attacker.username} -10 điểm, {defender.username} +5 điểm"
+                    outcome_text = f" **Điểm Rank:** {fresh_attacker.username} -10 điểm, {fresh_defender.username} +5 điểm"
 
                 session2.commit()
-                session.commit()
 
                 # 3) Gửi embed kết quả cuối cùng
                 result_embed = discord.Embed(
-                    title=f"🏁 Kết quả trận chiến của {fresh_attacker.username} VS {defender.username}",
+                    title=f"🏁 Kết quả trận chiến của {fresh_attacker.username} VS {fresh_defender.username}",
                     description=(
                         f"🎖️ **Kết quả:** {result}\n"
                         f"💰**Thưởng:** {bonus_reward + bonus_highest:,} Ryo\n"
