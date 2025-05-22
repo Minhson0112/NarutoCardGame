@@ -34,7 +34,7 @@ SKILL_MAP = {
     "obito": "Tăng 100% tỉ lệ chí mạng và 200% sát thương cơ bản của bản thân trong 6 turn.",
     "gengetsu": "Dùng Thủy Độn xuyên giáp tuyến đầu, gây 300% sát thương chuẩn và giảm 50% giáp đối phương trong 2 turn.",
     "bee": "Bắn Bom Vĩ Thú vào toàn đội địch, gây 200% sát thương cơ bản và choáng trong 1 turn.",
-    "raikage": "Tăng né tránh lên 70% trong 4 turn, tấn công kẻ địch đầu tiên với 500% sát thương chuẩn.",
+    "raikage": "Tăng né tránh lên 70% trong 4 turn, tấn công kẻ địch đầu tiên với 800% sát thương chuẩn.",
     "itachi": "Dùng ảo thuật khiến 2 kẻ địch hàng đầu tự tấn công đồng minh trong 2 turn, gây 200% sát thương cơ bản.",
     "pain": "Thần La Thiên Trinh, gây 500% sát thương cơ bản lên toàn đội địch và giảm tốc 100% trong 3 turn.",
     "sasuke": "Dùng Amaterasu thiêu đốt 2 kẻ địch tuyến sau bằng 100% sát thương cơ bản trong 4 turn.",
