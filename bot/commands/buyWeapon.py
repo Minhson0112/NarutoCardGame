@@ -59,6 +59,8 @@ class BuyWeapon(commands.Cog):
 
                 # Trừ tiền
                 playerService.addCoin(playerId, -cost)
+                #tăng exp
+                playerRepo.incrementExp(playerId,amount=20)
 
                 # Roll ngẫu nhiên theo weighted random dựa trên tỉ lệ drop của gói weapon
                 rates = WEAPON_GACHA_DROP_RATE[pack]

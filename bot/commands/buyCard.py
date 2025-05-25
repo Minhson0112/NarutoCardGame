@@ -65,6 +65,9 @@ class BuyCard(commands.Cog):
                 # Trừ tiền
                 playerService.addCoin(playerId, -cost)
 
+                #tăng exp
+                playerRepo.incrementExp(playerId)
+
                 # Hàm mở hộp cho 1 lượt
                 def openPack(playerId, pack) -> CardTemplate:
                     counter = pityRepo.getCount(playerId, pack)

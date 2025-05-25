@@ -308,7 +308,7 @@ class Fight(commands.Cog):
                     fresh_attacker.winning_streak = 0
                     result = "Thất Bại"
                     outcome_text = f" **Điểm Rank:** {fresh_attacker.username} -10 điểm, {fresh_defender.username} +5 điểm"
-
+                fresh_attacker.exp += 10
                 session2.commit()
 
                 # 3) Gửi embed kết quả cuối cùng

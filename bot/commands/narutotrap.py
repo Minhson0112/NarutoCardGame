@@ -99,6 +99,8 @@ class NarutoTrap(commands.Cog):
             if player.coin_balance < bet:
                 await interaction.response.send_message("⚠️ Số dư của bạn không đủ.", ephemeral=True)
                 return
+            
+            playerRepo.incrementExp(interaction.user.id,amount=5)
 
         # Khởi tạo game
         game = NarutoTrapGame(interaction.user, bet)

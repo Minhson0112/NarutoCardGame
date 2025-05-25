@@ -63,7 +63,8 @@ class CoinFlip(commands.Cog):
                     outcome_text = (f"😢 Rất tiếc! Kết quả là **{coin_result.upper()}**.\n"
                                     f"Bạn đã dự đoán sai và mất hết số tiền cược (**{bet} Ryo**).")
                     player.coin_balance -= bet
-
+                #tăng exp
+                playerRepo.incrementExp(interaction.user.id,amount=2)
                 session.commit()
 
                 # Tạo embed hiển thị kết quả

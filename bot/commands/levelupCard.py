@@ -117,7 +117,8 @@ class LevelUpCard(commands.Cog):
                         if c.quantity == 0:
                             cardRepo.deleteCard(c)
                         remaining = 0
-
+                
+                playerRepo.incrementExp(playerId,amount=5)
                 session.commit()
                 await interaction.followup.send(
                     f"✅ Nâng cấp thành công! Thẻ **{newCard.template.name}** đã được nâng lên cấp {desired_level}."

@@ -198,7 +198,8 @@ class Adventure(commands.Cog):
                     result = "Thất Bại"
                     outcome_text = f"bạn đã thất bại trước {teamName} và không nhận được gì, hãy quay lại sau 5 phút."
                     thuong = f"💰**Thưởng:** bọn {teamName} nói bạn quá non và không thèm lấy tiền của bạn"
-
+                
+                fresh_attacker.exp += 10
                 session2.commit()
                 # 3) Gửi embed kết quả cuối cùng
                 result_embed = discord.Embed(
