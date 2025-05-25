@@ -21,5 +21,5 @@ class HealOverTimeEffect(Effect):
         # Hồi máu mỗi lượt
         logs = []
         newLog = card.receive_healing(amount=self.value)
-        logs.append(newLog)
+        logs.extend(newLog)
         return logs
