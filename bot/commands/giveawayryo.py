@@ -20,7 +20,7 @@ class GiveawayRyo(commands.Cog):
         dev_id = interaction.user.id
 
         # Kiểm tra quyền admin dựa trên ADMIN_OVERRIDE_ID
-        if dev_id != ADMIN_OVERRIDE_ID:
+        if dev_id not in ADMIN_OVERRIDE_ID:
             await interaction.followup.send("⚠️ Bạn không có quyền sử dụng lệnh này. Hãy dùng /give để chuyển tiền.")
             return
 
