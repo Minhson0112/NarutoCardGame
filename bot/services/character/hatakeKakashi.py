@@ -24,9 +24,9 @@ class HatakeKakashi(Card):
             )
             logs.extend(dmg_logs)
 
-            # 2️⃣ Phá giáp 80% trong 2 lượt
+            # 2️⃣ Phá giáp 80% trong 4 lượt
             armor_debuff = DebuffArmorEffect(
-                duration=2,
+                duration=4,
                 value=0.8,  # giảm 80% giáp
                 description=f"Phá giáp từ Chidori của {self.name}"
             )

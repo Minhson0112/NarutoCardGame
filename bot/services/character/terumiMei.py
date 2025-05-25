@@ -1,5 +1,6 @@
 from bot.services.cardBase import Card
 from bot.services.effect.burnEffect import BurnEffect
+from bot.services.effect.antiHealEffect import AntihealEffect
 
 class TerumiMei(Card):
     def special_skills(self):
@@ -23,7 +24,15 @@ class TerumiMei(Card):
             )
             target.effects.append(burn_effect)
             logs.append(
-                f"🔥 {target.name} chịu {burn_damage} sát thương mỗi lượt trong 3 lượt!"
+                f"🔥 {target.name} chịu {burn_damage} sát thương mỗi lượt và giảm hồi máu trong 3 lượt!"
             )
+
+            #antiheal
+            antiHeal = AntihealEffect(
+                duration=3,
+                value=0.5,
+                description=f"giảm hồi máu của dung nham từ {self.name}"
+            )
+            target.effects.append(antiHeal)
 
         return logs

@@ -37,11 +37,11 @@ class SenjuHashirama(Card):
             if ally.is_alive():
                 logs.extend(ally.receive_healing(amount=heal_amount))
 
-        # --- 3️⃣ Cấp miễn nhiễm sát thương trong 2 lượt ---
+        # --- 3️⃣ Cấp miễn nhiễm sát thương trong 1 lượt ---
         for ally in real_allies:
             if ally.is_alive():
                 immune = ImmuneEffect(
-                    duration=2,
+                    duration=1,
                     description=f"Miễn nhiễm sát thương từ phật nghìn tay của {self.name}"
                 )
                 ally.effects.append(immune)

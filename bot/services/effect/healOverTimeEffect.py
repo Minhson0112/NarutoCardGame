@@ -20,9 +20,6 @@ class HealOverTimeEffect(Effect):
     def apply(self, card):
         # Hồi máu mỗi lượt
         logs = []
-        old_hp = card.health
-        card.health = min(card.max_health, card.health + self.value)
-        healed = card.health - old_hp
-        if healed > 0:
-            logs.append(f"💧 {card.name} hồi {healed} HP từ {self.description}.")
+        newLog = card.receive_healing(amount=self.value)
+        logs.append(newLog)
         return logs

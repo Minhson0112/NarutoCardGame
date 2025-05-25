@@ -227,7 +227,7 @@ class TailedBoss(commands.Cog):
                     fresh_attacker.coin_balance += bonus_reward
                     damageDeadTxt = f"bạn đã gây ra {damageDead} sát thương lên {list_cards[0].name}"
                     thuong = f"💰**Thưởng:** {bonus_reward:,} Ryo"
-
+                fresh_attacker.exp += 10
                 session2.commit()
 
                 # 3) Gửi embed kết quả cuối cùng

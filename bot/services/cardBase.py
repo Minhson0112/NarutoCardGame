@@ -219,6 +219,11 @@ class Card:
         if percent_of_max is not None:
             healing += int(self.max_health * percent_of_max)
         if amount is not None:
+            for effect in self.effects:
+                if effect.name == "AntiHeal":
+                    amount = int(amount*effect.value)
+                    logs.append(f"{self.name} đang bị dính {effect.description}")
+                    break                
             healing += amount
 
         if healing <= 0:

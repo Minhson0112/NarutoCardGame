@@ -9,9 +9,12 @@ class Player(Base):
     coin_balance = Column(Integer, nullable=False, default=0)
     rank_points = Column(Integer, nullable=False, default=0)
     highest_rank_points = Column(Integer, nullable=False, default=0)
+    exp = Column(Integer, nullable=False, default=0, server_default=text("0"))
     winning_streak = Column(Integer, nullable=False, default=0)
     challenge_id = Column(Integer, ForeignKey("challenges.id"), nullable=True)
     created_at = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+    daily_received_amount = Column(Integer, nullable=False, default=0, server_default=text("0"))
+    daily_received_date = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     updated_at = Column(
         TIMESTAMP, 
         server_default=text("CURRENT_TIMESTAMP"), 
