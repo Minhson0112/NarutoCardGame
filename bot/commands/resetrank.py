@@ -17,7 +17,7 @@ class ResetRank(commands.Cog):
     )
     async def resetrank(self, interaction: discord.Interaction):
         # 1. Kiểm tra quyền
-        if interaction.user.id != ADMIN_OVERRIDE_ID:
+        if interaction.user.id not in ADMIN_OVERRIDE_ID:
             await interaction.response.send_message(
                 "❌ Bạn không có quyền sử dụng lệnh này.",
                 ephemeral=True
