@@ -21,7 +21,7 @@ from bot.config.gachaConfig import GACHA_DROP_RATE
 from bot.config.weaponGachaConfig import WEAPON_GACHA_DROP_RATE
 from bot.services.tailedRender import renderImageFight
 from bot.services.battle import Battle
-from bot.services.help import get_battle_card_params, render_team_status
+from bot.services.help import get_battle_card_params, render_team_status, get_tailed_effective_stats
 from bot.services.createCard import create_card
 
 class TailedBoss(commands.Cog):
@@ -93,12 +93,14 @@ class TailedBoss(commands.Cog):
                     battle_card = create_card(*params)
                     battle_attacker_team.append(battle_card)
 
+                tailedCardlevel = random.randint(1, 10)
                 battle_defender_team = []
                 defenderCardImgPaths = []
                 list_cards = cardtemplaterepo.getRandomTailedCard()
                 for card in list_cards:
                     img_path = TAILED_IMAGE_LOCAL_PATH_MAP.get(card.image_url, NON_CARD_PATH)
-                    battle_card = create_card(card.name, card.health, card.armor, card.base_damage, card.crit_rate, card.speed, card.chakra, card.element, card.tier, level=1, weapon_name=None)
+                    taileCard = get_tailed_effective_stats(card.name, card.health, card.armor, card.base_damage, card.crit_rate, card.speed, card.chakra, card.element, card.tier, tailedCardlevel, weapon_name=None)
+                    battle_card = create_card(*taileCard)
                     battle_defender_team.append(battle_card)
                     defenderCardImgPaths.append(img_path)
                 
@@ -132,7 +134,7 @@ class TailedBoss(commands.Cog):
                 initial_desc.append("\nĐang khởi đầu trận đấu…")
 
                 log_embed = discord.Embed(
-                    title=f"🦊 {attacker.username} đã tìm thấy {list_cards[0].name} trong hang",
+                    title=f"🦊 {attacker.username} đã tìm thấy {list_cards[0].name} level: {tailedCardlevel} trong hang",
                     description="\n".join(initial_desc),
                     color=discord.Color.blurple()
                 )
@@ -166,7 +168,7 @@ class TailedBoss(commands.Cog):
                             desc += "\n".join(logs)
 
                             edit_embed = discord.Embed(
-                                title=f"🦊 {attacker.username} đã tìm thấy {list_cards[0].name} trong hang",
+                                title=f"🦊 {attacker.username} đã tìm thấy {list_cards[0].name} level: {tailedCardlevel} trong hang",
                                 description=desc,
                                 color=discord.Color.blurple()
                             )

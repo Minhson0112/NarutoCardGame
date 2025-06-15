@@ -39,6 +39,23 @@ def get_card_effective_stats(card):
         "level":     lvl
     }
 
+def get_tailed_effective_stats(name, health, armor, base_damage, crit_rate, speed, chakra, element, tier, level, weapon_name=None):
+
+    multiplier = 1 + 0.20 * (level - 1)
+    return (
+        name,
+        int(health * multiplier),
+        int(armor * multiplier),
+        int(base_damage * multiplier),
+        crit_rate * multiplier,
+        speed * multiplier,
+        chakra * multiplier,
+        element,
+        tier,
+        level,
+        weapon_name,
+    )
+
 def get_weapon_effective_stats(weapon):
     """
     Trả về dict với các bonus_* đã buff theo cấp độ:

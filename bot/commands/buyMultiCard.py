@@ -1,10 +1,7 @@
-# bot/commands/buy_multicard.py
-
 import random
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from discord.ext import commands
 from discord import app_commands
-from discord.app_commands import checks, CommandOnCooldown
 
 from bot.config.database import getDbSession
 from bot.repository.playerRepository import PlayerRepository
@@ -12,7 +9,7 @@ from bot.repository.gachaPityCounterRepository import GachaPityCounterRepository
 from bot.repository.cardTemplateRepository import CardTemplateRepository
 from bot.repository.playerCardRepository import PlayerCardRepository
 from bot.repository.dailyTaskRepository import DailyTaskRepository
-from bot.services.playerService import PlayerService
+from bot.repository.commandCooldownRepository import CommandCooldownRepository
 from bot.config.gachaConfig import GACHA_PRICES, PITY_LIMIT, PITY_PROTECTION, GACHA_DROP_RATE
 from bot.config.config import LEVEL_OPEN_PACK, LEVEL_CONFIG
 
@@ -33,7 +30,6 @@ class BuyMultiCard(commands.Cog):
         app_commands.Choice(name="card_advanced", value="card_advanced"),
         app_commands.Choice(name="card_elite", value="card_elite"),
     ])
-    @checks.cooldown(1, 1800.0, key=lambda inter: inter.user.id)
     async def buymulticard(
         self,
         interaction: commands.Context,
@@ -43,25 +39,43 @@ class BuyMultiCard(commands.Cog):
         await interaction.response.defer(thinking=True)
         player_id = interaction.user.id
 
-        if count <= 0:
-            await interaction.followup.send("⚠️ Số lượng phải lớn hơn 0.")
-            return
-
         try:
             with getDbSession() as session:
-                playerRepo    = PlayerRepository(session)
-                pityRepo      = GachaPityCounterRepository(session)
-                tplRepo       = CardTemplateRepository(session)
-                cardRepo      = PlayerCardRepository(session)
-                playerService = PlayerService(playerRepo)
+                # repositories
+                playerRepo = PlayerRepository(session)
+                pityRepo = GachaPityCounterRepository(session)
+                tplRepo = CardTemplateRepository(session)
+                cardRepo = PlayerCardRepository(session)
                 dailyTaskRepo = DailyTaskRepository(session)
+                cooldownRepo = CommandCooldownRepository(session)
 
+                # cooldown logic: 1800s = 30m
+                now = datetime.now(timezone.utc)
+                last = cooldownRepo.get_last_buy_multicard(player_id)
+                if last:
+                    # ensure last is timezone-aware
+                    if last.tzinfo is None:
+                        last = last.replace(tzinfo=timezone.utc)
+                    if (now - last) < timedelta(seconds=1800):
+                        remaining = 1800 - int((now - last).total_seconds())
+                        await interaction.followup.send(
+                            f"⏱️ Chưa hết cooldown, hãy đợi **{remaining}**s nữa.",
+                            ephemeral=True
+                        )
+                        return
+
+                # đăng ký
                 player = playerRepo.getById(player_id)
                 if not player:
                     await interaction.followup.send("⚠️ Bạn chưa đăng ký. Dùng `/register` trước nhé!")
                     return
 
-                # Tính level từ exp
+                # validate count
+                if count <= 0:
+                    await interaction.followup.send("⚠️ Số lượng phải lớn hơn 0.")
+                    return
+
+                # tính level
                 exp = player.exp or 0
                 thresholds = sorted(int(k) for k in LEVEL_CONFIG.keys())
                 level = 0
@@ -70,12 +84,13 @@ class BuyMultiCard(commands.Cog):
                         level = LEVEL_CONFIG[str(t)]
                     else:
                         break
-
                 if level < 2:
-                    await interaction.followup.send("⚠️ Chức năng này chỉ dành cho người chơi từ level 2 trở lên.")
+                    await interaction.followup.send(
+                        "⚠️ Chức năng này chỉ dành cho người chơi từ level 2 trở lên."
+                    )
                     return
 
-                # Lấy giới hạn mua pack
+                # giới hạn pack
                 max_pack = LEVEL_OPEN_PACK.get(str(level), 0)
                 if count > max_pack:
                     await interaction.followup.send(
@@ -83,11 +98,11 @@ class BuyMultiCard(commands.Cog):
                     )
                     return
 
-                # Tính tiền và kiểm tra số dư
+                # kiểm tra tiền
                 if pack not in GACHA_PRICES:
                     await interaction.followup.send("⚠️ Gói không hợp lệ.")
                     return
-                cost_per   = GACHA_PRICES[pack]
+                cost_per = GACHA_PRICES[pack]
                 total_cost = cost_per * count
                 if player.coin_balance < total_cost:
                     await interaction.followup.send(
@@ -95,22 +110,23 @@ class BuyMultiCard(commands.Cog):
                     )
                     return
 
-                # Trừ tiền & tăng exp
-                playerService.addCoin(player_id, -total_cost)
+                # trừ tiền và tăng exp
+                player.coin_balance -= total_cost
                 playerRepo.incrementExp(player_id, count)
+                session.commit()
 
-                # Mở pack và cập nhật kho
+                # mở pack và cập nhật kho
                 results: dict[tuple[str,str], int] = {}
                 def open_pack_once():
-                    cnt  = pityRepo.getCount(player_id, pack)
-                    lim  = PITY_LIMIT[pack]
+                    cnt = pityRepo.getCount(player_id, pack)
+                    lim = PITY_LIMIT[pack]
                     prot = PITY_PROTECTION[pack]
                     if cnt + 1 >= lim:
                         tier = prot
                         pityRepo.resetCounter(player_id, pack)
                     else:
                         rates = GACHA_DROP_RATE[pack]
-                        tier  = random.choices(list(rates), weights=list(rates.values()), k=1)[0]
+                        tier = random.choices(list(rates), weights=list(rates.values()), k=1)[0]
                         pityRepo.incrementCounter(player_id, pack)
                     return tplRepo.getRandomByTier(tier)
 
@@ -121,11 +137,10 @@ class BuyMultiCard(commands.Cog):
                     results[key] = results.get(key, 0) + 1
 
                 dailyTaskRepo.updateShopBuy(player_id)
+                # cập nhật cooldown
+                cooldownRepo.set_last_buy_multicard(player_id, now)
 
-                parts = [
-                    f"🥷 {name} ({tier}) x {qty}"
-                    for (name, tier), qty in results.items()
-                ]
+                parts = [f"🥷 {name} ({tier}) x {qty}" for (name, tier), qty in results.items()]
                 detail = "\n".join(parts)
                 await interaction.followup.send(
                     f"✅ Bạn đã mua thành công **{count} {pack}** và nhận được:\n{detail}"
@@ -133,16 +148,6 @@ class BuyMultiCard(commands.Cog):
         except Exception as e:
             print("❌ Lỗi buymulticard:", e)
             await interaction.followup.send("❌ Có lỗi xảy ra. Vui lòng thử lại sau.")
-
-    @buymulticard.error
-    async def buymulticard_error(self, interaction, error):
-        if isinstance(error, CommandOnCooldown):
-            await interaction.response.send_message(
-                f"⏱️ Chưa hết cooldown, hãy đợi **{error.retry_after:.0f}**s nữa.",
-                ephemeral=True
-            )
-        else:
-            raise error
 
 async def setup(bot):
     await bot.add_cog(BuyMultiCard(bot))

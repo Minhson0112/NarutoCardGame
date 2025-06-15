@@ -314,3 +314,15 @@ ALTER TABLE players
   ADD COLUMN daily_received_amount INT   NOT NULL DEFAULT 0,
   ADD COLUMN daily_received_date   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
+ALTER TABLE players ADD COLUMN consecutive_streak INT NOT NULL DEFAULT 0;
+
+-- 1. Tạo bảng cooldowns
+CREATE TABLE command_cooldowns (
+  player_id          BIGINT      NOT NULL PRIMARY KEY,
+  last_buy_multicard TIMESTAMP   NULL DEFAULT NULL,
+  FOREIGN KEY (player_id) REFERENCES players(player_id)
+);
+
+INSERT IGNORE INTO command_cooldowns (player_id)
+SELECT player_id
+FROM players;

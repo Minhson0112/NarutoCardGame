@@ -1,4 +1,5 @@
 from sqlalchemy import Column, BigInteger, String, Integer, TIMESTAMP, text, ForeignKey
+from sqlalchemy.orm import relationship
 from bot.config.database import Base
 
 class Player(Base):
@@ -15,11 +16,16 @@ class Player(Base):
     created_at = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
     daily_received_amount = Column(Integer, nullable=False, default=0, server_default=text("0"))
     daily_received_date = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
+    consecutive_streak = Column(Integer, nullable=False, default=0, server_default=text("0"))
     updated_at = Column(
         TIMESTAMP, 
         server_default=text("CURRENT_TIMESTAMP"), 
         server_onupdate=text("CURRENT_TIMESTAMP")
     )
-
+    command_cooldown = relationship(
+        "CommandCooldown",
+        uselist=False,
+        back_populates="player"
+    )
     def __repr__(self):
         return f"<Player(player_id={self.player_id}, username='{self.username}')>"

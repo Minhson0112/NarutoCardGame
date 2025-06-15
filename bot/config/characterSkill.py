@@ -53,7 +53,7 @@ SKILL_MAP = {
     "madara": "Dùng Susanoo đập mạnh, gây 400% sát thương chuẩn và choáng toàn đội địch trong 2 turn.",
     "hashirama": "Phật nghìn tay Hồi máu cho toàn đội bằng 500% sát thương cơ bản và buff miễn nhiễm sát thương trong 1 turn, giải mọi loại hiệu ứng bất lợi cho tất cả đồng minh",
     "danzo": "Dùng Sharingan gây 300% sát thương cơ bản lên toàn đội địch và khiến chúng bị câm lặng trong 2 turn.",
-    "haku": "Dùng Băng Thuật, buff phản damage 70% cho toàn bộ đồng minh trong 2 turn.",
+    "haku": "Dùng Băng Thuật, buff phản damage 70% và tăng damage cho toàn bộ đồng minh bằng 50% smkk trong 2 turn.",
     "kakashi": "Dùng Chidori cực mạnh gây 500% sát thương chuẩn lên toàn bộ địch và phá 80% giáp trong 4 turn.",
     "naruto": "Kết hợp Rasenshuriken và Bom Vĩ Thú, gây 400% sát thương cơ bản lên toàn đội địch và làm kẻ địch mất 40 charka, nếu Naruto đang ở trạng thái máu yếu(30% máu tối đa) skill sẽ gây 1000% damage.",
     "susanoosasuke": "Dùng Susanoo bắn cung tên, gây 800% sát thương cơ bản lên mục tiêu đầu tiên và choáng 2 turn.",
