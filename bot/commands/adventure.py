@@ -17,15 +17,23 @@ from bot.config.imageMap import CARD_IMAGE_LOCAL_PATH_MAP, BG_ADVENTURE, NON_CAR
 from bot.entity.player import Player
 from bot.services.fightRender import renderImageFight
 from bot.services.battle import Battle
-from bot.services.help import get_battle_card_params, render_team_status
+from bot.services.help import get_battle_card_params, render_team_status, get_adventure_effective_stats
 from bot.services.createCard import create_card
 
 class Adventure(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     @app_commands.command(name= "adventure", description= "đi thám hiểm, dẹp loạn, nhận ryo nếu thắng")
+    @app_commands.describe(
+        difficulty="độ khó"
+    )
+    @app_commands.choices(difficulty=[
+        app_commands.Choice(name="Dễ", value="easy"),
+        app_commands.Choice(name="Trung Bình", value="medium"),
+        app_commands.Choice(name="Khó", value="hard")
+    ])
     @checks.cooldown(1, 300, key=lambda interaction: interaction.user.id)
-    async def adventure(self, interaction: discord.Interaction):
+    async def adventure(self, interaction: discord.Interaction,  difficulty: str):
         attacker_id = interaction.user.id
         await interaction.response.defer(thinking=True)
         
@@ -36,6 +44,8 @@ class Adventure(commands.Cog):
                     "Team buôn hàng nóng", "Team gấu tró", "Team máu dồn lên não", "Team wibu", "Team fan mu", "Team đáy xã hội",
                     "Team phụ hồ", "Team Ca sĩ hàn quốc", "Team đom đóm", "Team hội mê peter"]
         teamName = random.choice(teamNames)
+
+        weaponName = ["Kunai", "Knife", "ChakraKnife", "Guandao", "Katana", "Shuriken", "Bow", "Flail", "Kibaku", "Tansa", "Tessen", "Sansaju", "Suna", "Enma", "Samehada", "Rinnegan", "Gudodama"]
         try:
             with getDbSession() as session:
                 # Lấy các repository cần thiết
@@ -91,12 +101,24 @@ class Adventure(commands.Cog):
                     battle_card = create_card(*params)
                     battle_attacker_team.append(battle_card)
 
+                defenderCardLevel = 1
+                weapon_name = None
                 battle_defender_team = []
                 defenderCardImgPaths = []
                 list_card = cardtemplaterepo.getFormationTemplates()
                 for card in list_card:
+                    if (difficulty == "easy"):
+                        defenderCardLevel = 1
+                    elif (difficulty == "medium"):
+                        defenderCardLevel = random.randint(10, 20)
+                        weapon_name = random.choice(weaponName)
+                    elif (difficulty == "hard"):
+                        defenderCardLevel = random.randint(30, 50)
+                        weapon_name = random.choice(weaponName)
+                        
                     img_path = CARD_IMAGE_LOCAL_PATH_MAP.get(card.image_url, NON_CARD_PATH)
-                    battle_card = create_card(card.name, card.health, card.armor, card.base_damage, card.crit_rate, card.speed, card.chakra, card.element, card.tier, level=1, weapon_name=None)
+                    params = get_adventure_effective_stats(card.name, card.health, card.armor, card.base_damage, card.crit_rate, card.speed, card.chakra, card.element, card.tier, defenderCardLevel, weapon_name)
+                    battle_card = create_card(*params)
                     battle_defender_team.append(battle_card)
                     defenderCardImgPaths.append(img_path)
 

@@ -28,8 +28,16 @@ class TailedBoss(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     @app_commands.command(name= "tailedboss", description= "săn vĩ thú nhận ryo, thẻ và vũ khí")
+    @app_commands.describe(
+        difficulty="độ khó"
+    )
+    @app_commands.choices(difficulty=[
+        app_commands.Choice(name="Dễ", value="easy"),
+        app_commands.Choice(name="Trung Bình", value="medium"),
+        app_commands.Choice(name="Khó", value="hard")
+    ])
     @checks.cooldown(1, 3600, key=lambda interaction: interaction.user.id)
-    async def tailedboss(self, interaction: discord.Interaction):
+    async def tailedboss(self, interaction: discord.Interaction, difficulty: str):
         attacker_id = interaction.user.id
         await interaction.response.defer(thinking=True)
 
@@ -93,7 +101,14 @@ class TailedBoss(commands.Cog):
                     battle_card = create_card(*params)
                     battle_attacker_team.append(battle_card)
 
-                tailedCardlevel = random.randint(1, 10)
+                tailedCardlevel = 1
+                if (difficulty == "easy"):
+                    tailedCardlevel = 1
+                elif (difficulty == "medium"):
+                    tailedCardlevel = random.randint(2, 6)
+                elif (difficulty == "hard"):
+                    tailedCardlevel = random.randint(7, 10)
+
                 battle_defender_team = []
                 defenderCardImgPaths = []
                 list_cards = cardtemplaterepo.getRandomTailedCard()
