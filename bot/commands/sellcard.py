@@ -44,26 +44,37 @@ class SellCard(commands.Cog):
                     await interaction.followup.send(f"⚠️ Bạn không sở hữu thẻ **{card}** ở cấp {level}.")
                     return
 
+                # MỚI: kiểm tra xem có thẻ nào đang bị khoá không
+                locked_cards = [c for c in matching_cards if getattr(c, 'locked', False)]
+                if locked_cards:
+                    await interaction.followup.send(
+                        f"🔒 Thẻ **{card}** cấp {level} hiện đang bị khoá. "
+                        f"Hãy mở khoá bằng lệnh `/unlockcard: {card}` trước khi bán."
+                    )
+                    return
+
                 # Kiểm tra nếu có thẻ nào đang được dùng làm thẻ chính (equipped)
                 for c in matching_cards:
                     if c.equipped:
                         await interaction.followup.send(
-                            f"⚠️ Thẻ **{c.template.name}** đang được dùng làm thẻ chính, hãy tháo thẻ đó ra bằng lệnh /setcard một thẻ khác trước khi bán."
+                            f"⚠️ Thẻ **{c.template.name}** đang được dùng làm thẻ chính, "
+                            f"hãy tháo thẻ đó ra bằng lệnh /setcard một thẻ khác trước khi bán."
                         )
                         return
 
                 # Tính tổng số lượng thẻ ở cấp đó
                 total_quantity = sum(c.quantity for c in matching_cards)
                 if total_quantity < quantity:
-                    await interaction.followup.send(f"⚠️ Bạn không có đủ số lượng thẻ để bán. Bạn có: {total_quantity}, yêu cầu: {quantity}.")
+                    await interaction.followup.send(
+                        f"⚠️ Bạn không có đủ số lượng thẻ để bán. Bạn có: {total_quantity}, yêu cầu: {quantity}."
+                    )
                     return
 
-                # Tính số tiền nhận được: tiền nhận = sell_price * cấp thẻ * số lượng bán
-                # Giả sử sell_price được lấy từ template của bản ghi đầu tiên
+                # Tính số tiền nhận được
                 sell_price = matching_cards[0].template.sell_price
                 total_money = sell_price * level * quantity
 
-                # Tiêu hao các bản ghi thẻ bán ra:
+                # Tiêu hao các bản ghi thẻ bán ra
                 remaining = quantity
                 for c in matching_cards:
                     if remaining <= 0:
@@ -81,8 +92,10 @@ class SellCard(commands.Cog):
                 player.coin_balance += total_money
                 dailyTaskRepo.updateShopSell(player_id)
                 session.commit()
+
                 await interaction.followup.send(
-                    f"✅ Bán thành công! Bạn nhận được **{total_money:,} Ryo** từ việc bán {quantity} thẻ **{card}** cấp {level}."
+                    f"✅ Bán thành công! Bạn nhận được **{total_money:,} Ryo** "
+                    f"từ việc bán {quantity} thẻ **{card}** cấp {level}."
                 )
         except Exception as e:
             print("❌ Lỗi khi xử lý sellcard:", e)

@@ -74,6 +74,11 @@ async def main():
         "bot.commands.adventure",
         "bot.commands.tailedboss",
         "bot.commands.resetrank",
+        "bot.commands.showcard",
+        "bot.commands.lockcard",
+        "bot.commands.unlockcard",
+        "bot.commands.showweapon",
+        "bot.commands.buyMultiCard",
     ]
 
     # Load từng extension

@@ -16,11 +16,11 @@ def get_card_effective_stats(card):
 
     # Định nghĩa tỉ lệ buff theo từng tier
     buff_rates = {
-        "Genin":     0.30,
-        "Chunin":    0.25,
-        "Jounin":    0.20,
+        "Genin":     0.10,
+        "Chunin":    0.15,
+        "Jounin":    0.15,
         "Kage":      0.15,
-        "Legendary": 0.10,
+        "Legendary": 0.20,
     }
     tier = card.template.tier
     tier_rate = buff_rates.get(tier, 0.10)  # nếu không tìm thấy thì mặc định 10%
@@ -35,8 +35,43 @@ def get_card_effective_stats(card):
         "armor":     int(base.armor      * multiplier),
         "crit_rate": base.crit_rate      * multiplier,
         "speed":     base.speed          * multiplier,
-        "chakra":    int(base.chakra     * multiplier),
+        "chakra":    base.chakra,
+        "level":     lvl
     }
+
+def get_tailed_effective_stats(name, health, armor, base_damage, crit_rate, speed, chakra, element, tier, level, weapon_name=None):
+
+    multiplier = 1 + 0.20 * (level - 1)
+    return (
+        name,
+        int(health * multiplier),
+        int(armor * multiplier),
+        int(base_damage * multiplier),
+        crit_rate * multiplier,
+        min(speed * multiplier, 0.7),
+        int(chakra * multiplier),
+        element,
+        tier,
+        level,
+        weapon_name,
+    )
+
+def get_adventure_effective_stats(name, health, armor, base_damage, crit_rate, speed, chakra, element, tier, level, weapon_name):
+
+    multiplier = 1 + 0.20 * (level - 1)
+    return (
+        name,
+        int(health * multiplier),
+        int(armor * multiplier),
+        int(base_damage * multiplier),
+        crit_rate * multiplier,
+        min(speed * multiplier, 0.7),
+        int(chakra * multiplier),
+        element,
+        tier,
+        level,
+        weapon_name,
+    )
 
 def get_weapon_effective_stats(weapon):
     """
@@ -62,12 +97,13 @@ def get_weapon_effective_stats(weapon):
         "bonus_crit_rate":  buff("bonus_crit_rate"),
         "bonus_speed":      buff("bonus_speed"),
         "bonus_chakra":     buff("bonus_chakra"),
+        "name":             tmpl.name,
     }
 
 def get_battle_card_params(
     player_card,                      # instance PlayerCard
     player_weapon: Optional[object] = None,  # instance PlayerWeapon hoặc None
-) -> Tuple[str, int, int, int, float, float, int, str, str]:
+) -> Tuple[str, int, int, int, float, float, int, str, str, int, str]:
     """
     Trả về tuple:
       (name, health, armor, base_damage, crit_rate, speed, chakra, position, element, tier)
@@ -77,6 +113,7 @@ def get_battle_card_params(
     stats = get_card_effective_stats(player_card)
 
     # 2) Nếu có vũ khí, cộng thêm từng bonus_* đã buff
+    weapon_name = None
     if player_weapon:
         wstats = get_weapon_effective_stats(player_weapon)
         stats["hp"]       += wstats.get("bonus_health")    or 0
@@ -85,6 +122,7 @@ def get_battle_card_params(
         stats["crit_rate"]+= wstats.get("bonus_crit_rate") or 0
         stats["speed"]    += wstats.get("bonus_speed")     or 0
         stats["chakra"]   += wstats.get("bonus_chakra")    or 0
+        weapon_name = wstats.get("name")
 
 
 
@@ -98,5 +136,22 @@ def get_battle_card_params(
         stats["speed"],
         stats["chakra"],
         player_card.template.element,
-        player_card.template.tier
+        player_card.template.tier,
+        stats["level"],
+        weapon_name,
     )
+    
+def render_team_status(team, title=""):
+    lines = [title]
+    for c in team:
+        lines.append(
+            # Gọi các phương thức để lấy giá trị, không phải tham chiếu tới method
+            f"{c.name} (lv:{c.level})  "
+            f"⚔️{c.get_effective_base_damage()}  "
+            f"🛡️{c.get_effective_armor()}  "
+            f"💥{c.get_effective_crit_rate():.0%}  "
+            f"🏃{c.get_effective_speed():.0%}  "
+            f"🔋{c.chakra}"
+        )
+        lines.append(c.health_bar() + "\n")
+    return lines

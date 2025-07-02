@@ -12,6 +12,7 @@ from bot.repository.dailyTaskRepository import DailyTaskRepository
 from bot.services.playerService import PlayerService
 from bot.config.weaponGachaConfig import WEAPON_GACHA_PRICES, WEAPON_GACHA_DROP_RATE, WEAPON_GACHA_PACKS
 from bot.config.imageMap import WEAPON_IMAGE_MAP  # mapping ảnh vũ khí
+from bot.config.weaponSkill import WEAPON_SKILL_MAP
 from bot.entity.weaponTemplate import WeaponTemplate
 
 class BuyWeapon(commands.Cog):
@@ -58,6 +59,8 @@ class BuyWeapon(commands.Cog):
 
                 # Trừ tiền
                 playerService.addCoin(playerId, -cost)
+                #tăng exp
+                playerRepo.incrementExp(playerId,amount=20)
 
                 # Roll ngẫu nhiên theo weighted random dựa trên tỉ lệ drop của gói weapon
                 rates = WEAPON_GACHA_DROP_RATE[pack]
@@ -78,10 +81,12 @@ class BuyWeapon(commands.Cog):
                 # Lấy URL ảnh thực từ WEAPON_IMAGE_MAP (weapon.image_url lưu key)
                 imageUrl = WEAPON_IMAGE_MAP.get(weapon.image_url, weapon.image_url)
 
+                skillDescription = WEAPON_SKILL_MAP.get(weapon.image_url)
+
                 # Tạo embed hiển thị thông tin của vũ khí nhận được
                 embed = discord.Embed(
                     title=f"🎉 Bạn đã mua gói {pack} và mở được vũ khí: {weapon.name}",
-                     description=(
+                    description=(
                         f"**Damage cộng thêm:** {weapon.bonus_damage or 0}\n"
                         f"**Hp cộng thêm:** {weapon.bonus_health or 0}\n"
                         f"**Giáp cộng thêm:** {weapon.bonus_armor or 0}\n"
@@ -90,7 +95,8 @@ class BuyWeapon(commands.Cog):
                         f"**Chakra cộng thêm:** {weapon.bonus_chakra or 0}\n"
                         f"**Bậc:** {weapon.grade}\n"
                         f"**Giá bán:** {weapon.sell_price:,} Ryo\n\n"
-                        "Vũ khí đã được thêm vào kho của bạn. Kiểm tra kho bằng lệnh `/inventory`."
+                        f"Vũ khí đã được thêm vào kho của bạn. Kiểm tra kho bằng lệnh `/inventory`.\n\n\n\n"
+                        f"📜 **Nội Tại Vũ khí:**\n{skillDescription}\n\n"
                     ),
                     color=discord.Color.green()
                 )

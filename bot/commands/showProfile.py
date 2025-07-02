@@ -18,6 +18,7 @@ from bot.config.imageMap import (
     NON_CARD_PATH,
     BG
 )
+from bot.config.config import LEVEL_CONFIG
 
 class ShowProfile(commands.Cog):
     def __init__(self, bot):
@@ -144,6 +145,38 @@ class ShowProfile(commands.Cog):
                         lines.append(f"**Vũ khí {slot_idx} (Thẻ {slot_names[slot_idx-1]}):** Chưa lắp vũ khí")
 
                 lines.append("")  # ngăn cách
+
+                # 1) Lấy exp của player và chuẩn bị thresholds
+                exp = player.exp or 0
+                thresholds = sorted(int(k) for k in LEVEL_CONFIG.keys())
+                current_level = 0
+                prev_thresh = 0
+                next_thresh = None
+                for t in thresholds:
+                    lvl = LEVEL_CONFIG[str(t)]
+                    if exp >= t:
+                        current_level = lvl
+                        prev_thresh = t
+                    elif next_thresh is None:
+                        next_thresh = t
+
+                bar_length = 20
+                if next_thresh:
+                    # tỉ lệ trong khoảng [prev_thresh, next_thresh)
+                    ratio = (exp - prev_thresh) / (next_thresh - prev_thresh)
+                    filled = int(ratio * bar_length)
+                    bar = "█" * filled + "░" * (bar_length - filled)
+                    exp_text = f"{exp - prev_thresh}/{next_thresh - prev_thresh}"
+                else:
+                    # đã max level
+                    bar = "█" * bar_length
+                    exp_text = str(exp)
+
+                lines.append(f"**Cấp độ hiện tại của bạn:** {current_level}")
+                if next_thresh:
+                    lines.append(f"**EXP tới cấp {current_level+1}:** [{bar}] {exp_text}")
+                else:
+                    lines.append(f"**EXP:** [{bar}] {exp_text} (MAX)")
 
                 embed = discord.Embed(
                     title="🛡️ Hồ sơ Chiến Đấu của bạn",

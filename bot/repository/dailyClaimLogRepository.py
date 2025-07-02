@@ -14,3 +14,13 @@ class DailyClaimLogRepository:
         log = DailyClaimLog(player_id=playerId, claim_date=today)
         self.session.add(log)
         self.session.commit()
+
+    def getLastClaimDate(self, playerId: int) -> date | None:
+        """Trả về ngày điểm danh gần nhất trước hôm nay, hoặc None nếu chưa từng."""
+        last = (
+            self.session.query(DailyClaimLog.claim_date)
+            .filter_by(player_id=playerId)
+            .order_by(DailyClaimLog.claim_date.desc())
+            .first()
+        )
+        return last[0] if last else None

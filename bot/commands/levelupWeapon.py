@@ -110,7 +110,8 @@ class LevelUpWeapon(commands.Cog):
                         if w.quantity == 0:
                             weaponRepo.deleteWeapon(w)
                         remaining = 0
-
+                        
+                playerRepo.incrementExp(playerId,amount=10)
                 session.commit()
                 await interaction.followup.send(
                     f"✅ Nâng cấp thành công! Vũ khí **{newWeapon.template.name}** đã được nâng lên cấp {desired_level}."

@@ -121,6 +121,9 @@ class Bingo(commands.Cog):
                     )
                     player.coin_balance -= bet
 
+                #tăng exp
+                playerRepo.incrementExp(player_id,amount=2)
+
                 session.commit()
 
                 # Tạo embed kết quả với trang trí emoji

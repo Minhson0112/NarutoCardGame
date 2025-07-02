@@ -331,6 +331,9 @@ class Blackjack(commands.Cog):
                     f"Số dư hiện tại: **{player.coin_balance}**"
                 )
                 await msg.edit(embed=embed)
+                
+                #tăng exp
+                playerRepo.incrementExp(player_id,amount=2)
                 session.commit()
 
         except Exception as e:

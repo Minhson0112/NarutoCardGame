@@ -33,3 +33,23 @@ class PlayerRepository:
             return None
         higherCount = self.session.query(Player).filter(Player.rank_points > player.rank_points).count()
         return higherCount + 1
+    
+    def incrementExp(self, player_id: int, amount: int = 1) -> int:
+        """
+        Cộng thêm `amount` vào exp của người chơi.
+        Trả về exp mới.
+        """
+        player = self.getById(player_id)
+        if not player:
+            raise ValueError(f"Không tìm thấy player với id={player_id}")
+        player.exp += amount
+        self.session.commit()
+        return player.exp
+    
+    def getExp(self, player_id: int) -> int | None:
+        """
+        Lấy exp hiện tại của người chơi, hoặc None nếu không tồn tại.
+        """
+        player = self.getById(player_id)
+        return player.exp if player else None
+    

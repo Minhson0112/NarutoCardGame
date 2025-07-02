@@ -111,7 +111,8 @@ class Slot(commands.Cog):
                     )
                     player.coin_balance -= bet
                     final_color = discord.Color.red()
-                
+                #tăng exp
+                playerRepo.incrementExp(player_id,amount=2)
                 session.commit()
 
                 # Cập nhật cuối cùng: Hiển thị kết quả đầy đủ
