@@ -104,3 +104,24 @@ class PlayerCardRepository:
     def deleteCard(self, card):
         """Xóa bản ghi thẻ khỏi session."""
         self.session.delete(card)
+        
+    def getByPlayerIdAndCardKey(self, playerId: int, cardKey: str):
+        """
+        Lấy tất cả các thẻ của một người chơi theo cùng card_key.
+        Thường dùng để:
+        - kiểm tra các level khác nhau của cùng 1 thẻ
+        - tính tổng số phôi (level 1)
+        - tìm level cao nhất của thẻ đó
+
+        :param playerId: ID người chơi
+        :param cardKey:  card_key trong bảng card_templates
+        :return: Danh sách PlayerCard thỏa điều kiện
+        """
+        return (
+            self.session.query(PlayerCard)
+            .filter(
+                PlayerCard.player_id == playerId,
+                PlayerCard.card_key == cardKey
+            )
+            .all()
+        )

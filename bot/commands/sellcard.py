@@ -13,11 +13,10 @@ class SellCard(commands.Cog):
 
     @app_commands.command(name="sellcard", description="Bán thẻ của bạn để nhận Ryo")
     @app_commands.describe(
-        card="Tên thẻ bạn muốn bán (ví dụ: Uchiha Madara)",
-        level="Cấp của thẻ cần bán",
+        cardId="ID của thẻ muốn bán (xem bằng /inventory)",
         quantity="Số lượng thẻ muốn bán"
     )
-    async def sellcard(self, interaction: discord.Interaction, card: str, level: int, quantity: int):
+    async def sellcard(self, interaction: discord.Interaction, cardId: int, quantity: int):
         await interaction.response.defer(thinking=True)
         player_id = interaction.user.id
 
@@ -37,65 +36,53 @@ class SellCard(commands.Cog):
                     return
 
                 # Lấy danh sách các thẻ của người chơi có tên khớp
-                cards = card_repo.getByCardNameAndPlayerId(player_id, card)
+                card = card_repo.getById(cardId)
                 # Lọc các bản ghi có cấp đúng yêu cầu
-                matching_cards = [c for c in cards if c.level == level]
-                if not matching_cards:
-                    await interaction.followup.send(f"⚠️ Bạn không sở hữu thẻ **{card}** ở cấp {level}.")
+                if not card or card.player_id != player_id:
+                    await interaction.followup.send(f"⚠️ Bạn không sở hữu thẻ với ID `{cardId}`.")
                     return
 
+                cardName = card.template.name
+                cardLevel = card.level
+
                 # MỚI: kiểm tra xem có thẻ nào đang bị khoá không
-                locked_cards = [c for c in matching_cards if getattr(c, 'locked', False)]
-                if locked_cards:
+                if getattr(card, "locked", False):
                     await interaction.followup.send(
-                        f"🔒 Thẻ **{card}** cấp {level} hiện đang bị khoá. "
-                        f"Hãy mở khoá bằng lệnh `/unlockcard: {card}` trước khi bán."
+                        f"🔒 Thẻ **{card.template.name}** (ID `{card.id}`) đang bị khoá.\n"
+                        f"Hãy mở khoá bằng lệnh `/unlockcard` trước khi bán."
                     )
                     return
 
-                # Kiểm tra nếu có thẻ nào đang được dùng làm thẻ chính (equipped)
-                for c in matching_cards:
-                    if c.equipped:
-                        await interaction.followup.send(
-                            f"⚠️ Thẻ **{c.template.name}** đang được dùng làm thẻ chính, "
-                            f"hãy tháo thẻ đó ra bằng lệnh /setcard một thẻ khác trước khi bán."
-                        )
-                        return
-
-                # Tính tổng số lượng thẻ ở cấp đó
-                total_quantity = sum(c.quantity for c in matching_cards)
-                if total_quantity < quantity:
+                if card.equipped:
                     await interaction.followup.send(
-                        f"⚠️ Bạn không có đủ số lượng thẻ để bán. Bạn có: {total_quantity}, yêu cầu: {quantity}."
+                        f"⚠️ Thẻ **{card.template.name}** (ID `{card.id}`) đang được dùng trong đội hình.\n"
+                        f"Hãy tháo thẻ đó ra bằng lệnh `/setcard` một thẻ khác trước khi bán."
+                    )
+                    return
+
+                if card.quantity < quantity:
+                    await interaction.followup.send(
+                        f"⚠️ Bạn không có đủ số lượng để bán. "
+                        f"Hiện có: {card.quantity}, yêu cầu: {quantity}."
                     )
                     return
 
                 # Tính số tiền nhận được
-                sell_price = matching_cards[0].template.sell_price
-                total_money = sell_price * level * quantity
+                sell_price = card.template.sell_price
+                total_money = sell_price * card.level * quantity
 
-                # Tiêu hao các bản ghi thẻ bán ra
-                remaining = quantity
-                for c in matching_cards:
-                    if remaining <= 0:
-                        break
-                    if c.quantity <= remaining:
-                        remaining -= c.quantity
-                        card_repo.deleteCard(c)
-                    else:
-                        c.quantity -= remaining
-                        if c.quantity == 0:
-                            card_repo.deleteCard(c)
-                        remaining = 0
-
-                # Cộng tiền bán được vào số dư của người chơi
+                card.quantity -= quantity
+                if card.quantity <= 0:
+                    card_repo.deleteCard(card)
+                # Cộng tiền
                 player.coin_balance += total_money
+
                 dailyTaskRepo.updateShopSell(player_id)
                 session.commit()
 
                 await interaction.followup.send(
                     f"✅ Bán thành công! Bạn nhận được **{total_money:,} Ryo** "
-                    f"từ việc bán {quantity} thẻ **{card}** cấp {level}."
+                    f"từ việc bán {quantity} thẻ **{cardName}** cấp {cardLevel}."
                 )
         except Exception as e:
             print("❌ Lỗi khi xử lý sellcard:", e)

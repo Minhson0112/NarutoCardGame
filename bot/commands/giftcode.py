@@ -11,15 +11,15 @@ from bot.repository.playerWeaponRepository import PlayerWeaponRepository
 from bot.repository.gifcodeRepository import GifcodeRepository
 from bot.repository.gifcodeLogRepository import GifcodeLogRepository
 
-class GifcodeGame(commands.Cog):
+class GiftcodeGame(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @app_commands.command(name="gifcode", description="Sử dụng mã GIF để nhận quà")
+    @app_commands.command(name="giftcode", description="Sử dụng mã GIFT để nhận quà")
     @app_commands.describe(
-        code="Mã GIF bạn muốn sử dụng"
+        code="Mã GIFT bạn muốn sử dụng"
     )
-    async def gifcode(self, interaction: discord.Interaction, code: str):
+    async def giftcode(self, interaction: discord.Interaction, code: str):
         await interaction.response.defer(thinking=True)
         player_id = interaction.user.id
 
@@ -40,18 +40,18 @@ class GifcodeGame(commands.Cog):
                 # Kiểm tra mã GIF có tồn tại không
                 gifcodeEntry = gifcodeRepo.getByGifCode(code)
                 if not gifcodeEntry:
-                    await interaction.followup.send("⚠️ Mã GIF không tồn tại. Vui lòng kiểm tra lại.")
+                    await interaction.followup.send("⚠️ Mã GIFT không tồn tại. Vui lòng kiểm tra lại.")
                     return
 
                 # Kiểm tra hạn sử dụng nếu có
                 if gifcodeEntry.expiration_date is not None:
                     if date.today() > gifcodeEntry.expiration_date:
-                        await interaction.followup.send("⚠️ Mã GIF này đã hết hạn sử dụng.")
+                        await interaction.followup.send("⚠️ Mã GIFT này đã hết hạn sử dụng.")
                         return
 
                 # Kiểm tra xem người chơi đã dùng mã này chưa
                 if gifcodeLogRepo.hasPlayerUsed(player_id, gifcodeEntry.id):
-                    await interaction.followup.send("⚠️ Bạn đã sử dụng mã GIF này trước đó và không thể sử dụng lại.")
+                    await interaction.followup.send("⚠️ Bạn đã sử dụng mã GIFT này trước đó và không thể sử dụng lại.")
                     return
 
                 # Xử lý quà tặng dựa vào các cột của gifcodeEntry:
@@ -86,7 +86,7 @@ class GifcodeGame(commands.Cog):
 
                 reward_str = ", ".join(rewards) if rewards else "Không có phần thưởng nào."
                 response = (
-                    f"✅ Bạn đã sử dụng thành công mã GIF!\n"
+                    f"✅ Bạn đã sử dụng thành công mã GIFT!\n"
                     f"Phần quà nhận được: {reward_str}\n"
                 )
                 await interaction.followup.send(response)

@@ -12,21 +12,21 @@ class LockCard(commands.Cog):
 
     @app_commands.command(
         name="lockcard",
-        description="Khoá tất cả thẻ của bạn, thẻ bị khoá sẽ không thể bán"
+        description="Khoá toàn bộ thẻ cùng loại, thẻ bị khoá sẽ không thể bán"
     )
     @app_commands.describe(
-        card_name="Tên thẻ bạn muốn khoá (ví dụ: Naruto)"
+        card_id="ID thẻ bạn muốn khoá (xem trong /inventory)"
     )
-    async def lockcard(self, interaction: discord.Interaction, card_name: str):
+    async def lockcard(self, interaction: discord.Interaction, card_id: int):
         await interaction.response.defer(thinking=True)
         player_id = interaction.user.id
 
         try:
             with getDbSession() as session:
                 playerRepo = PlayerRepository(session)
-                cardRepo = PlayerCardRepository(session)
+                cardRepo   = PlayerCardRepository(session)
 
-                # Kiểm tra người chơi đã đăng ký
+                # 1) Kiểm tra người chơi đã đăng ký
                 player = playerRepo.getById(player_id)
                 if not player:
                     await interaction.followup.send(
@@ -35,23 +35,37 @@ class LockCard(commands.Cog):
                     )
                     return
 
-                # Lấy các bản ghi thẻ theo tên
-                cards = cardRepo.getByCardNameAndPlayerId(player_id, card_name)
-                if not cards:
+                # 2) Lấy thẻ theo ID
+                card = cardRepo.getById(card_id)
+                if not card or card.player_id != player_id:
                     await interaction.followup.send(
-                        f"⚠️ Bạn không có thẻ nào tên **{card_name}**.",
+                        f"⚠️ Bạn không sở hữu thẻ với ID `{card_id}`.",
                         ephemeral=True
                     )
                     return
 
-                # Khoá tất cả bản ghi có cùng card_key
-                for card in cards:
-                    card.locked = True
+                card_name = card.template.name
+                card_key  = card.card_key
+
+                # 3) Lấy toàn bộ thẻ cùng card_key của player
+                all_same_cards = cardRepo.getByPlayerIdAndCardKey(player_id, card_key)
+                if not all_same_cards:
+                    # Về lý thuyết không xảy ra, nhưng cứ phòng lỗi
+                    await interaction.followup.send(
+                        "⚠️ Không tìm thấy các bản thẻ cùng loại để khoá.",
+                        ephemeral=True
+                    )
+                    return
+
+                # 4) Khoá toàn bộ
+                for c in all_same_cards:
+                    c.locked = True
 
                 session.commit()
 
                 await interaction.followup.send(
-                    f"✅ Đã khoá thành công thẻ có tên **{card_name}**."
+                    f"✅ Đã khoá **toàn bộ thẻ `{card_name}`** của bạn "
+                    f"(bao gồm mọi cấp độ & phôi)."
                 )
 
         except Exception as e:

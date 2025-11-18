@@ -42,6 +42,7 @@ class CardInventoryView(View):
                     nameMsg = f"•🥷 **{card.template.name}** (Lv {card.level}) (🔒)\n" if card.locked else f"•🥷 **{card.template.name}** (Lv {card.level})\n"
                     lines.append(
                         f"{nameMsg}"
+                        f"  ┣ **ID:** `{card.id}`\n"
                         f"  ┣ **Bậc:** {card.template.tier}\n"
                         f"  ┣ **Damage:** {stats['strength']}\n"
                         f"  ┣ **HP:** {stats['hp'] or 'N/A'}\n"
@@ -110,7 +111,8 @@ class WeaponInventoryView(View):
                     # header + bậc
                     block = [
                         f"•🔪 **{weapon.template.name}** (Lv: {weapon.level}), (sl: {weapon.quantity})",
-                        f"  ┣ **Bậc:** {weapon.template.grade}"
+                        f"  ┣ **Bậc:** {weapon.template.grade}",
+                        f"  ┣ **ID:** {weapon.id}"
                     ]
                     # thêm danh sách buffs
                     for i, (label, val) in enumerate(buffs):
