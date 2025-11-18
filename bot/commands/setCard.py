@@ -17,7 +17,7 @@ class SetCard(commands.Cog):
     )
     @app_commands.describe(
         position="Chọn vị trí lắp: tanker/middle/back",
-        cardId="ID thẻ bạn sở hữu (xem trong /inventory)"
+        card_id="ID thẻ bạn sở hữu (xem trong /inventory)"
     )
     @app_commands.choices(position=[
         app_commands.Choice(name="tanker", value="tanker"),
@@ -28,7 +28,7 @@ class SetCard(commands.Cog):
         self,
         interaction: discord.Interaction,
         position: app_commands.Choice[str],
-        cardId: int
+        card_id: int
     ):
         await interaction.response.defer(thinking=True)
         player_id = interaction.user.id
@@ -49,10 +49,10 @@ class SetCard(commands.Cog):
                     return
 
                 # 2) Tìm thẻ theo id
-                selected = cardRepo.getById(cardId)
+                selected = cardRepo.getById(card_id)
                 if not selected or selected.player_id != player_id:
                     await interaction.followup.send(
-                        f"⚠️ Bạn không sở hữu thẻ với ID `{cardId}`."
+                        f"⚠️ Bạn không sở hữu thẻ với ID `{card_id}`."
                     )
                     return
 

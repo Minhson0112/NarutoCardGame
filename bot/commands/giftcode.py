@@ -95,4 +95,4 @@ class GiftcodeGame(commands.Cog):
             await interaction.followup.send("❌ Có lỗi xảy ra. Vui lòng thử lại sau.", ephemeral=True)
 
 async def setup(bot: commands.Bot):
-    await bot.add_cog(GifcodeGame(bot))
+    await bot.add_cog(GiftcodeGame(bot))

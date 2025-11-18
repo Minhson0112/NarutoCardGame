@@ -110,9 +110,10 @@ class WeaponInventoryView(View):
 
                     # header + bậc
                     block = [
-                        f"•🔪 **{weapon.template.name}** (Lv: {weapon.level}), (sl: {weapon.quantity})",
+                        f"•🔪 **{weapon.template.name}** (Lv {weapon.level})",
+                        f"  ┣ **ID:** `{weapon.id}`",
                         f"  ┣ **Bậc:** {weapon.template.grade}",
-                        f"  ┣ **ID:** {weapon.id}"
+                        f"  ┣ **Số Lượng:** {weapon.quantity}"
                     ]
                     # thêm danh sách buffs
                     for i, (label, val) in enumerate(buffs):

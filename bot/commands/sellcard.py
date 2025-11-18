@@ -13,10 +13,10 @@ class SellCard(commands.Cog):
 
     @app_commands.command(name="sellcard", description="Bán thẻ của bạn để nhận Ryo")
     @app_commands.describe(
-        cardId="ID của thẻ muốn bán (xem bằng /inventory)",
+        card_id="ID của thẻ muốn bán (xem bằng /inventory)",
         quantity="Số lượng thẻ muốn bán"
     )
-    async def sellcard(self, interaction: discord.Interaction, cardId: int, quantity: int):
+    async def sellcard(self, interaction: discord.Interaction, card_id: int, quantity: int):
         await interaction.response.defer(thinking=True)
         player_id = interaction.user.id
 
@@ -36,10 +36,10 @@ class SellCard(commands.Cog):
                     return
 
                 # Lấy danh sách các thẻ của người chơi có tên khớp
-                card = card_repo.getById(cardId)
+                card = card_repo.getById(card_id)
                 # Lọc các bản ghi có cấp đúng yêu cầu
                 if not card or card.player_id != player_id:
-                    await interaction.followup.send(f"⚠️ Bạn không sở hữu thẻ với ID `{cardId}`.")
+                    await interaction.followup.send(f"⚠️ Bạn không sở hữu thẻ với ID `{card_id}`.")
                     return
 
                 cardName = card.template.name
