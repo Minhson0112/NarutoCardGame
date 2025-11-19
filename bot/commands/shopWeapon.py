@@ -46,7 +46,7 @@ class ShopWeapon(commands.Cog):
                         inline=False
                     )
                 
-                embed.set_footer(text="Shop Vũ Khí - Hãy lựa chọn vũ khí cho bản thân bạn!")
+                embed.set_footer(text="Shop Vũ Khí - Hãy lựa chọn vũ khí thích hợp cho tướng của bạn!")
                 await interaction.followup.send(embed=embed)
         except Exception as e:
             print("❌ Lỗi khi xử lý shopweapon:", e)

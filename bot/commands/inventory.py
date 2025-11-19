@@ -49,9 +49,7 @@ class CardInventoryView(View):
                         f"  ┣ **Giáp:** {stats['armor'] or 'N/A'}\n"
                         f"  ┣ **Tỉ lệ chí mạng:** {stats['crit_rate']:.0%}\n"
                         f"  ┣ **Né:** {stats['speed']:.0%}\n"
-                        f"  ┣ **Chakra:** {stats['chakra']}\n"
                         f"  ┣ **Tanker:** {'✅' if card.template.first_position else '❌'}\n"
-                        f"  ┣ **Hệ chakra:** {card.template.element}\n"
                         f"  ┗ **Số Lượng:** {card.quantity}\n"
                     )
                 embed.description = "\n\n".join(lines)

@@ -154,7 +154,7 @@ class NarutoTrap(commands.Cog):
             # Cập nhật embed mới sau mỗi lần di chuyển
             updated_embed = discord.Embed(
                 title="🔥 Naruto Trap Game 🔥",
-                description=f"Tiền cược: **{bet} Ryo**\n\n{game.grid_to_str()}\n\nDi chuyển: ⬆️, ➡️, ⬅️",
+                description=f"Tiền cược: **{bet} Ryo** đưa ninja lên hàng trên cùng để về đích\n\n{game.grid_to_str()}\n\nDi chuyển: ⬆️, ➡️, ⬅️",
                 color=discord.Color.gold()
             )
             await message.edit(embed=updated_embed)

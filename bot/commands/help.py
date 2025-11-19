@@ -52,7 +52,8 @@ class HelpCommand(commands.Cog):
                 "2. Sau khi mua, kiểm tra kho của bạn bằng lệnh ``/inventory``.\n\n"
                 "3. Tương tự, bạn có thể vào shop vũ khí để mua vũ khí qua các lệnh tương tự.\n\n"
                 "4. Nâng cấp thẻ và vũ khí bằng lệnh ``/levelupcard`` và ``/levelupweapon`` (nâng cấp sẽ tăng sức mạnh nếu bạn có các thẻ hoặc vũ khí giống nhau).\n\n"
-                "5. Lắp thẻ mạnh nhất và vũ khí mạnh nhất vào hồ sơ của bạn bằng lệnh ``/setcard`` và ``/setweapon`` để chuẩn bị chiến đấu với các người chơi khác."
+                "5. Lắp thẻ mạnh nhất và vũ khí mạnh nhất vào hồ sơ của bạn bằng lệnh ``/setcard`` và ``/setweapon`` để chuẩn bị chiến đấu với các người chơi khác.\n\n"
+                "5. Chi tiết luật chiến đấu ở ``/battlerule``.\n\n"
             )
         )
 
