@@ -17,7 +17,7 @@ class SetWeapon(commands.Cog):
     )
     @app_commands.describe(
         position="Chọn vị trí lắp: tanker/middle/back (tương ứng với vị trí thẻ)",
-        weaponId="ID vũ khí bạn sở hữu (xem trong /inventory)"
+        weapon_id="ID vũ khí bạn sở hữu (xem trong /inventory)"
     )
     @app_commands.choices(position=[
         app_commands.Choice(name="tanker", value="tanker"),
@@ -28,7 +28,7 @@ class SetWeapon(commands.Cog):
         self,
         interaction: discord.Interaction,
         position: app_commands.Choice[str],
-        weaponId: int
+        weapon_id: int
     ):
         await interaction.response.defer(thinking=True)
         player_id = interaction.user.id
@@ -48,10 +48,10 @@ class SetWeapon(commands.Cog):
                     return
 
                 # 2) Lấy tất cả vũ khí matching tên
-                selected = weaponRepo.getById(weaponId)
+                selected = weaponRepo.getById(weapon_id)
                 if not selected or selected.player_id != player_id:
                     await interaction.followup.send(
-                        f"⚠️ Bạn không sở hữu vũ khí với ID `{weaponId}`."
+                        f"⚠️ Bạn không sở hữu vũ khí với ID `{weapon_id}`."
                     )
                     return
 

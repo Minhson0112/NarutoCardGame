@@ -13,10 +13,10 @@ class SellWeapon(commands.Cog):
 
     @app_commands.command(name="sellweapon", description="Bán vũ khí của bạn để nhận Ryo")
     @app_commands.describe(
-        weaponId="ID của vũ khí muốn bán (xem trong /inventory)",
+        weapon_id="ID của vũ khí muốn bán (xem trong /inventory)",
         quantity="Số lượng vũ khí muốn bán"
     )
-    async def sellweapon(self, interaction: discord.Interaction, weaponId: int, quantity: int):
+    async def sellweapon(self, interaction: discord.Interaction, weapon_id: int, quantity: int):
         await interaction.response.defer(thinking=True)
         player_id = interaction.user.id
 
@@ -36,10 +36,10 @@ class SellWeapon(commands.Cog):
                     return
 
                 # Lấy danh sách các vũ khí của người chơi có tên khớp
-                weapon = weapon_repo.getById(weaponId)
+                weapon = weapon_repo.getById(weapon_id)
                 if not weapon or weapon.player_id != player_id:
                     await interaction.followup.send(
-                        f"⚠️ Bạn không sở hữu vũ khí với ID `{weaponId}`."
+                        f"⚠️ Bạn không sở hữu vũ khí với ID `{weapon_id}`."
                     )
                     return
 
