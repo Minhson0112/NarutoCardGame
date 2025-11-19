@@ -125,3 +125,61 @@ class PlayerCardRepository:
             )
             .all()
         )
+
+    def apply_rank_reset_level_penalty(self):
+        """
+        Áp dụng trừ cấp cho toàn bộ thẻ theo rule reset rank:
+            <10:   không trừ
+            10–19: -5 (nhưng không bao giờ < 10)
+            20–29: -10
+            30–39: -15
+            >=40:  -20
+
+        Đảm bảo: KHÔNG thẻ nào sau reset bị tụt xuống dưới level 10 vì bị trừ cấp.
+        (Các thẻ vốn <10 vẫn giữ nguyên, không đụng tới.)
+        """
+        q = self.session.query(PlayerCard)
+
+        # 10–14: nếu trừ 5 sẽ <10 → clamp về 10
+        q.filter(
+            PlayerCard.level >= 10,
+            PlayerCard.level < 15
+        ).update(
+            {PlayerCard.level: 10},
+            synchronize_session=False
+        )
+
+        # 15–19: trừ 5 vẫn >=10 → OK
+        q.filter(
+            PlayerCard.level >= 15,
+            PlayerCard.level < 20
+        ).update(
+            {PlayerCard.level: PlayerCard.level - 5},
+            synchronize_session=False
+        )
+
+        # 20–29: -10 → 10–19
+        q.filter(
+            PlayerCard.level >= 20,
+            PlayerCard.level < 30
+        ).update(
+            {PlayerCard.level: PlayerCard.level - 10},
+            synchronize_session=False
+        )
+
+        # 30–39: -15 → 15–24
+        q.filter(
+            PlayerCard.level >= 30,
+            PlayerCard.level < 40
+        ).update(
+            {PlayerCard.level: PlayerCard.level - 15},
+            synchronize_session=False
+        )
+
+        # >=40: -20 → >=20
+        q.filter(
+            PlayerCard.level >= 40
+        ).update(
+            {PlayerCard.level: PlayerCard.level - 20},
+            synchronize_session=False
+        )
