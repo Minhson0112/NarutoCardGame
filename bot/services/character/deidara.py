@@ -5,13 +5,13 @@ class Deidara(Card):
         logs: list[str] = []
         logs.append("💥 Deidara tạo vụ nổ lớn, nhắm vào tuyến đầu đối phương!")
 
-        # 1️⃣ Xác định mục tiêu tuyến đầu còn sống
+        # Xác định mục tiêu tuyến đầu còn sống
         target = next((c for c in self.enemyTeam if c.is_alive()), None)
         if not target:
             logs.append("❌ Không tìm thấy mục tiêu để tấn công.")
             return logs
 
-        # 2️⃣ Gây 600% sát thương chuẩn (bỏ qua giáp)
+        # Gây 600% sát thương chuẩn (bỏ qua giáp)
         damage = int(self.get_effective_base_damage() * 5)
         dealt, new_logs = target.receive_damage(
             damage,

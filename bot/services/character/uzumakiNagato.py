@@ -5,7 +5,7 @@ class UzumakiNagato(Card):
         logs: list[str] = []
         logs.append(f"🌊 {self.name} sử dụng Ngoại Đạo Luân Hồi Chi Thuật, hồi sinh hoặc chữa lành đồng minh!")
 
-        # 1️⃣ Tìm đồng minh đã chết
+        # Tìm đồng minh đã chết
         dead_allies = [c for c in self.team if not c.is_alive()]
         if dead_allies:
             # Hồi sinh đồng minh đầu tiên với 100% HP
@@ -31,7 +31,7 @@ class UzumakiNagato(Card):
             logs.append(f"🏃 {target.name} tốc độ: {orig_speed:.0%} → {target.speed:.0%}")
             logs.append(f"🔋 {target.name} chakra: {orig_chakra} → {target.chakra}")
         else:
-            # 2️⃣ Nếu không có ai chết, hồi máu cho đồng minh thấp máu nhất bằng 400% SMKK
+            # Nếu không có ai chết, hồi máu cho đồng minh thấp máu nhất bằng 400% SMKK
             heal_amount = int(self.get_effective_base_damage() * 4)
             alive = [c for c in self.team if c.is_alive()]
             if not alive:

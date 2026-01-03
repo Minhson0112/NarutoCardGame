@@ -6,13 +6,13 @@ class YuhiKurenai(Card):
         logs: list[str] = []
         logs.append(f"🌸 {self.name} thi triển Ảo Thuật, khiến đối phương tấn công chính đồng minh!")
 
-        # 1️⃣ Xác định mục tiêu tuyến đầu (đầu tiên còn sống)
+        # Xác định mục tiêu tuyến đầu (đầu tiên còn sống)
         target = next((c for c in self.enemyTeam if c.is_alive()), None)
         if not target:
             logs.append("❌ Không tìm thấy mục tiêu để áp dụng Ảo Thuật.")
             return logs
 
-        # 2️⃣ Cộng dồn hoặc khởi tạo IllusionEffect
+        # Cộng dồn hoặc khởi tạo IllusionEffect
         stack_turns = 2
         existing = next(
             (e for e in target.effects if isinstance(e, IllusionEffect)),

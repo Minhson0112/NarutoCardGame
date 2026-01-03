@@ -15,7 +15,7 @@ class Kushina(Card):
             return logs
 
         for target in alive_enemies:
-            # 1️⃣ Gây sát thương thường
+            # Gây sát thương thường
             dealt, dmg_logs = target.receive_damage(
                 damage,
                 true_damage=False,
@@ -24,7 +24,7 @@ class Kushina(Card):
             )
             logs.extend(dmg_logs)
 
-            # 2️⃣ Phong ấn chakra 3 lượt
+            # Phong ấn chakra 3 lượt
             seal = SealChakraEffect(
                 duration=3,
                 description="Phong ấn chakra bởi Kushina"

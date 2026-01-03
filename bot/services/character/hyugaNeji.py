@@ -7,7 +7,7 @@ class HyugaNeji(Card):
         logs.append(f"🛡️ Hyuga Neji kích hoạt Bát Quái Bảo Kính, tăng phòng thủ và hồi máu!")
 
         neji_damage = self.get_effective_base_damage()
-        # 1️⃣ Tăng giáp: 100% SMKK trong 3 turn
+        # Tăng giáp: 100% SMKK trong 3 turn
         armor_buff = BuffArmorEffect(
             duration=3,
             value=0,  # Không buff theo %
@@ -17,7 +17,7 @@ class HyugaNeji(Card):
         self.effects.append(armor_buff)
         logs.append(f"🛡️ {self.name} tăng {neji_damage} giáp trong 3 lượt.")
 
-        # 2️⃣ Hồi 20% máu đã mất
+        # Hồi 20% máu đã mất
         missing_hp = self.max_health - self.health
         healing = int(missing_hp * 0.2)
         if healing > 0:

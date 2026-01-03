@@ -15,7 +15,7 @@ class HatakeKakashi(Card):
             return logs
 
         for target in alive_enemies:
-            # 1️⃣ Gây sát thương chuẩn (bỏ qua giáp)
+            # Gây sát thương chuẩn (bỏ qua giáp)
             dealt, dmg_logs = target.receive_damage(
                 damage,
                 true_damage=True,
@@ -24,7 +24,7 @@ class HatakeKakashi(Card):
             )
             logs.extend(dmg_logs)
 
-            # 2️⃣ Phá giáp 80% trong 4 lượt
+            # Phá giáp 80% trong 4 lượt
             armor_debuff = DebuffArmorEffect(
                 duration=4,
                 value=0.8,  # giảm 80% giáp

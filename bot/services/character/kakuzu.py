@@ -6,12 +6,12 @@ class Kakuzu(Card):
         logs: list[str] = []
         logs.append(f"❤️ Kakuzu có 4 trái tim, hồi phục và gia tăng phòng thủ!")
 
-        # 1️⃣ Hồi lại 300% SMKK
+        # Hồi lại 300% SMKK
         heal_amount = int(self.get_effective_base_damage() * 500)
         heal_logs = self.receive_healing(amount=heal_amount)
         logs.extend(heal_logs)
 
-        # 2️⃣ Tăng giáp bằng 100% SMKK trong 4 turn
+        # Tăng giáp bằng 100% SMKK trong 4 turn
         armor_buff_amount = int(self.get_effective_base_damage() * 1.0)
         armor_buff = BuffArmorEffect(
             duration=4,

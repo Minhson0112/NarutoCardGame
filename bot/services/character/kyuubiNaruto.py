@@ -6,7 +6,7 @@ class KyuubiNaruto(Card):
         logs: list[str] = []
         logs.append(f"🐺 {self.name} cuồng hóa ở dạng Vĩ Thú, tăng sức mạnh khủng khiếp và tấn công toàn đội địch!")
 
-        # 1️⃣ Buff sát thương +300% trong 3 lượt
+        # Buff sát thương +300% trong 3 lượt
         berserk = BuffDamageEffect(
             duration=3,
             value=2.0,  # +200% sát thương cơ bản
@@ -15,7 +15,7 @@ class KyuubiNaruto(Card):
         self.effects.append(berserk)
         logs.append(f"⚔️ {self.name} nhận buff +200% sát thương trong 3 lượt!")
 
-        # 2️⃣ Tấn công toàn bộ kẻ địch với 200% SMKK
+        # Tấn công toàn bộ kẻ địch với 200% SMKK
         damage = int(self.get_effective_base_damage() * 2)
         alive_enemies = [c for c in self.enemyTeam if c.is_alive()]
 

@@ -9,7 +9,7 @@ class Yagura(Card):
 
         yagura_damage = self.get_effective_base_damage()
 
-        # 1️⃣ Buff giáp: 50% SMKK trong 4 turn
+        # Buff giáp: 50% SMKK trong 4 turn
         armor_buff = BuffArmorEffect(
             duration=4,
             value=0,  # % tăng thêm (0  dùng flat_bonus)
@@ -19,7 +19,7 @@ class Yagura(Card):
         self.effects.append(armor_buff)
         logs.append(f"🛡️ {self.name} tăng giáp bằng {int(yagura_damage/2)} trong 4 lượt.")
 
-        # 2️⃣ Buff né: +30% trong 4 turn
+        # Buff né: +30% trong 4 turn
         speed_buff = BuffSpeedEffect(
             duration=4,
             value=0.3,

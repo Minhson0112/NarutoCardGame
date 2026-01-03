@@ -13,7 +13,7 @@ class ChuninKakashi(Card):
             logs.append("❌ Không có kẻ địch nào để tấn công.")
             return logs
 
-        # 1️⃣ Tấn công mục tiêu hàng đầu
+        # Tấn công mục tiêu hàng đầu
         first = alive_enemies[0]
         dealt1, logs1 = first.receive_damage(
             primary_damage,
@@ -23,7 +23,7 @@ class ChuninKakashi(Card):
         )
         logs.extend(logs1)
 
-        # 2️⃣ Lan truyền sang mục tiêu thứ hai (nếu có) với 1/2 sát thương
+        # Lan truyền sang mục tiêu thứ hai (nếu có) với 1/2 sát thương
         if len(alive_enemies) > 1:
             second = alive_enemies[1]
             splash_damage = primary_damage // 2

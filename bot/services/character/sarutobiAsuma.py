@@ -16,7 +16,7 @@ class SarutobiAsuma(Card):
             return logs
 
         for target in alive_enemies:
-            # 1️⃣ Gây sát thương chuẩn
+            # Gây sát thương chuẩn
             dealt, dmg_logs = target.receive_damage(
                 asuma_damage,
                 true_damage=True,
@@ -25,7 +25,7 @@ class SarutobiAsuma(Card):
             )
             logs.extend(dmg_logs)
 
-            # 2️⃣ Giảm giáp vĩnh viễn (5% smkk)
+            # Giảm giáp vĩnh viễn (5% smkk)
             if armor_break_amount > 0:
                 armor_logs = target.reduce_armor_direct(armor_reduce=armor_break_amount)
                 logs.extend(armor_logs)
