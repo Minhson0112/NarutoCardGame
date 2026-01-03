@@ -9,7 +9,7 @@ class Onoki(Card):
         logs: list[str] = []
         logs.append(f"🪨 {self.name} tung Trần Độn, càn quét toàn bộ kẻ địch và suy yếu!")
 
-        # 1️⃣ Gây 200% sát thương cơ bản lên tất cả kẻ địch
+        # Gây 200% sát thương cơ bản lên tất cả kẻ địch
         damage = int(self.get_effective_base_damage() * 2)
         alive_enemies = [c for c in self.enemyTeam if c.is_alive()]
 
@@ -17,7 +17,7 @@ class Onoki(Card):
             logs.append("❌ Không có kẻ địch nào để tấn công.")
             return logs
 
-        # 2️⃣ Áp dụng sát thương và giảm 50% toàn bộ chỉ số trong 2 lượt
+        # Áp dụng sát thương và giảm 50% toàn bộ chỉ số trong 2 lượt
         duration = 2
         for target in alive_enemies:
             dealt, dmg_logs = target.receive_damage(

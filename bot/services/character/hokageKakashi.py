@@ -6,7 +6,7 @@ class HokageKakashi(Card):
         logs: list[str] = []
         logs.append(f"🌀 {self.name}  Ninja Sao Chép: sao chép mọi hiệu ứng buff của đối thủ và tấn công toàn diện!")
 
-        # 1️⃣ Sao chép tất cả hiệu ứng buff từ team địch
+        # Sao chép tất cả hiệu ứng buff từ team địch
         for enemy in self.enemyTeam:
             for effect in enemy.effects:
                 if effect.effect_type == "buff":
@@ -22,7 +22,7 @@ class HokageKakashi(Card):
                     self.effects.append(copied)
                     logs.append(f"🔄 Sao chép {effect.description} từ {enemy.name} trong {effect.duration} lượt).")
 
-        # 2️⃣ Tấn công toàn bộ kẻ địch với 400% sát thương cơ bản
+        # Tấn công toàn bộ kẻ địch với 400% sát thương cơ bản
         damage = int(self.get_effective_base_damage() * 4)
         alive_enemies = [c for c in self.enemyTeam if c.is_alive()]
 

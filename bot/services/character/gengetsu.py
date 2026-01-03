@@ -12,7 +12,7 @@ class Gengetsu(Card):
             logs.append("❌ Không tìm thấy mục tiêu tuyến đầu để tấn công.")
             return logs
 
-        # 1️⃣ Gây 300% sát thương chuẩn (bỏ qua giáp)
+        # Gây 300% sát thương chuẩn (bỏ qua giáp)
         damage = int(self.get_effective_base_damage() * 3)
         dealt, dmg_logs = target.receive_damage(
             damage,
@@ -22,7 +22,7 @@ class Gengetsu(Card):
         )
         logs.extend(dmg_logs)
 
-        # 2️⃣ Giảm 50% giáp trong 2 lượt
+        # Giảm 50% giáp trong 2 lượt
         armor_debuff = DebuffArmorEffect(
             duration=2,
             value=0.5,  # giảm 50% giáp hiện tại

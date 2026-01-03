@@ -6,7 +6,7 @@ class AburameShino(Card):
 
         logs.append("🐛 Shino điều khiển bọ ký sinh hút chakra đối phương và truyền cho đồng minh!")
 
-        # 1️⃣ Tìm đối phương nhiều chakra nhất
+        # Tìm đối phương nhiều chakra nhất
         alive_enemies = [c for c in self.enemyTeam if c.is_alive()]
         if not alive_enemies:
             logs.append("❌ Không tìm thấy kẻ địch nào còn sống để hút chakra.")
@@ -15,7 +15,7 @@ class AburameShino(Card):
         target = max(alive_enemies, key=lambda c: c.chakra)
         logs.append(f"🎯 Mục tiêu hút chakra: {target.name} ({target.chakra} chakra).")
 
-        # 2️⃣ Hút chakra = 30% sát thương cơ bản
+        # Hút chakra = 30% sát thương cơ bản
         suck_amount = int(self.get_effective_base_damage() * 0.3)
         if target.chakra <= 0:
             logs.append(f"⚠️ {target.name} không có chakra để hút.")
@@ -29,7 +29,7 @@ class AburameShino(Card):
             logs.append("⚠️ Không có chakra nào được truyền cho đồng minh.")
             return logs
 
-        # 3️⃣ Tìm đồng minh nhiều chakra nhất để nhận
+        # Tìm đồng minh nhiều chakra nhất để nhận
         allies_alive = [c for c in self.team if c.is_alive() and c is not self]
         if not allies_alive:
             logs.append("❌ Không tìm thấy đồng minh nào còn sống để nhận chakra.")

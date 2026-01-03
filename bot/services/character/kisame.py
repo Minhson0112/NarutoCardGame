@@ -7,7 +7,7 @@ class Kisame(Card):
         logs: list[str] = []
         logs.append(f"💧 {self.name} sử dụng Thủy Ngục, giam cầm tuyến đầu địch và gia tăng giáp bản thân!")
 
-        # 1️⃣ Trói chân tuyến đầu địch (stun) trong 3 lượt
+        # Trói chân tuyến đầu địch (stun) trong 3 lượt
         front = next((c for c in self.enemyTeam if c.is_alive()), None)
         if front:
             stun = StunEffect(
@@ -27,7 +27,7 @@ class Kisame(Card):
         else:
             logs.append("❌ Không tìm thấy mục tiêu tuyến đầu để trói chân.")
 
-        # 2️⃣ Tăng giáp bản thân bằng 200% SMKK trong 5 lượt
+        # Tăng giáp bản thân bằng 200% SMKK trong 5 lượt
         flat_bonus = int(self.get_effective_base_damage() * 2)
         armor_buff = BuffArmorEffect(
             duration=5,

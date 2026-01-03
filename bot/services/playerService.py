@@ -20,7 +20,7 @@ class PlayerService:
         self.repo.create(newPlayer)
 
         if self.setupRepo:
-            # ✅ Gọi repo để tạo bản ghi player_active_setup
+            # Gọi repo để tạo bản ghi player_active_setup
             self.setupRepo.createEmptySetup(playerId)
 
         if self.gachaPityRepo:

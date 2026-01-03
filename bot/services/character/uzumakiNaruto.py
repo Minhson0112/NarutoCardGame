@@ -21,7 +21,7 @@ class UzumakiNaruto(Card):
             return logs
 
         for target in alive_enemies:
-            # 1️⃣ Gây sát thương thường
+            # Gây sát thương thường
             dealt, dmg_logs = target.receive_damage(
                 damage,
                 true_damage=False,
@@ -30,7 +30,7 @@ class UzumakiNaruto(Card):
             )
             logs.extend(dmg_logs)
 
-            # 2️⃣ Làm mất hết chakra của mục tiêu
+            # Làm mất hết chakra của mục tiêu
             if target.chakra > 0:
                 reduce_logs = target.reduce_chakra_direct(40)
                 logs.extend(reduce_logs)

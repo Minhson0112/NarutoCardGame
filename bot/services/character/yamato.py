@@ -14,7 +14,7 @@ class Yamato(Card):
             logs.append("❌ Không có kẻ địch nào để tấn công.")
             return logs
 
-        # 1️⃣ Gây sát thương lên tất cả kẻ địch
+        # Gây sát thương lên tất cả kẻ địch
         for target in alive_enemies:
             dealt, new_logs = target.receive_damage(
                 damage,
@@ -24,7 +24,7 @@ class Yamato(Card):
             )
             logs.extend(new_logs)
 
-        # 2️⃣ Trói chân tuyến đầu địch trong 2 turn
+        # Trói chân tuyến đầu địch trong 2 turn
         front = next((c for c in alive_enemies if c.is_alive()), None)
         if front:
             root_effect = RootEffect(

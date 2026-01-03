@@ -6,7 +6,7 @@ class Minato(Card):
         logs: list[str] = []
         logs.append(f"⚡️ {self.name} sử dụng Phi Tiêu Thần Tốc: tăng né tránh và tấn công toàn diện!")
 
-        # 1️⃣ Tăng né tránh lên 70% trong 3 lượt
+        # Tăng né tránh lên 70% trong 3 lượt
         speed_buff = BuffSpeedEffect(
             duration=3,
             value=0.7,  # +70% speed, sẽ được clamp bởi get_effective_speed()
@@ -16,7 +16,7 @@ class Minato(Card):
         self.effects.append(speed_buff)
         logs.append(f"🏃 {self.name} tăng né tránh lên 70% trong 3 lượt!")
 
-        # 2️⃣ Gây 500% sát thương cơ bản lên toàn bộ kẻ địch
+        # Gây 500% sát thương cơ bản lên toàn bộ kẻ địch
         damage = int(self.get_effective_base_damage() * 5)
         alive_enemies = [c for c in self.enemyTeam if c.is_alive()]
 

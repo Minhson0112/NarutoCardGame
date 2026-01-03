@@ -13,7 +13,7 @@ class SenjuHashirama(Card):
         else:
             real_allies = self.team
 
-        # --- 1️⃣ Giải trừ mọi debuff trên nhóm đồng minh thực ---
+        # --- Giải trừ mọi debuff trên nhóm đồng minh thực ---
         for ally in real_allies:
             if not ally.is_alive():
                 continue
@@ -31,13 +31,13 @@ class SenjuHashirama(Card):
             for ln in expired_logs:
                 logs.append(f"❎ {ln}")
 
-        # --- 2️⃣ Hồi máu 500% SMKK ---
+        # --- Hồi máu 500% SMKK ---
         heal_amount = int(self.get_effective_base_damage() * 5)
         for ally in real_allies:
             if ally.is_alive():
                 logs.extend(ally.receive_healing(amount=heal_amount))
 
-        # --- 3️⃣ Cấp miễn nhiễm sát thương trong 1 lượt ---
+        # --- Cấp miễn nhiễm sát thương trong 1 lượt ---
         for ally in real_allies:
             if ally.is_alive():
                 immune = ImmuneEffect(

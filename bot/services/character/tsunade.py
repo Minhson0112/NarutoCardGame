@@ -6,13 +6,13 @@ class Tsunade(Card):
         logs: list[str] = []
         logs.append(f"🐌 {self.name} gọi Sên Thần, triệu hồi Katsuyu để hỗ trợ đồng đội!")
 
-        # 1️⃣ Hồi máu cho toàn đội bằng 800% SMKK
+        # Hồi máu cho toàn đội bằng 800% SMKK
         heal_amount = int(self.get_effective_base_damage() * 7)
         for ally in self.team:
             if ally.is_alive():
                 logs.extend(ally.receive_healing(amount=heal_amount))
 
-        # 2️⃣ Buff giáp flat bằng 30% SMKK của Tsunade trong 5 lượt
+        # Buff giáp flat bằng 30% SMKK của Tsunade trong 5 lượt
         flat_bonus = int(self.get_effective_base_damage() * 0.3)
         for ally in self.team:
             if ally.is_alive():
