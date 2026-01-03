@@ -12,21 +12,21 @@ class UnlockCard(commands.Cog):
 
     @app_commands.command(
         name="unlockcard",
-        description="Mở khoá theo tên thẻ"
+        description="Mở khoá một thẻ theo ID"
     )
     @app_commands.describe(
-        card_name="Tên thẻ bạn muốn mở khoá (ví dụ: Naruto)"
+        card_id="ID thẻ bạn muốn mở khoá (xem trong /inventory)"
     )
-    async def unlockcard(self, interaction: discord.Interaction, card_name: str):
+    async def unlockcard(self, interaction: discord.Interaction, card_id: int):
         await interaction.response.defer(thinking=True)
         player_id = interaction.user.id
 
         try:
             with getDbSession() as session:
                 playerRepo = PlayerRepository(session)
-                cardRepo = PlayerCardRepository(session)
+                cardRepo   = PlayerCardRepository(session)
 
-                # Kiểm tra người chơi đã đăng ký
+                # 1) Kiểm tra người chơi đã đăng ký
                 player = playerRepo.getById(player_id)
                 if not player:
                     await interaction.followup.send(
@@ -35,23 +35,31 @@ class UnlockCard(commands.Cog):
                     )
                     return
 
-                # Lấy các bản ghi thẻ theo tên
-                cards = cardRepo.getByCardNameAndPlayerId(player_id, card_name)
-                if not cards:
+                # 2) Lấy thẻ theo ID
+                card = cardRepo.getById(card_id)
+                if not card or card.player_id != player_id:
                     await interaction.followup.send(
-                        f"⚠️ Bạn không có thẻ nào tên **{card_name}**.",
+                        f"⚠️ Bạn không sở hữu thẻ với ID `{card_id}`.",
                         ephemeral=True
                     )
                     return
 
-                # Mở khoá tất cả bản ghi có cùng card_key
-                for card in cards:
-                    card.locked = False
+                # 3) Mở khoá thẻ này
+                if not card.locked:
+                    await interaction.followup.send(
+                        f"ℹ️ Thẻ **{card.template.name}** (ID `{card.id}`, Lv {card.level}) "
+                        f"hiện đang không bị khoá.",
+                        ephemeral=True
+                    )
+                    return
 
+                card.locked = False
                 session.commit()
 
                 await interaction.followup.send(
-                    f"✅ Đã mở khoá thành công {len(cards)} thẻ có tên **{card_name}**."
+                    f"✅ Đã mở khoá thẻ **{card.template.name}** "
+                    f"(ID `{card.id}`, Lv {card.level}).\n"
+                    f"🔓 Thẻ này giờ có thể bán."
                 )
 
         except Exception as e:

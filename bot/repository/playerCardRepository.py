@@ -104,3 +104,82 @@ class PlayerCardRepository:
     def deleteCard(self, card):
         """Xóa bản ghi thẻ khỏi session."""
         self.session.delete(card)
+        
+    def getByPlayerIdAndCardKey(self, playerId: int, cardKey: str):
+        """
+        Lấy tất cả các thẻ của một người chơi theo cùng card_key.
+        Thường dùng để:
+        - kiểm tra các level khác nhau của cùng 1 thẻ
+        - tính tổng số phôi (level 1)
+        - tìm level cao nhất của thẻ đó
+
+        :param playerId: ID người chơi
+        :param cardKey:  card_key trong bảng card_templates
+        :return: Danh sách PlayerCard thỏa điều kiện
+        """
+        return (
+            self.session.query(PlayerCard)
+            .filter(
+                PlayerCard.player_id == playerId,
+                PlayerCard.card_key == cardKey
+            )
+            .all()
+        )
+
+    def apply_rank_reset_level_penalty(self):
+        """
+        Áp dụng trừ cấp cho toàn bộ thẻ theo rule reset rank:
+            <10:   không trừ
+            10–19: -5 (nhưng không bao giờ < 10)
+            20–29: -10
+            30–39: -15
+            >=40:  -20
+
+        Đảm bảo: KHÔNG thẻ nào sau reset bị tụt xuống dưới level 10 vì bị trừ cấp.
+        (Các thẻ vốn <10 vẫn giữ nguyên, không đụng tới.)
+        """
+        q = self.session.query(PlayerCard)
+
+        # 10–14: nếu trừ 5 sẽ <10 → clamp về 10
+        q.filter(
+            PlayerCard.level >= 10,
+            PlayerCard.level < 15
+        ).update(
+            {PlayerCard.level: 10},
+            synchronize_session=False
+        )
+
+        # 15–19: trừ 5 vẫn >=10 → OK
+        q.filter(
+            PlayerCard.level >= 15,
+            PlayerCard.level < 20
+        ).update(
+            {PlayerCard.level: PlayerCard.level - 5},
+            synchronize_session=False
+        )
+
+        # 20–29: -10 → 10–19
+        q.filter(
+            PlayerCard.level >= 20,
+            PlayerCard.level < 30
+        ).update(
+            {PlayerCard.level: PlayerCard.level - 10},
+            synchronize_session=False
+        )
+
+        # 30–39: -15 → 15–24
+        q.filter(
+            PlayerCard.level >= 30,
+            PlayerCard.level < 40
+        ).update(
+            {PlayerCard.level: PlayerCard.level - 15},
+            synchronize_session=False
+        )
+
+        # >=40: -20 → >=20
+        q.filter(
+            PlayerCard.level >= 40
+        ).update(
+            {PlayerCard.level: PlayerCard.level - 20},
+            synchronize_session=False
+        )

@@ -42,15 +42,14 @@ class CardInventoryView(View):
                     nameMsg = f"•🥷 **{card.template.name}** (Lv {card.level}) (🔒)\n" if card.locked else f"•🥷 **{card.template.name}** (Lv {card.level})\n"
                     lines.append(
                         f"{nameMsg}"
+                        f"  ┣ **ID:** `{card.id}`\n"
                         f"  ┣ **Bậc:** {card.template.tier}\n"
                         f"  ┣ **Damage:** {stats['strength']}\n"
                         f"  ┣ **HP:** {stats['hp'] or 'N/A'}\n"
                         f"  ┣ **Giáp:** {stats['armor'] or 'N/A'}\n"
                         f"  ┣ **Tỉ lệ chí mạng:** {stats['crit_rate']:.0%}\n"
                         f"  ┣ **Né:** {stats['speed']:.0%}\n"
-                        f"  ┣ **Chakra:** {stats['chakra']}\n"
                         f"  ┣ **Tanker:** {'✅' if card.template.first_position else '❌'}\n"
-                        f"  ┣ **Hệ chakra:** {card.template.element}\n"
                         f"  ┗ **Số Lượng:** {card.quantity}\n"
                     )
                 embed.description = "\n\n".join(lines)
@@ -109,8 +108,10 @@ class WeaponInventoryView(View):
 
                     # header + bậc
                     block = [
-                        f"•🔪 **{weapon.template.name}** (Lv: {weapon.level}), (sl: {weapon.quantity})",
-                        f"  ┣ **Bậc:** {weapon.template.grade}"
+                        f"•🔪 **{weapon.template.name}** (Lv {weapon.level})",
+                        f"  ┣ **ID:** `{weapon.id}`",
+                        f"  ┣ **Bậc:** {weapon.template.grade}",
+                        f"  ┣ **Số Lượng:** {weapon.quantity}"
                     ]
                     # thêm danh sách buffs
                     for i, (label, val) in enumerate(buffs):

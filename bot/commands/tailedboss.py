@@ -240,7 +240,7 @@ class TailedBoss(commands.Cog):
                     result = "Thất Bại"
                     outcome_text = f"bạn đã bị {list_cards[0].name} đấm chết và nhận thưởng, hãy quay lại sau 1 tiếng."
                     damageDead = battle_defender_team[0].max_health - battle_defender_team[0].health
-                    bonus_reward = damageDead * 50
+                    bonus_reward = damageDead * 25
                     fresh_attacker.coin_balance += bonus_reward
                     damageDeadTxt = f"bạn đã gây ra {damageDead} sát thương lên {list_cards[0].name}"
                     thuong = f"💰**Thưởng:** {bonus_reward:,} Ryo"

@@ -24,7 +24,7 @@ class BattleRule(commands.Cog):
             "💧 **Chakra** của thẻ sẽ tăng 20 sau mỗi lần ra đòn hoặc kết liễu tướng đối phương, tăng khi nhận sát thương theo % máu tối đa bị mất\n"
             "💀 Trận đấu kết thúc khi một bên có cả **3 thẻ đều chết**\n"
             "⏳ Nếu quá **120 lượt** mà chưa phân thắng bại thì **hòa**\n"
-            "⚔️ Xem kĩ năng đặc biệt tướng bằng lệnh `showcard`"
+            "⚔️ Xem kĩ năng đặc biệt tướng bằng lệnh `/showcard`"
         )
 
         

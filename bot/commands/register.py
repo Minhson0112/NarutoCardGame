@@ -29,7 +29,7 @@ class Register(commands.Cog):
                 success = service.registerPlayer(playerId, username)
 
                 if success:
-                    await interaction.followup.send("✅ Bạn đã đăng ký tài khoản thành công!")
+                    await interaction.followup.send("✅ Bạn đã đăng ký tài khoản thành công!, tiếp theo hãy dùng lệnh /help để biết cách dùng bot nhé.")
                 else:
                     await interaction.followup.send("⚠️ Bạn đã đăng ký rồi.")
         except Exception as e:

@@ -17,7 +17,7 @@ class SetCard(commands.Cog):
     )
     @app_commands.describe(
         position="Chọn vị trí lắp: tanker/middle/back",
-        card="Tên thẻ bạn sở hữu (ví dụ: Uchiha Madara)"
+        card_id="ID thẻ bạn sở hữu (xem trong /inventory)"
     )
     @app_commands.choices(position=[
         app_commands.Choice(name="tanker", value="tanker"),
@@ -28,7 +28,7 @@ class SetCard(commands.Cog):
         self,
         interaction: discord.Interaction,
         position: app_commands.Choice[str],
-        card: str
+        card_id: int
     ):
         await interaction.response.defer(thinking=True)
         player_id = interaction.user.id
@@ -48,16 +48,13 @@ class SetCard(commands.Cog):
                     )
                     return
 
-                # 2) Tìm thẻ theo tên
-                candidates = cardRepo.getByCardNameAndPlayerId(player_id, card)
-                if not candidates:
+                # 2) Tìm thẻ theo id
+                selected = cardRepo.getById(card_id)
+                if not selected or selected.player_id != player_id:
                     await interaction.followup.send(
-                        "⚠️ Nhập sai tên thẻ hoặc bạn không sở hữu thẻ đó."
+                        f"⚠️ Bạn không sở hữu thẻ với ID `{card_id}`."
                     )
                     return
-
-                # 3) Chọn thẻ level cao nhất
-                selected = max(candidates, key=lambda c: c.level)
 
                 # 4) Kiểm first_position theo slot
                 pos = position.value  # "tanker"/"middle"/"back"

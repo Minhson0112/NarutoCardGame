@@ -13,11 +13,10 @@ class SellWeapon(commands.Cog):
 
     @app_commands.command(name="sellweapon", description="Bán vũ khí của bạn để nhận Ryo")
     @app_commands.describe(
-        weapon="Tên vũ khí bạn muốn bán (ví dụ: Suriken)",
-        level="Cấp của vũ khí cần bán",
+        weapon_id="ID của vũ khí muốn bán (xem trong /inventory)",
         quantity="Số lượng vũ khí muốn bán"
     )
-    async def sellweapon(self, interaction: discord.Interaction, weapon: str, level: int, quantity: int):
+    async def sellweapon(self, interaction: discord.Interaction, weapon_id: int, quantity: int):
         await interaction.response.defer(thinking=True)
         player_id = interaction.user.id
 
@@ -37,53 +36,47 @@ class SellWeapon(commands.Cog):
                     return
 
                 # Lấy danh sách các vũ khí của người chơi có tên khớp
-                weapons = weapon_repo.getByWeaponNameAndPlayerId(player_id, weapon)
-                # Lọc các bản ghi có cấp đúng yêu cầu
-                matching_weapons = [w for w in weapons if w.level == level]
-                if not matching_weapons:
-                    await interaction.followup.send(f"⚠️ Bạn không sở hữu vũ khí **{weapon}** ở cấp {level}.")
+                weapon = weapon_repo.getById(weapon_id)
+                if not weapon or weapon.player_id != player_id:
+                    await interaction.followup.send(
+                        f"⚠️ Bạn không sở hữu vũ khí với ID `{weapon_id}`."
+                    )
                     return
 
                 # Kiểm tra nếu có vũ khí đang được cài đặt (equipped)
-                for w in matching_weapons:
-                    if w.equipped:
-                        await interaction.followup.send(
-                            f"⚠️ Vũ khí **{w.template.name}** đang được dùng làm vũ khí chính, hãy tháo vũ khí đó ra bằng lệnh /unequipweapon trước khi bán."
-                        )
-                        return
+                if weapon.equipped:
+                    await interaction.followup.send(
+                        f"⚠️ Vũ khí **{weapon.template.name}** (ID `{weapon.id}`) "
+                        f"đang được dùng làm vũ khí chính, hãy tháo vũ khí đó ra "
+                        f"bằng lệnh `/unequipweapon` trước khi bán."
+                    )
+                    return
+
+                weaponName = weapon.template.name
+                weaponLevel = weapon.level
 
                 # Tính tổng số lượng vũ khí ở cấp đó
-                total_quantity = sum(w.quantity for w in matching_weapons)
-                if total_quantity < quantity:
+                if weapon.quantity < quantity:
                     await interaction.followup.send(
-                        f"⚠️ Bạn không có đủ số lượng vũ khí để bán. Bạn có: {total_quantity}, yêu cầu: {quantity}."
+                        f"⚠️ Bạn không có đủ số lượng vũ khí để bán. "
+                        f"Bạn có: {weapon.quantity}, yêu cầu: {quantity}."
                     )
                     return
 
                 # Tính số tiền nhận được: tiền nhận = sell_price * level * quantity
-                sell_price = matching_weapons[0].template.sell_price
-                total_money = sell_price * level * quantity
+                sell_price  = weapon.template.sell_price
+                total_money = sell_price * weapon.level * quantity
 
                 # Tiêu hao các bản ghi vũ khí bán ra:
-                remaining = quantity
-                for w in matching_weapons:
-                    if remaining <= 0:
-                        break
-                    if w.quantity <= remaining:
-                        remaining -= w.quantity
-                        weapon_repo.deleteWeapon(w)
-                    else:
-                        w.quantity -= remaining
-                        if w.quantity == 0:
-                            weapon_repo.deleteWeapon(w)
-                        remaining = 0
-
+                weapon.quantity -= quantity
+                if weapon.quantity <= 0:
+                    weapon_repo.deleteWeapon(weapon)
                 # Cộng tiền bán được vào số dư của người chơi
                 player.coin_balance += total_money
                 dailyTaskRepo.updateShopSell(player_id)
                 session.commit()
                 await interaction.followup.send(
-                    f"✅ Bán thành công! Bạn nhận được **{total_money:,} Ryo** từ việc bán {quantity} vũ khí **{weapon}** cấp {level}."
+                    f"✅ Bán thành công! Bạn nhận được **{total_money:,} Ryo** từ việc bán {quantity} vũ khí **{weaponName}** cấp {weaponLevel}."
                 )
         except Exception as e:
             print("❌ Lỗi khi xử lý sellweapon:", e)

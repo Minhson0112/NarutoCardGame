@@ -4,8 +4,8 @@ GACHA_PACKS = ["card_basic", "card_advanced", "card_elite"]
 # 🛡️ Bảo hiểm: Số lần mở tối đa trước khi đảm bảo nhận thẻ tối thiểu theo gói
 PITY_LIMIT = {
     "card_basic": 20,
-    "card_advanced": 10,
-    "card_elite": 5
+    "card_advanced": 15,
+    "card_elite": 10
 }
 
 # 🛡️ Bậc tối thiểu được đảm bảo sau khi chạm mốc bảo hiểm
@@ -34,15 +34,15 @@ GACHA_DROP_RATE = {
     "card_advanced": {
         "Genin": 50,
         "Chunin": 29,
-        "Jounin": 15,
-        "Kage": 5,
-        "Legendary": 1
+        "Jounin": 17,
+        "Kage": 3.5,
+        "Legendary": 0.5
     },
     "card_elite": {
         "Genin": 15,
         "Chunin": 30,
-        "Jounin": 35,
-        "Kage": 15,
-        "Legendary": 5
+        "Jounin": 45,
+        "Kage": 8,
+        "Legendary": 2
     }
 }
