@@ -1,5 +1,4 @@
 from bot.services.cardBase import Card
-from bot.services.tailedCard import TailedBeastCard
 from bot.services.character.yamanakaIno import YamanakaIno
 from bot.services.character.tenTen import TenTen
 from bot.services.character.kankuro import Kankuro
