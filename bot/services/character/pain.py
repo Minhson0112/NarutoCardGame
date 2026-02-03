@@ -1,5 +1,5 @@
 from bot.services.cardBase import Card
-from bot.services.effect.deBuffSpeedEffect import DebuffSpeedEffect
+from bot.services.effect.debuffSpeedEffect import DebuffSpeedEffect
 
 class Pain(Card):
     def special_skills(self):

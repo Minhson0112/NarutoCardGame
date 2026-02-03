@@ -2,7 +2,7 @@ from bot.services.cardBase import Card
 from bot.services.effect.deBuffArmorEffect import DebuffArmorEffect
 from bot.services.effect.deBuffCritEffect import DebuffCritEffect
 from bot.services.effect.deBuffDamageEffect import DebuffDamageEffect
-from bot.services.effect.deBuffSpeedEffect import DebuffSpeedEffect
+from bot.services.effect.debuffSpeedEffect import DebuffSpeedEffect
 
 class Onoki(Card):
     def special_skills(self):
