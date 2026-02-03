@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands, tasks
 import asyncio
 from bot.config.config import DISCORD_TOKEN
+from bot.services.guildLanguageCache import guildLanguageCache
 
 # Định nghĩa intents – bắt buộc nếu muốn bot đọc tin nhắn hoặc phản hồi người dùng
 intents = discord.Intents.default()
@@ -24,6 +25,12 @@ async def update_status():
 @bot.event
 async def on_ready():
     print(f"✅ Bot đã đăng nhập với tên: {bot.user}")
+    try:
+        count = await guildLanguageCache.loadAll()
+        print(f"✅ Đã load guild language cache: {count} guild")
+    except Exception as e:
+        print(f"❌ Không thể load guild language cache: {e}")
+
     try:
         synced = await bot.tree.sync()
         print(f"🔧 Slash commands đã sync: {len(synced)} lệnh")
@@ -78,6 +85,7 @@ async def main():
         "bot.commands.showweapon",
         "bot.commands.buyMultiCard",
         "bot.commands.shop",
+        "bot.commands.setLanguage",
     ]
 
     # Load từng extension
