@@ -40,8 +40,6 @@ async def main():
         "bot.commands.register",
         "bot.commands.daily",
         "bot.commands.checkMoney",
-        "bot.commands.shopCard",
-        "bot.commands.shopWeapon",
         "bot.commands.buyCard",
         "bot.commands.buyWeapon",
         "bot.commands.inventory",
@@ -79,6 +77,7 @@ async def main():
         "bot.commands.unlockcard",
         "bot.commands.showweapon",
         "bot.commands.buyMultiCard",
+        "bot.commands.shop",
     ]
 
     # Load từng extension
