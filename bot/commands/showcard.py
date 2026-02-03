@@ -1,31 +1,45 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
+import traceback
 
 from bot.config.database import getDbSession
 from bot.config.imageMap import CARD_IMAGE_MAP
 from bot.config.characterSkill import SKILL_MAP
-from bot.entity.cardTemplate import CardTemplate
+from bot.repository.cardTemplateRepository import CardTemplateRepository
 
 
 class ShowCard(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
+    async def cardNameAutocomplete(self, interaction: discord.Interaction, current: str):
+        typed = (current or "").strip()
+        if not typed:
+            return []
+
+        try:
+            with getDbSession() as session:
+                repo = CardTemplateRepository(session)
+                names = repo.searchNamesForAutocomplete(typed, limit=25)
+                return [app_commands.Choice(name=n, value=n) for n in names]
+        except Exception:
+            return []
+
     @app_commands.command(
         name="showcard",
         description="Hiển thị thông tin chi tiết của một thẻ theo tên"
     )
-    @app_commands.describe(
-        card_name="Tên của thẻ (ví dụ: Uzumaki Naruto, Sasori, …)"
-    )
+    @app_commands.describe(card_name="Gõ vài chữ để hiện gợi ý")
+    @app_commands.autocomplete(card_name=cardNameAutocomplete)
     async def showcard(self, interaction: discord.Interaction, card_name: str):
         await interaction.response.defer(thinking=True)
 
         try:
             with getDbSession() as session:
-                # Tìm theo name
-                card = session.query(CardTemplate).filter_by(name=card_name).first()
+                repo = CardTemplateRepository(session)
+                card = repo.getByName(card_name)
+
                 if not card:
                     await interaction.followup.send(
                         f"❌ Không tìm thấy thẻ với tên `{card_name}`.",
@@ -33,11 +47,9 @@ class ShowCard(commands.Cog):
                     )
                     return
 
-                # Lấy URL ảnh và skill description
                 image_url = CARD_IMAGE_MAP.get(card.image_url, card.image_url)
                 skill_desc = SKILL_MAP.get(card.image_url, "Chưa có skill đặc biệt.")
 
-                # Tạo embed
                 embed = discord.Embed(
                     title=f"🔍 Thẻ: {card.name}",
                     description=(
@@ -50,7 +62,7 @@ class ShowCard(commands.Cog):
                         f"**Tanker:** {'✅' if card.first_position else '❌'}\n"
                         f"**Bậc:** {card.tier}\n"
                         f"**Hệ chakra:** {card.element}\n"
-                        f"**Giá bán:** {card.sell_price:,} Ryo\n\n\n\n"
+                        f"**Giá bán:** {card.sell_price:,} Ryo\n\n"
                         f"📜 **Skill đặc biệt:**\n{skill_desc}"
                     ),
                     color=discord.Color.blue()
@@ -58,12 +70,10 @@ class ShowCard(commands.Cog):
                 embed.set_image(url=image_url)
 
                 await interaction.followup.send(embed=embed)
-        except Exception as e:
-            print("❌ Lỗi khi xử lý showcard:", e)
-            await interaction.followup.send(
-                "❌ Có lỗi xảy ra khi hiển thị thẻ. Vui lòng thử lại sau.",
-                ephemeral=True
-            )
+
+        except Exception:
+            tb = traceback.format_exc()
+            await interaction.followup.send(f"❌ Có lỗi xảy ra:\n```{tb}```", ephemeral=True)
 
 
 async def setup(bot: commands.Bot):
