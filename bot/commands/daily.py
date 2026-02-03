@@ -6,6 +6,8 @@ from datetime import date, timedelta
 from bot.config.database import getDbSession
 from bot.repository.playerRepository import PlayerRepository
 from bot.repository.dailyClaimLogRepository import DailyClaimLogRepository
+from bot.services.i18n import t
+
 
 class Daily(commands.Cog):
     def __init__(self, bot):
@@ -14,58 +16,55 @@ class Daily(commands.Cog):
     @app_commands.command(name="daily", description="Nhận thưởng điểm danh hàng ngày")
     async def daily(self, interaction: discord.Interaction):
         await interaction.response.defer(thinking=True)
-        playerId = interaction.user.id
+
+        guild_id = interaction.guild.id if interaction.guild else None
+        player_id = interaction.user.id
 
         try:
             with getDbSession() as session:
                 playerRepo = PlayerRepository(session)
-                claimRepo  = DailyClaimLogRepository(session)
+                claimRepo = DailyClaimLogRepository(session)
 
-                # Kiểm tra đã nhận hôm nay chưa
-                if claimRepo.hasClaimedToday(playerId):
-                    await interaction.followup.send(
-                        "❗ Bạn đã nhận thưởng hôm nay rồi. Quay lại vào ngày mai nhé!"
-                    )
+                if claimRepo.hasClaimedToday(player_id):
+                    await interaction.followup.send(t(guild_id, "daily.already_claimed"))
                     return
 
-                # Lấy player
-                player = playerRepo.getById(playerId)
+                player = playerRepo.getById(player_id)
                 if not player:
-                    await interaction.followup.send(
-                        "⚠️ Bạn chưa đăng ký tài khoản. Dùng `/register` trước nhé!"
-                    )
+                    await interaction.followup.send(t(guild_id, "daily.not_registered"))
                     return
 
-                # Tính số ngày liên tiếp
                 today = date.today()
                 yesterday = today - timedelta(days=1)
-                last_date = claimRepo.getLastClaimDate(playerId)
+                last_date = claimRepo.getLastClaimDate(player_id)
 
                 if last_date == yesterday:
                     player.consecutive_streak += 1
                 else:
                     player.consecutive_streak = 1
 
-                # Quay vòng sau 7 ngày
                 if player.consecutive_streak > 7:
                     player.consecutive_streak = 1
 
-                # Tính thưởng
                 reward = player.consecutive_streak * 50000
                 player.coin_balance += reward
 
-                # Cập nhật player và đánh dấu đã nhận
-                claimRepo.markClaimed(playerId)
+                claimRepo.markClaimed(player_id)
                 session.commit()
 
                 await interaction.followup.send(
-                    f"💰 Bạn đã nhận **{reward:,} ryo** (Chuỗi {player.consecutive_streak} ngày)! Hẹn gặp lại mai nhé 😄"
+                    t(
+                        guild_id,
+                        "daily.success",
+                        reward=reward,
+                        streak=player.consecutive_streak
+                    )
                 )
+
         except Exception as e:
             print("❌ Lỗi khi xử lý daily:", e)
-            await interaction.followup.send(
-                "❌ Có lỗi xảy ra. Vui lòng thử lại sau."
-            )
+            await interaction.followup.send(t(guild_id, "daily.error"))
+
 
 async def setup(bot):
     await bot.add_cog(Daily(bot))

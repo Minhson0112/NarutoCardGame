@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 import random
-from sqlalchemy import func
 
 from bot.config.database import getDbSession
 from bot.repository.playerRepository import PlayerRepository
@@ -10,101 +9,123 @@ from bot.repository.weaponTemplateRepository import WeaponTemplateRepository
 from bot.repository.playerWeaponRepository import PlayerWeaponRepository
 from bot.repository.dailyTaskRepository import DailyTaskRepository
 from bot.services.playerService import PlayerService
-from bot.config.weaponGachaConfig import WEAPON_GACHA_PRICES, WEAPON_GACHA_DROP_RATE, WEAPON_GACHA_PACKS
-from bot.config.imageMap import WEAPON_IMAGE_MAP  # mapping ảnh vũ khí
+from bot.config.weaponGachaConfig import WEAPON_GACHA_PRICES, WEAPON_GACHA_DROP_RATE
+from bot.config.imageMap import WEAPON_IMAGE_MAP
 from bot.config.weaponSkill import WEAPON_SKILL_MAP
-from bot.entity.weaponTemplate import WeaponTemplate
+from bot.services.i18n import t
+
 
 class BuyWeapon(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @app_commands.command(name="buyweapon", description="Mua gói mở vũ khí và mở hộp ngay lập tức")
-    @app_commands.describe(
-        pack="Tên gói mở vũ khí (ví dụ: weapon_pack)"
-    )
+    @app_commands.describe(pack="Tên gói mở vũ khí (ví dụ: weapon_pack)")
     @app_commands.choices(pack=[
         app_commands.Choice(name="weapon_pack", value="weapon_pack")
     ])
     async def buyWeapon(self, interaction: discord.Interaction, pack: str):
         await interaction.response.defer(thinking=True)
+
         playerId = interaction.user.id
+        guild_id = interaction.guild.id if interaction.guild else None
 
         try:
             with getDbSession() as session:
-                # Khởi tạo các repository cần thiết
                 playerRepo = PlayerRepository(session)
                 weaponTemplateRepo = WeaponTemplateRepository(session)
                 playerWeaponRepo = PlayerWeaponRepository(session)
                 playerService = PlayerService(playerRepo)
                 dailyTaskRepo = DailyTaskRepository(session)
 
-                # Kiểm tra tài khoản người chơi
                 player = playerRepo.getById(playerId)
                 if not player:
-                    await interaction.followup.send("⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng `/register` trước nhé!")
+                    await interaction.followup.send(t(guild_id, "buyweapon.not_registered"))
                     return
 
-                # Kiểm tra gói mở vũ khí hợp lệ
                 if pack not in WEAPON_GACHA_PRICES:
                     validPacks = ", ".join(WEAPON_GACHA_PRICES.keys())
-                    await interaction.followup.send(f"❌ Gói '{pack}' không hợp lệ. Vui lòng chọn: {validPacks}")
+                    await interaction.followup.send(
+                        t(guild_id, "buyweapon.pack_invalid", pack=pack, validPacks=validPacks)
+                    )
                     return
 
-                # Tính chi phí cho 1 lượt mở gói vũ khí
                 cost = WEAPON_GACHA_PRICES[pack]
                 if player.coin_balance < cost:
-                    await interaction.followup.send(f"❌ Số dư không đủ. Cần {cost:,} Ryo, hiện có {player.coin_balance:,} Ryo.")
+                    await interaction.followup.send(
+                        t(
+                            guild_id,
+                            "buyweapon.not_enough_balance",
+                            cost=cost,
+                            balance=player.coin_balance
+                        )
+                    )
                     return
 
-                # Trừ tiền
                 playerService.addCoin(playerId, -cost)
-                #tăng exp
-                playerRepo.incrementExp(playerId,amount=20)
+                playerRepo.incrementExp(playerId, amount=20)
 
-                # Roll ngẫu nhiên theo weighted random dựa trên tỉ lệ drop của gói weapon
                 rates = WEAPON_GACHA_DROP_RATE[pack]
                 tiers = list(rates.keys())
                 weights = list(rates.values())
                 outcomeTier = random.choices(tiers, weights=weights, k=1)[0]
 
-                # Lấy ngẫu nhiên một weapon template theo grade (outcomeTier)
                 weapon = weaponTemplateRepo.getRandomByGrade(outcomeTier)
                 if not weapon:
-                    await interaction.followup.send("❌ Lỗi khi mở hộp, không tìm thấy vũ khí phù hợp.")
+                    await interaction.followup.send(t(guild_id, "buyweapon.no_weapon_found"))
                     return
 
                 dailyTaskRepo.updateShopBuy(playerId)
-                # Thêm vũ khí vào kho của người chơi
                 playerWeaponRepo.incrementQuantity(playerId, weapon.weapon_key, increment=1)
 
-                # Lấy URL ảnh thực từ WEAPON_IMAGE_MAP (weapon.image_url lưu key)
                 imageUrl = WEAPON_IMAGE_MAP.get(weapon.image_url, weapon.image_url)
 
                 skillDescription = WEAPON_SKILL_MAP.get(weapon.image_url)
+                if not skillDescription:
+                    skillDescription = t(guild_id, "buyweapon.embed.skill_missing")
 
-                # Tạo embed hiển thị thông tin của vũ khí nhận được
+                bonus_damage = weapon.bonus_damage or 0
+                bonus_health = weapon.bonus_health or 0
+                bonus_armor = weapon.bonus_armor or 0
+                bonus_crit_rate = weapon.bonus_crit_rate or 0
+                bonus_speed = weapon.bonus_speed or 0
+                bonus_chakra = weapon.bonus_chakra or 0
+
+                lines = [
+                    t(guild_id, "buyweapon.embed.line_bonus_damage", value=bonus_damage),
+                    t(guild_id, "buyweapon.embed.line_bonus_health", value=bonus_health),
+                    t(guild_id, "buyweapon.embed.line_bonus_armor", value=bonus_armor),
+                    t(guild_id, "buyweapon.embed.line_bonus_crit_rate", value=f"{bonus_crit_rate:.0%}"),
+                    t(guild_id, "buyweapon.embed.line_bonus_speed", value=f"{bonus_speed:.0%}"),
+                    t(guild_id, "buyweapon.embed.line_bonus_chakra", value=bonus_chakra),
+                    t(guild_id, "buyweapon.embed.line_grade", grade=weapon.grade),
+                    t(guild_id, "buyweapon.embed.line_sell_price", price=weapon.sell_price),
+                    "",
+                    t(guild_id, "buyweapon.embed.added_to_inventory"),
+                    "",
+                    "",
+                    t(guild_id, "buyweapon.embed.passive_title"),
+                    skillDescription,
+                    "",
+                ]
+
                 embed = discord.Embed(
-                    title=f"🎉 Bạn đã mua gói {pack} và mở được vũ khí: {weapon.name}",
-                    description=(
-                        f"**Damage cộng thêm:** {weapon.bonus_damage or 0}\n"
-                        f"**Hp cộng thêm:** {weapon.bonus_health or 0}\n"
-                        f"**Giáp cộng thêm:** {weapon.bonus_armor or 0}\n"
-                        f"**Tỉ lệ chí mạng cộng thêm:** {(weapon.bonus_crit_rate or 0):.0%}\n"
-                        f"**Né cộng thêm:** {(weapon.bonus_speed or 0):.0%}\n"
-                        f"**Chakra cộng thêm:** {weapon.bonus_chakra or 0}\n"
-                        f"**Bậc:** {weapon.grade}\n"
-                        f"**Giá bán:** {weapon.sell_price:,} Ryo\n\n"
-                        f"Vũ khí đã được thêm vào kho của bạn. Kiểm tra kho bằng lệnh `/inventory`.\n\n\n\n"
-                        f"📜 **Nội Tại Vũ khí:**\n{skillDescription}\n\n"
+                    title=t(
+                        guild_id,
+                        "buyweapon.embed.title",
+                        pack=pack,
+                        weaponName=weapon.name
                     ),
+                    description="\n".join(lines),
                     color=discord.Color.green()
                 )
                 embed.set_image(url=imageUrl)
                 await interaction.followup.send(embed=embed)
+
         except Exception as e:
             print("❌ Lỗi khi xử lý buyweapon:", e)
-            await interaction.followup.send("❌ Có lỗi xảy ra. Vui lòng thử lại sau.")
+            await interaction.followup.send(t(guild_id, "buyweapon.error"))
+
 
 async def setup(bot):
     await bot.add_cog(BuyWeapon(bot))

@@ -14,75 +14,66 @@ from bot.repository.playerActiveSetupRepository import PlayerActiveSetupReposito
 from bot.repository.cardTemplateRepository import CardTemplateRepository
 from bot.repository.dailyTaskRepository import DailyTaskRepository
 from bot.config.imageMap import CARD_IMAGE_LOCAL_PATH_MAP, BG_ADVENTURE, NON_CARD_PATH
-from bot.entity.player import Player
 from bot.services.fightRender import renderImageFight
 from bot.services.battle import Battle
 from bot.services.help import get_battle_card_params, render_team_status, get_adventure_effective_stats
 from bot.services.createCard import create_card
+from bot.services.i18n import t
+
 
 class Adventure(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-    @app_commands.command(name= "adventure", description= "đi thám hiểm, dẹp loạn, nhận ryo nếu thắng")
-    @app_commands.describe(
-        difficulty="độ khó"
-    )
+
+    @app_commands.command(name="adventure", description="đi thám hiểm, dẹp loạn, nhận ryo nếu thắng")
+    @app_commands.describe(difficulty="độ khó")
     @app_commands.choices(difficulty=[
         app_commands.Choice(name="Dễ", value="easy"),
         app_commands.Choice(name="Trung Bình", value="medium"),
         app_commands.Choice(name="Khó", value="hard")
     ])
     @checks.cooldown(1, 300, key=lambda interaction: interaction.user.id)
-    async def adventure(self, interaction: discord.Interaction,  difficulty: str):
+    async def adventure(self, interaction: discord.Interaction, difficulty: str):
         attacker_id = interaction.user.id
         await interaction.response.defer(thinking=True)
-        
-        teamNames = ["Team thích thể hiện", "Team phổi to", "Team phá làng phá xóm", "Team giang hồ mõm",
-                    "Team cung bọ cạp", "Team biết bố mày là ai không", "Team chọc gậy bánh xe", "Team nghiện cờ bạc",
-                    "Team con nhà người ta", "Team thì ra mày chọn cái chết", "Team mình tao chấp hết",
-                    "Team tao có kiên", "Team hacker lỏ", "Team Không trượt phát lào", "Team tuổi l sánh vai", "Team đầu chộm đuôi cướp",
-                    "Team buôn hàng nóng", "Team gấu tró", "Team máu dồn lên não", "Team wibu", "Team fan mu", "Team đáy xã hội",
-                    "Team phụ hồ", "Team Ca sĩ hàn quốc", "Team đom đóm", "Team hội mê peter"]
-        teamName = random.choice(teamNames)
 
-        weaponName = ["Kunai", "Knife", "ChakraKnife", "Guandao", "Katana", "Shuriken", "Bow", "Flail", "Kibaku", "Tansa", "Tessen", "Sansaju", "Suna", "Enma", "Samehada", "Rinnegan", "Gudodama"]
+        guild_id = interaction.guild.id if interaction.guild else None
+
+        team_names = t(guild_id, "adventure.team_names")
+        teamName = random.choice(team_names) if isinstance(team_names, list) and team_names else "Enemy Team"
+
+        weaponName = [
+            "Kunai", "Knife", "ChakraKnife", "Guandao", "Katana", "Shuriken", "Bow", "Flail",
+            "Kibaku", "Tansa", "Tessen", "Sansaju", "Suna", "Enma", "Samehada", "Rinnegan", "Gudodama"
+        ]
+
         try:
             with getDbSession() as session:
-                # Lấy các repository cần thiết
                 playerRepo = PlayerRepository(session)
                 cardRepo = PlayerCardRepository(session)
                 weaponRepo = PlayerWeaponRepository(session)
                 activeSetupRepo = PlayerActiveSetupRepository(session)
                 dailyTaskRepo = DailyTaskRepository(session)
                 cardtemplaterepo = CardTemplateRepository(session)
-                
-                # Lấy thông tin người tấn công
+
                 attacker = playerRepo.getById(attacker_id)
                 if not attacker:
-                    await interaction.followup.send("⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!")
+                    await interaction.followup.send(t(guild_id, "adventure.not_registered"))
                     return
-                
-                # Lấy active setup của người tấn công
+
                 attackerSetup = activeSetupRepo.getByPlayerId(attacker_id)
-                # Kiểm 3 slot thẻ
+
                 slots = [
                     attackerSetup.card_slot1,
                     attackerSetup.card_slot2,
                     attackerSetup.card_slot3,
                 ]
                 if any(slot is None for slot in slots):
-                    await interaction.followup.send(
-                        "⚠️ Bạn phải lắp đủ 3 thẻ (Tanker, Middle, Back) mới có thể tham gia đấu!"
-                    )
+                    await interaction.followup.send(t(guild_id, "adventure.need_full_team"))
                     return
 
-                # Nếu đầy đủ, lấy ra các đối tượng PlayerCard
-                attacker_cards = [
-                    cardRepo.getById(slot_id)
-                    for slot_id in slots
-                ]
+                attacker_cards = [cardRepo.getById(slot_id) for slot_id in slots]
 
-                # lấy vũ khí
                 attacker_weapon_slots = [
                     attackerSetup.weapon_slot1,
                     attackerSetup.weapon_slot2,
@@ -95,9 +86,7 @@ class Adventure(commands.Cog):
 
                 battle_attacker_team = []
                 for pc, pw in zip(attacker_cards, attacker_weapons):
-                    # Lấy tuple params đã buff level + bonus vũ khí
                     params = get_battle_card_params(pc, pw)
-                    # Create đúng subclass dựa trên element và tier
                     battle_card = create_card(*params)
                     battle_attacker_team.append(battle_card)
 
@@ -105,19 +94,32 @@ class Adventure(commands.Cog):
                 weapon_name = None
                 battle_defender_team = []
                 defenderCardImgPaths = []
+
                 list_card = cardtemplaterepo.getFormationTemplates()
                 for card in list_card:
-                    if (difficulty == "easy"):
+                    if difficulty == "easy":
                         defenderCardLevel = 1
-                    elif (difficulty == "medium"):
+                    elif difficulty == "medium":
                         defenderCardLevel = random.randint(10, 20)
                         weapon_name = random.choice(weaponName)
-                    elif (difficulty == "hard"):
+                    elif difficulty == "hard":
                         defenderCardLevel = random.randint(30, 50)
                         weapon_name = random.choice(weaponName)
-                        
+
                     img_path = CARD_IMAGE_LOCAL_PATH_MAP.get(card.image_url, NON_CARD_PATH)
-                    params = get_adventure_effective_stats(card.name, card.health, card.armor, card.base_damage, card.crit_rate, card.speed, card.chakra, card.element, card.tier, defenderCardLevel, weapon_name)
+                    params = get_adventure_effective_stats(
+                        card.name,
+                        card.health,
+                        card.armor,
+                        card.base_damage,
+                        card.crit_rate,
+                        card.speed,
+                        card.chakra,
+                        card.element,
+                        card.tier,
+                        defenderCardLevel,
+                        weapon_name
+                    )
                     battle_card = create_card(*params)
                     battle_defender_team.append(battle_card)
                     defenderCardImgPaths.append(img_path)
@@ -125,7 +127,6 @@ class Adventure(commands.Cog):
                 attackCardImgpaths = []
                 for pc in attacker_cards:
                     key = pc.template.image_url
-                    # nếu không tìm thấy key trong map thì fallback sang NON_CARD_PATH nếu bạn có
                     img_path = CARD_IMAGE_LOCAL_PATH_MAP.get(key, NON_CARD_PATH)
                     attackCardImgpaths.append(img_path)
 
@@ -139,22 +140,20 @@ class Adventure(commands.Cog):
                 battle_file = discord.File(buffer, filename=filename)
 
                 for c in battle_attacker_team:
-                    c.team      = battle_attacker_team
+                    c.team = battle_attacker_team
                     c.enemyTeam = battle_defender_team
 
-                # --- Gán team/enemyTeam cho defender ---
                 for c in battle_defender_team:
-                    c.team      = battle_defender_team
+                    c.team = battle_defender_team
                     c.enemyTeam = battle_attacker_team
 
-                # 1) Gửi embed log ban đầu kèm ảnh
                 initial_desc = []
-                initial_desc += render_team_status(battle_attacker_team, "**Team Tấn Công**")
-                initial_desc += render_team_status(battle_defender_team, "**Team Phòng Thủ**")
-                initial_desc.append("\nĐang khởi đầu trận đấu…")
+                initial_desc += render_team_status(battle_attacker_team, "**Attack team**")
+                initial_desc += render_team_status(battle_defender_team, "**Defense team**")
+                initial_desc.append("\n" + t(guild_id, "adventure.battle.starting"))
 
                 log_embed = discord.Embed(
-                    title=f"🔎 {attacker.username} đi khám phá và bị {teamName} phục kích",
+                    title=t(guild_id, "adventure.battle.title", username=attacker.username, teamName=teamName),
                     description="\n".join(initial_desc),
                     color=discord.Color.blurple()
                 )
@@ -165,7 +164,6 @@ class Adventure(commands.Cog):
                     wait=True
                 )
 
-                #..........................battle.................................
                 battle = Battle(battle_attacker_team, battle_defender_team, maxturn=120)
                 while (
                     battle.is_team_alive(battle.attacker_team) and
@@ -179,78 +177,93 @@ class Adventure(commands.Cog):
                         for c in atk_team:
                             if not c.is_alive():
                                 continue
+
                             logs = battle.battle_turn_one_card(c)
+
                             static_lines = []
-                            static_lines += render_team_status(battle_attacker_team, "**Team Tấn Công**")
-                            static_lines += render_team_status(battle_defender_team, "**Team Phòng Thủ**")
+                            static_lines += render_team_status(battle_attacker_team, "**Attack team**")
+                            static_lines += render_team_status(battle_defender_team, "**Defense team**")
+
                             desc = "\n".join(static_lines)
-                            desc += f"\n--- Lượt {battle.turn}: {c.name} ---\n"
+                            desc += "\n" + t(
+                                guild_id,
+                                "adventure.battle.turn_header",
+                                turn=battle.turn,
+                                cardName=c.name
+                            ) + "\n"
                             desc += "\n".join(logs)
 
                             edit_embed = discord.Embed(
-                                title=f"🔎 {attacker.username} đi khám phá và bị {teamName} phục kích",
+                                title=t(guild_id, "adventure.battle.title", username=attacker.username, teamName=teamName),
                                 description=desc,
                                 color=discord.Color.blurple()
                             )
                             edit_embed.set_image(url=f"attachment://{filename}")
                             await log_msg.edit(embed=edit_embed)
                             await asyncio.sleep(2)
+
                             battle.turn += 1
                             if not battle.is_team_alive(def_team):
                                 break
+
                         if not battle.is_team_alive(def_team):
                             break
 
-            bonus_reward = 0  # số tiền thưởng dựa trên việc đánh bại đối thủ
+            bonus_reward = 0
             with getDbSession() as session2:
                 playerRepo2 = PlayerRepository(session2)
-                fresh_attacker = playerRepo2.getById(attacker_id) 
-                # xác định người thắng
+                fresh_attacker = playerRepo2.getById(attacker_id)
+
                 if battle.turn >= battle.maxturn:
-                    result = "🏳️ Hoà"
-                    outcome_text = "⚔️ Hai đội đều rút lui nên hoà! không nhận được thưởng, hãy quay lại sau 5 phút."
-                    thuong = f"💰**Thưởng:** {bonus_reward:,} Ryo"
+                    result = t(guild_id, "adventure.result.result_draw")
+                    outcome_text = t(guild_id, "adventure.result.outcome_draw")
+                    thuong = t(guild_id, "adventure.result.reward_draw", reward=bonus_reward)
                 elif battle.is_team_alive(battle.attacker_team):
-                    result = "Chiến Thắng"
+                    result = t(guild_id, "adventure.result.result_win")
                     bonus_reward = random.randint(30000, 50000)
                     fresh_attacker.coin_balance += bonus_reward
-                    outcome_text = f"bạn đã chiến thắng {teamName} và đã nhận thưởng, hãy quay lại sau 5 phút."
-                    thuong = f"💰**Thưởng:** nhặt được {bonus_reward:,} Ryo từ xác của {teamName}"
+                    outcome_text = t(guild_id, "adventure.result.outcome_win", teamName=teamName)
+                    thuong = t(guild_id, "adventure.result.reward_win", reward=bonus_reward, teamName=teamName)
                 else:
-                    result = "Thất Bại"
-                    outcome_text = f"bạn đã thất bại trước {teamName} và không nhận được gì, hãy quay lại sau 5 phút."
-                    thuong = f"💰**Thưởng:** bọn {teamName} nói bạn quá non và không thèm lấy tiền của bạn"
-                
+                    result = t(guild_id, "adventure.result.result_lose")
+                    outcome_text = t(guild_id, "adventure.result.outcome_lose", teamName=teamName)
+                    thuong = t(guild_id, "adventure.result.reward_lose", teamName=teamName)
+
                 fresh_attacker.exp += 10
                 session2.commit()
-                # 3) Gửi embed kết quả cuối cùng
+
                 result_embed = discord.Embed(
-                    title=f"🏁 Kết quả trận chiến của {fresh_attacker.username} VS {teamName}",
+                    title=t(guild_id, "adventure.result.title", username=fresh_attacker.username, teamName=teamName),
                     description=(
-                        f"🎖️ **Kết quả:** {result}\n"
+                        f"{t(guild_id, 'adventure.result.line_result', result=result)}\n"
                         f"{thuong}\n\n"
                         f"{outcome_text}"
                     ),
                     color=discord.Color.green() if bonus_reward != 0 else discord.Color.red()
                 )
-                result_embed.set_footer(text=f"Điểm Rank: {fresh_attacker.rank_points}")
+                result_embed.set_footer(text=t(guild_id, "adventure.result.footer_rank", rankPoints=fresh_attacker.rank_points))
                 await interaction.followup.send(embed=result_embed)
 
-        except Exception as e:
+        except Exception:
             tb = traceback.format_exc()
             await interaction.followup.send(
-                f"❌ Có lỗi xảy ra:\n```{tb}```",
+                t(guild_id, "adventure.error", trace=tb),
                 ephemeral=True
             )
+
     @adventure.error
     async def buycard_error(self, interaction: discord.Interaction, error):
+        guild_id = interaction.guild.id if interaction.guild else None
+
         if isinstance(error, CommandOnCooldown):
             await interaction.response.send_message(
-                f"⏱️ Bạn phải chờ **{error.retry_after:.1f}** giây nữa mới đi khám phá được.",
+                t(guild_id, "adventure.cooldown", seconds=error.retry_after),
                 ephemeral=True
             )
-        else:
-            # Với lỗi khác, ta vẫn raise lên để discord.py xử hoặc log
-            raise error
+            return
+
+        raise error
+
+
 async def setup(bot):
     await bot.add_cog(Adventure(bot))

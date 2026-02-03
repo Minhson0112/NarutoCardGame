@@ -15,28 +15,29 @@ from bot.config.gachaConfig import GACHA_PRICES, PITY_LIMIT, PITY_PROTECTION, GA
 from bot.config.imageMap import CARD_IMAGE_MAP
 from bot.entity.cardTemplate import CardTemplate
 from bot.config.characterSkill import SKILL_MAP
+from bot.services.i18n import t
+
 
 class BuyCard(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @app_commands.command(name="buycard", description="Mua gói mở thẻ và mở hộp ngay lập tức")
-    @app_commands.describe(
-        pack="Tên gói mở thẻ (card_basic, card_advanced, card_elite)"
-    )
+    @app_commands.describe(pack="Tên gói mở thẻ (card_basic, card_advanced, card_elite)")
     @app_commands.choices(pack=[
         app_commands.Choice(name="card_basic", value="card_basic"),
         app_commands.Choice(name="card_advanced", value="card_advanced"),
         app_commands.Choice(name="card_elite", value="card_elite")
     ])
     @checks.cooldown(1, 2.0, key=lambda interaction: interaction.user.id)
-    async def buyCard(self,interaction: discord.Interaction, pack: str):
+    async def buyCard(self, interaction: discord.Interaction, pack: str):
         await interaction.response.defer(thinking=True)
+
         playerId = interaction.user.id
+        guild_id = interaction.guild.id if interaction.guild else None
 
         try:
             with getDbSession() as session:
-                # Khởi tạo các repository cần thiết
                 playerRepo = PlayerRepository(session)
                 pityRepo = GachaPityCounterRepository(session)
                 cardTemplateRepo = CardTemplateRepository(session)
@@ -44,99 +45,107 @@ class BuyCard(commands.Cog):
                 playerService = PlayerService(playerRepo)
                 dailyTaskRepo = DailyTaskRepository(session)
 
-                # Kiểm tra tài khoản người chơi
                 player = playerRepo.getById(playerId)
                 if not player:
-                    await interaction.followup.send("⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng `/register` trước nhé!")
+                    await interaction.followup.send(t(guild_id, "buycard.not_registered"))
                     return
 
-                # Kiểm tra gói mở thẻ hợp lệ
                 if pack not in GACHA_PRICES:
                     validPacks = ", ".join(GACHA_PRICES.keys())
-                    await interaction.followup.send(f"❌ Gói '{pack}' không hợp lệ. Vui lòng chọn: {validPacks}")
+                    await interaction.followup.send(
+                        t(guild_id, "buycard.invalid_pack", pack=pack, validPacks=validPacks)
+                    )
                     return
 
-                # Tính chi phí cho 1 lượt mở gói
                 cost = GACHA_PRICES[pack]
                 if player.coin_balance < cost:
-                    await interaction.followup.send(f"❌ Số dư không đủ. Cần {cost:,} Ryo, hiện có {player.coin_balance:,} Ryo.")
+                    await interaction.followup.send(
+                        t(guild_id, "buycard.not_enough_balance", cost=cost, balance=player.coin_balance)
+                    )
                     return
 
-                # Trừ tiền
                 playerService.addCoin(playerId, -cost)
-
-                #tăng exp
                 playerRepo.incrementExp(playerId)
 
-                # Hàm mở hộp cho 1 lượt
-                def openPack(playerId, pack) -> CardTemplate:
-                    counter = pityRepo.getCount(playerId, pack)
-                    limit = PITY_LIMIT[pack]
-                    protectionTier = PITY_PROTECTION[pack]
+                def openPack(pid, pack_name) -> CardTemplate:
+                    counter = pityRepo.getCount(pid, pack_name)
+                    limit = PITY_LIMIT[pack_name]
+                    protectionTier = PITY_PROTECTION[pack_name]
 
                     if counter + 1 >= limit:
                         outcomeTier = protectionTier
-                        pityRepo.resetCounter(playerId, pack)
+                        pityRepo.resetCounter(pid, pack_name)
                     else:
-                        rates = GACHA_DROP_RATE[pack]
+                        rates = GACHA_DROP_RATE[pack_name]
                         tiers = list(rates.keys())
                         weights = list(rates.values())
                         outcomeTier = random.choices(tiers, weights=weights, k=1)[0]
-                        pityRepo.incrementCounter(playerId, pack, increment=1)
-                    
-                    # Lấy ngẫu nhiên card từ bảng card_templates theo tier
-                    card = cardTemplateRepo.getRandomByTier(outcomeTier)
-                    return card
+                        pityRepo.incrementCounter(pid, pack_name, increment=1)
+
+                    return cardTemplateRepo.getRandomByTier(outcomeTier)
 
                 card = openPack(playerId, pack)
                 if not card:
-                    await interaction.followup.send("❌ Lỗi khi mở hộp, không tìm thấy thẻ phù hợp.")
+                    await interaction.followup.send(t(guild_id, "buycard.open_pack_not_found"))
                     return
-                
+
                 dailyTaskRepo.updateShopBuy(playerId)
-                # Thêm card vào kho của người chơi
                 playerCardRepo.incrementQuantity(playerId, card.card_key, increment=1)
 
-                # Lấy URL ảnh thực từ CARD_IMAGE_MAP (card.image_url lưu key)
                 imageUrl = CARD_IMAGE_MAP.get(card.image_url, card.image_url)
+                skillDescription = SKILL_MAP.get(card.image_url, t(guild_id, "buycard.skill_missing"))
 
-                skillDescription = SKILL_MAP.get(card.image_url, "Chưa có skill đặc biệt.")
+                yes = t(guild_id, "buycard.common.yes")
+                no = t(guild_id, "buycard.common.no")
+                tanker_value = yes if card.first_position else no
 
-                # Tạo embed hiển thị thông tin của thẻ nhận được
+                crit_rate_text = f"{card.crit_rate:.0%}"
+                dodge_text = f"{card.speed:.0%}"
+
+                desc_lines = [
+                    t(guild_id, "buycard.result.stats.damage", value=card.base_damage),
+                    t(guild_id, "buycard.result.stats.hp", value=card.health),
+                    t(guild_id, "buycard.result.stats.armor", value=card.armor),
+                    t(guild_id, "buycard.result.stats.crit_rate", value=crit_rate_text),
+                    t(guild_id, "buycard.result.stats.dodge", value=dodge_text),
+                    t(guild_id, "buycard.result.stats.base_chakra", value=card.chakra),
+                    t(guild_id, "buycard.result.stats.tanker", value=tanker_value),
+                    t(guild_id, "buycard.result.stats.tier", value=card.tier),
+                    t(guild_id, "buycard.result.stats.element", value=card.element),
+                    t(guild_id, "buycard.result.stats.sell_price", value=card.sell_price),
+                    "",
+                    t(guild_id, "buycard.result.added_to_inventory"),
+                    "",
+                    t(guild_id, "buycard.result.skill_title"),
+                    f"{skillDescription}",
+                ]
+
                 embed = discord.Embed(
-                    title=f"🎉 Bạn đã mua gói {pack} và mở được thẻ: {card.name}",
-                    description=(
-                        f"**Damage:** {card.base_damage}\n"
-                        f"**Hp:** {card.health}\n"
-                        f"**Giáp:** {card.armor}\n"
-                        f"**Tỉ lệ chí mạng:** {card.crit_rate:.0%}\n"
-                        f"**Né:** {card.speed:.0%}\n"
-                        f"**chakra gốc:** {card.chakra}\n"
-                        f"**Tanker:** {'✅' if card.first_position else '❌'}\n"
-                        f"**Bậc:** {card.tier}\n"
-                        f"**Hệ chakra:** {card.element}\n"
-                        f"**Giá bán:** {card.sell_price:,} Ryo\n\n"
-                        f"Thẻ đã được thêm vào kho của bạn. Kiểm tra kho bằng lệnh `/inventory`.\n\n\n\n"
-                        f"📜 **Skill đặc biệt:**\n{skillDescription}\n\n"
-                    ),
+                    title=t(guild_id, "buycard.result.title", pack=pack, cardName=card.name),
+                    description="\n".join(desc_lines),
                     color=discord.Color.green()
                 )
                 embed.set_image(url=imageUrl)
+
                 await interaction.followup.send(embed=embed)
+
         except Exception as e:
             print("❌ Lỗi khi xử lý buycard:", e)
-            await interaction.followup.send("❌ Có lỗi xảy ra. Vui lòng thử lại sau.")
-        
+            await interaction.followup.send(t(guild_id, "buycard.error"))
+
     @buyCard.error
     async def buycard_error(self, interaction: discord.Interaction, error):
+        guild_id = interaction.guild.id if interaction.guild else None
+
         if isinstance(error, CommandOnCooldown):
             await interaction.response.send_message(
-                f"⏱️ Bạn phải chờ **{error.retry_after:.1f}** giây nữa mới mở gói tiếp được.",
+                t(guild_id, "buycard.cooldown", seconds=error.retry_after),
                 ephemeral=True
             )
-        else:
-            # Với lỗi khác, ta vẫn raise lên để discord.py xử hoặc log
-            raise error
+            return
+
+        raise error
+
 
 async def setup(bot):
     await bot.add_cog(BuyCard(bot))

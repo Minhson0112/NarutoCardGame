@@ -16,6 +16,7 @@ class SetLanguage(commands.Cog):
     @app_commands.choices(
         language=[
             app_commands.Choice(name="Tiếng Việt", value="vi"),
+            app_commands.Choice(name="English", value="en"),
         ]
     )
     async def setlanguage(self, interaction: discord.Interaction, language: app_commands.Choice[str]):

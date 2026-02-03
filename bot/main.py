@@ -68,7 +68,7 @@ async def main():
         "bot.commands.rename",
         "bot.commands.top10",
         "bot.commands.devinfo",
-        "bot.commands.challenge",
+#        "bot.commands.challenge",
         "bot.commands.giftcode",
         "bot.commands.help",
         "bot.commands.narutotrap",
