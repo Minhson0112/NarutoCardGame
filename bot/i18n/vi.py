@@ -277,4 +277,249 @@ VI = {
     "dailytask.task.shop_buy": "Mua đồ trong shop 3 lần",
     "dailytask.task.shop_sell": "Bán đồ cho shop 3 lần",
     "dailytask.task.stage_clear": "Đánh ải ít nhất 1 lần bằng lệnh `/challenge`",
+
+
+    #devinfo
+    "devinfo.command_desc": "Hiển thị thông tin nhà phát triển",
+
+    "devinfo.embed.title": "🌟 Thông tin Nhà Phát Triển 🌟",
+    "devinfo.embed.description": (
+        "Bot được phát triển bởi **{developerName}**.\n\n"
+        "Nếu bạn gặp lỗi hoặc có góp ý, hãy nhấn vào [đây]({contactUrl}) để liên hệ.\n\n"
+        "Cảm ơn bạn đã sử dụng bot!"
+    ),
+    "devinfo.embed.author_name": "{authorName}",
+
+
+
+    # Command meta
+    "fight.command_desc": "Thách đấu người chơi cùng trình độ",
+
+    # Guard / validate
+    "fight.already_in_fight": "⚠️ Bạn đang trong trận đấu, vui lòng chờ cho trận trước kết thúc rồi mới /fight tiếp!",
+    "fight.not_registered": "⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!",
+    "fight.need_full_team": "⚠️ Bạn phải lắp đủ 3 thẻ (Tanker, Middle, Back) mới có thể tham gia đấu!",
+    "fight.no_opponent": "⚠️ Hiện không tìm thấy đối thủ phù hợp.",
+    "fight.top1_no_opponent": "⚠️ Bạn đang ở Top 1, không có đối thủ.",
+
+    # Battle log
+    "fight.team_attack": "Team Tấn Công",
+    "fight.team_defense": "Team Phòng Thủ",
+    "fight.battle.starting": "Đang khởi đầu trận đấu…",
+    "fight.battle.title": "🔥 Battle Log {attacker} VS {defender}",
+    "fight.battle.turn_header": "--- Lượt {turn}: {cardName} ---",
+
+    # Result labels
+    "fight.result.win": "Chiến Thắng",
+    "fight.result.lose": "Thất Bại",
+    "fight.result.draw": "🏳️ Hoà",
+
+    # Result texts
+    "fight.result.draw_outcome": "⚔️ Hai đội quá cân sức (120 vòng) nên hoà! không bên nào được thưởng.",
+    "fight.result.rank_change_win": "**Điểm Rank:** {attacker} +10 điểm, {defender} -5 điểm",
+    "fight.result.rank_change_lose": "**Điểm Rank:** {attacker} -10 điểm, {defender} +5 điểm",
+
+    # Final embed
+    "fight.result.title": "🏁 Kết quả trận chiến của {attacker} VS {defender}",
+    "fight.result.line_result": "🎖️ **Kết quả:** {result}",
+    "fight.result.line_reward": "💰**Thưởng:** {reward:,} Ryo",
+    "fight.result.line_streak": "🏆**Chuỗi thắng:** {streak}",
+    "fight.result.footer_rank": "Điểm Rank: {rankPoints}",
+
+    # Error
+    "fight.error": "❌ Có lỗi xảy ra:\n```{trace}```",
+
+
+
+    # Command meta
+    "fightwith.command_desc": "Pk vui với người chơi đã tag (không cập nhật rank)",
+    "fightwith.param.target": "Tag của người chơi bạn muốn pk",
+
+    # Guard / validate
+    "fightwith.already_in_fight": "⚠️ Bạn đang trong trận đấu, vui lòng chờ cho trận trước kết thúc rồi mới /fight tiếp!",
+    "fightwith.not_registered": "⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!",
+    "fightwith.cannot_self": "⚠️ Bạn không thể pk với chính mình.",
+    "fightwith.target_not_registered": "⚠️ Người chơi được tag chưa tạo tài khoản.",
+    "fightwith.target_not_ready": "⚠️ Người chơi được tag chưa sẵn sàng pk (thiếu thẻ).",
+    "fightwith.need_full_team": "⚠️ Bạn phải lắp đủ 3 thẻ (Tanker, Middle, Back) mới có thể tham gia đấu!",
+
+    # Battle log
+    "fightwith.team_attack": "Team Tấn Công",
+    "fightwith.team_defense": "Team Phòng Thủ",
+    "fightwith.battle.starting": "Đang khởi đầu trận đấu…",
+    "fightwith.battle.title": "🔥 Battle Log {attacker} VS {defender}",
+    "fightwith.battle.turn_header": "--- Lượt {turn}: {cardName} ---",
+
+    # Result labels
+    "fightwith.result.win": "Chiến Thắng",
+    "fightwith.result.lose": "Thất Bại",
+    "fightwith.result.draw": "🏳️ Hoà",
+
+    # Result texts
+    "fightwith.result.draw_outcome": "⚔️ Hai đội quá cân sức (120 vòng) nên hoà!.",
+    "fightwith.result.no_rank_note": "**Điểm Rank:** vì không phải đánh rank nên không ai nhận được thưởng hay điểm rank.",
+    "fightwith.result.streak_unchanged": "Không bị thay đổi",
+
+    # Final embed
+    "fightwith.result.title": "🏁 Kết quả trận chiến của {attacker} VS {defender}",
+    "fightwith.result.line_result": "🎖️ **Kết quả:** {result}",
+    "fightwith.result.line_reward": "💰**Thưởng:** {reward:,} Ryo",
+    "fightwith.result.line_streak": "🏆**Chuỗi thắng:** {streak}",
+    "fightwith.result.footer_rank": "Điểm Rank: {rankPoints}",
+
+    # Error
+    "fightwith.error_generic": "❌ Có lỗi xảy ra. Vui lòng thử lại sau.",
+
+
+
+    # Command meta
+    "giftcode.command_desc": "Sử dụng mã GIFT để nhận quà",
+    "giftcode.param.code": "Mã GIFT bạn muốn sử dụng",
+
+    # Validate
+    "giftcode.not_registered": "⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!",
+    "giftcode.not_found": "⚠️ Mã GIFT không tồn tại. Vui lòng kiểm tra lại.",
+    "giftcode.expired": "⚠️ Mã GIFT này đã hết hạn sử dụng.",
+    "giftcode.already_used": "⚠️ Bạn đã sử dụng mã GIFT này trước đó và không thể sử dụng lại.",
+
+    # Reward item labels (parts)
+    "giftcode.reward.ryo": "Bonus Ryo: {amount:,} Ryo",
+    "giftcode.reward.card": "Thẻ: {name}",
+    "giftcode.reward.weapon": "Vũ khí: {name}",
+    "giftcode.reward.weapon_default": "Vũ khí",
+    "giftcode.reward.none": "Không có phần thưởng nào.",
+
+    # Success message
+    "giftcode.success.title": "✅ Bạn đã sử dụng thành công mã GIFT!",
+    "giftcode.success.detail": "Phần quà nhận được: {rewards}",
+
+    # Error
+    "giftcode.error_generic": "❌ Có lỗi xảy ra. Vui lòng thử lại sau.",
+
+
+
+    # Command meta
+    "give.command_desc": "Chuyển tiền cho người khác",
+    "give.param.target": "Tag của người nhận",
+    "give.param.amount": "Số Ryo cần chuyển",
+
+    # Validate
+    "give.amount_invalid": "⚠️ Số tiền chuyển phải lớn hơn 0.",
+    "give.sender_not_registered": "⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!",
+    "give.receiver_not_registered": "⚠️ Người nhận chưa đăng ký tài khoản.",
+    "give.insufficient_balance": "⚠️ Số tiền chuyển vượt quá số dư của bạn.",
+
+    # Daily limit
+    "give.limit_exceeded": (
+        "⚠️ Người nhận đang ở cấp **{level}**, chỉ được nhận tối đa **{limit:,} Ryo** mỗi ngày.\n\n"
+        "Hiện đã nhận **{received:,} Ryo** hôm nay."
+    ),
+
+    # Success
+    "give.success": "✅ Bạn đã chuyển **{amount:,} Ryo** cho {mention}.",
+
+    # Error
+    "give.error_generic": "❌ Có lỗi xảy ra. Vui lòng thử lại sau.",
+
+
+
+    # Command meta
+    "giveawayryo.command_desc": "Tặng Ryo (chỉ admin)",
+    "giveawayryo.param.target": "Tag của người nhận",
+    "giveawayryo.param.amount": "Số Ryo muốn tặng",
+
+    # Validate / permission
+    "giveawayryo.no_permission": "⚠️ Bạn không có quyền sử dụng lệnh này. Hãy dùng /give để chuyển tiền.",
+    "giveawayryo.amount_invalid": "⚠️ Số Ryo tặng phải lớn hơn 0.",
+    "giveawayryo.receiver_not_registered": "⚠️ Người nhận chưa đăng ký tài khoản.",
+
+    # Success
+    "giveawayryo.success": "✅ Đã giveaway **{amount:,} Ryo** cho {mention}.",
+
+    # Error
+    "giveawayryo.error_generic": "❌ Có lỗi xảy ra. Vui lòng thử lại sau.",
+
+
+
+    # command meta
+    "help.command_desc": "Hướng dẫn cho người mới bắt đầu sử dụng bot",
+
+    # embeds: overview
+    "help.embed.overview.title": "📜 Giới thiệu game",
+    "help.embed.overview.desc": (
+        "Game của chúng ta xoay quanh việc thu thập các thẻ nhân vật từ anime **Naruto** với độ hiếm khác nhau. \n"
+        "Bạn sẽ sử dụng các thẻ này để **PK** với nhau, tham gia đánh ải cốt truyện, leo bảng xếp hạng và trải nghiệm nhiều trò chơi thú vị khác."
+    ),
+
+    # embeds: start
+    "help.embed.start.title": "🚀 Xuất phát nào",
+    "help.embed.start.desc": "• Tạo tài khoản ngay bằng lệnh ``/register`` để bắt đầu hành trình của bạn.",
+
+    # embeds: earn
+    "help.embed.earn.title": "💰 Cách kiếm tiền",
+    "help.embed.earn.desc": (
+        "1. Điểm danh mỗi ngày bằng lệnh ``/daily`` để nhận tiền điểm danh.\n\n"
+        "2. Hoàn thành các nhiệm vụ hằng ngày bằng lệnh ``/dailytask`` để nhận thưởng.\n\n"
+        "3. Tham gia đánh ải cốt truyện bằng lệnh ``/challenge`` – càng đánh càng được thưởng nhiều.\n\n"
+        "4. Thử vận may với lệnh ``/fight`` để leo bảng xếp hạng; chuỗi thắng cao sẽ nhận thêm tiền.\n\n"
+        "5. Chơi minigame với bot qua các lệnh ``/slot``, ``/blackjack``, ``/coinflip``, ``/bingo`` để kiếm tiền.\n\n"
+        "6. Mua gói thẻ rẻ (với tỷ lệ rơi thẻ hiếm) và bán chúng bằng lệnh ``/sellcard`` hoặc ``/sellweapon`` để kiếm lời.\n\n"
+        "7. Đi viễn chinh bằng ``/adventure``, thắng sẽ nhận được tiền.\n\n"
+        "8. Đánh boss vĩ thú bằng ``/tailedboss``, nhận được tiền theo sát thương gây ra; hạ gục vĩ thú sẽ có tỉ lệ nhận được thẻ và vũ khí.\n\n"
+    ),
+
+    # embeds: interact
+    "help.embed.interact.title": "🃏 Cách tương tác với thẻ và vũ khí",
+    "help.embed.interact.desc": (
+        "1. Ghé shop thẻ bằng lệnh ``/shop`` để xem các gói thẻ, tỷ lệ rơi và cách mua, cũng như số lần cần mua để đảm bảo nhận được thẻ hiếm (được cá nhân hóa cho từng người chơi).\n\n"
+        "2. Sau khi mua, kiểm tra kho của bạn bằng lệnh ``/inventory``.\n\n"
+        "3. Tương tự, bạn có thể vào shop vũ khí để mua vũ khí qua các lệnh tương tự.\n\n"
+        "4. Nâng cấp thẻ và vũ khí bằng lệnh ``/levelupcard`` và ``/levelupweapon`` (nâng cấp sẽ tăng sức mạnh nếu bạn có các thẻ hoặc vũ khí giống nhau).\n\n"
+        "5. Lắp thẻ mạnh nhất và vũ khí mạnh nhất vào hồ sơ của bạn bằng lệnh ``/setcard`` và ``/setweapon`` để chuẩn bị chiến đấu với các người chơi khác.\n\n"
+        "6. Chi tiết luật chiến đấu ở ``/battlerule``.\n\n"
+    ),
+
+    # embeds: community
+    "help.embed.community.title": "🌐 Máy chủ cộng đồng",
+    "help.embed.community.desc": (
+        "• Tham gia [máy chủ cộng đồng]({community_link}) của chúng ta để nhận thông báo về **giftcode** và các event hấp dẫn của bot.\n\n"
+    ),
+
+
+
+    "inventory.command_desc": "Hiển thị kho đồ của bạn",
+
+    "inventory.embed.cards.title": "🎴 Kho Thẻ Bài",
+    "inventory.embed.weapons.title": "🔪 Kho Vũ Khí",
+
+    "inventory.embed.cards.empty": "Không có thẻ nào.",
+    "inventory.embed.weapons.empty": "Không có vũ khí nào.",
+
+    "inventory.footer.page": "Trang {page}/{total}",
+
+    "inventory.button.prev": "Trước",
+    "inventory.button.next": "Tiếp",
+    "inventory.button.to_weapons": "Kho vũ khí",
+    "inventory.button.to_cards": "Kho thẻ",
+
+    "inventory.msg.first_page": "Bạn đang ở trang đầu!",
+    "inventory.msg.last_page": "Bạn đang ở trang cuối!",
+
+    "inventory.error.not_registered": "Bạn chưa đăng ký tài khoản. Hãy dùng `/register` trước nhé!",
+
+    "inventory.field.id": "ID",
+    "inventory.field.tier": "Bậc",
+    "inventory.field.grade": "Bậc",
+    "inventory.field.tanker": "Tanker",
+    "inventory.field.quantity": "Số Lượng",
+    "inventory.field.quantity_weapon": "Số Lượng",
+
+    "inventory.card.locked_marker": " (🔒)",
+
+    "inventory.buff.damage": "Damage",
+    "inventory.buff.health": "Hp",
+    "inventory.buff.armor": "Armor",
+    "inventory.buff.crit_rate": "Crit Rate",
+    "inventory.buff.speed": "Speed",
+    "inventory.buff.chakra": "Chakra",
 }

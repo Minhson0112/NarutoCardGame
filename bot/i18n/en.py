@@ -276,4 +276,249 @@ EN = {
     "dailytask.task.shop_buy": "Buy from the shop 3 times",
     "dailytask.task.shop_sell": "Sell to the shop 3 times",
     "dailytask.task.stage_clear": "Clear at least 1 stage using `/challenge`",
+
+
+    #devinfo
+    "devinfo.command_desc": "Show developer information",
+
+    "devinfo.embed.title": "🌟 Developer Info 🌟",
+    "devinfo.embed.description": (
+        "This bot is developed by **{developerName}**.\n\n"
+        "If you find a bug or have feedback, click [here]({contactUrl}) to contact.\n\n"
+        "Thanks for using the bot!"
+    ),
+    "devinfo.embed.author_name": "{authorName}",
+
+
+
+    # Command meta
+    "fight.command_desc": "Challenge an opponent near your rank",
+
+    # Guard / validate
+    "fight.already_in_fight": "⚠️ You're already in a battle. Please wait until it ends before using /fight again!",
+    "fight.not_registered": "⚠️ You haven't registered yet. Use /register first!",
+    "fight.need_full_team": "⚠️ You must equip 3 cards (Tanker, Middle, Back) to join a fight!",
+    "fight.no_opponent": "⚠️ No suitable opponent found right now.",
+    "fight.top1_no_opponent": "⚠️ You're Top 1. No opponent available.",
+
+    # Battle log
+    "fight.team_attack": "Attack Team",
+    "fight.team_defense": "Defense Team",
+    "fight.battle.starting": "Starting the battle…",
+    "fight.battle.title": "🔥 Battle Log {attacker} VS {defender}",
+    "fight.battle.turn_header": "--- Turn {turn}: {cardName} ---",
+
+    # Result labels
+    "fight.result.win": "Victory",
+    "fight.result.lose": "Defeat",
+    "fight.result.draw": "🏳️ Draw",
+
+    # Result texts
+    "fight.result.draw_outcome": "⚔️ The fight reached 120 turns and ended in a draw. No rewards for either side.",
+    "fight.result.rank_change_win": "**Rank Points:** {attacker} +10, {defender} -5",
+    "fight.result.rank_change_lose": "**Rank Points:** {attacker} -10, {defender} +5",
+
+    # Final embed
+    "fight.result.title": "🏁 Battle Result: {attacker} VS {defender}",
+    "fight.result.line_result": "🎖️ **Result:** {result}",
+    "fight.result.line_reward": "💰**Reward:** {reward:,} Ryo",
+    "fight.result.line_streak": "🏆**Win Streak:** {streak}",
+    "fight.result.footer_rank": "Rank Points: {rankPoints}",
+
+    # Error
+    "fight.error": "❌ An error occurred:\n```{trace}```",
+
+
+
+    # Command meta
+    "fightwith.command_desc": "Friendly PK with a tagged player (no rank changes)",
+    "fightwith.param.target": "Tag the player you want to PK",
+
+    # Guard / validate
+    "fightwith.already_in_fight": "⚠️ You're already in a battle. Please wait until it ends before using /fight again!",
+    "fightwith.not_registered": "⚠️ You haven't registered yet. Use /register first!",
+    "fightwith.cannot_self": "⚠️ You can't PK yourself.",
+    "fightwith.target_not_registered": "⚠️ The tagged player hasn't registered yet.",
+    "fightwith.target_not_ready": "⚠️ The tagged player isn't ready to PK (missing cards).",
+    "fightwith.need_full_team": "⚠️ You must equip 3 cards (Tanker, Middle, Back) to join a fight!",
+
+    # Battle log
+    "fightwith.team_attack": "Attack Team",
+    "fightwith.team_defense": "Defense Team",
+    "fightwith.battle.starting": "Starting the battle…",
+    "fightwith.battle.title": "🔥 Battle Log {attacker} VS {defender}",
+    "fightwith.battle.turn_header": "--- Turn {turn}: {cardName} ---",
+
+    # Result labels
+    "fightwith.result.win": "Victory",
+    "fightwith.result.lose": "Defeat",
+    "fightwith.result.draw": "🏳️ Draw",
+
+    # Result texts
+    "fightwith.result.draw_outcome": "⚔️ The fight reached 120 turns and ended in a draw.",
+    "fightwith.result.no_rank_note": "**Rank Points:** This is not a ranked match, so no one gets rewards or rank points.",
+    "fightwith.result.streak_unchanged": "Unchanged",
+
+    # Final embed
+    "fightwith.result.title": "🏁 Battle Result: {attacker} VS {defender}",
+    "fightwith.result.line_result": "🎖️ **Result:** {result}",
+    "fightwith.result.line_reward": "💰**Reward:** {reward:,} Ryo",
+    "fightwith.result.line_streak": "🏆**Win Streak:** {streak}",
+    "fightwith.result.footer_rank": "Rank Points: {rankPoints}",
+
+    # Error
+    "fightwith.error_generic": "❌ Something went wrong. Please try again later.",
+
+
+
+    # Command meta
+    "giftcode.command_desc": "Use a GIFT code to claim rewards",
+    "giftcode.param.code": "The GIFT code you want to use",
+
+    # Validate
+    "giftcode.not_registered": "⚠️ You haven't registered yet. Use /register first!",
+    "giftcode.not_found": "⚠️ This GIFT code doesn't exist. Please double-check it.",
+    "giftcode.expired": "⚠️ This GIFT code has expired.",
+    "giftcode.already_used": "⚠️ You've already used this GIFT code and can't use it again.",
+
+    # Reward item labels (parts)
+    "giftcode.reward.ryo": "Bonus Ryo: {amount:,} Ryo",
+    "giftcode.reward.card": "Card: {name}",
+    "giftcode.reward.weapon": "Weapon: {name}",
+    "giftcode.reward.weapon_default": "Weapon",
+    "giftcode.reward.none": "No rewards.",
+
+    # Success message
+    "giftcode.success.title": "✅ GIFT code redeemed successfully!",
+    "giftcode.success.detail": "Rewards received: {rewards}",
+
+    # Error
+    "giftcode.error_generic": "❌ Something went wrong. Please try again later.",
+
+
+
+    # Command meta
+    "give.command_desc": "Transfer money to another player",
+    "give.param.target": "The recipient you want to tag",
+    "give.param.amount": "Amount of Ryo to transfer",
+
+    # Validate
+    "give.amount_invalid": "⚠️ Transfer amount must be greater than 0.",
+    "give.sender_not_registered": "⚠️ You haven't registered yet. Use /register first!",
+    "give.receiver_not_registered": "⚠️ The recipient hasn't registered yet.",
+    "give.insufficient_balance": "⚠️ You don't have enough balance for that transfer.",
+
+    # Daily limit
+    "give.limit_exceeded": (
+        "⚠️ The recipient is level **{level}** and can receive at most **{limit:,} Ryo** per day.\n\n"
+        "They have already received **{received:,} Ryo** today."
+    ),
+
+    # Success
+    "give.success": "✅ You transferred **{amount:,} Ryo** to {mention}.",
+
+    # Error
+    "give.error_generic": "❌ Something went wrong. Please try again later.",
+
+
+
+    # Command meta
+    "giveawayryo.command_desc": "Give Ryo (admin only)",
+    "giveawayryo.param.target": "The recipient you want to tag",
+    "giveawayryo.param.amount": "Amount of Ryo to give",
+
+    # Validate / permission
+    "giveawayryo.no_permission": "⚠️ You don't have permission to use this command. Use /give to transfer money.",
+    "giveawayryo.amount_invalid": "⚠️ Giveaway amount must be greater than 0.",
+    "giveawayryo.receiver_not_registered": "⚠️ The recipient hasn't registered yet.",
+
+    # Success
+    "giveawayryo.success": "✅ Gave **{amount:,} Ryo** to {mention}.",
+
+    # Error
+    "giveawayryo.error_generic": "❌ Something went wrong. Please try again later.",
+
+
+
+    # command meta
+    "help.command_desc": "A quick guide for new players to use the bot",
+
+    # embeds: overview
+    "help.embed.overview.title": "📜 Game Overview",
+    "help.embed.overview.desc": (
+        "Our game is all about collecting **Naruto** character cards with different rarities.\n"
+        "You will use these cards to **PK** other players, clear story stages, climb the leaderboard, and enjoy many other fun activities."
+    ),
+
+    # embeds: start
+    "help.embed.start.title": "🚀 Getting Started",
+    "help.embed.start.desc": "• Create your account with ``/register`` to begin your journey.",
+
+    # embeds: earn
+    "help.embed.earn.title": "💰 How to Earn Money",
+    "help.embed.earn.desc": (
+        "1. Claim your daily reward with ``/daily``.\n\n"
+        "2. Complete daily missions with ``/dailytask`` to earn rewards.\n\n"
+        "3. Clear story stages with ``/challenge`` — the more you clear, the more you earn.\n\n"
+        "4. Try your luck with ``/fight`` to climb the ranking; longer win streaks give extra money.\n\n"
+        "5. Play minigames like ``/slot``, ``/blackjack``, ``/coinflip``, ``/bingo`` to earn money.\n\n"
+        "6. Buy cheaper card packs (with a chance to drop rare cards) and sell them using ``/sellcard`` or ``/sellweapon`` for profit.\n\n"
+        "7. Go on an expedition with ``/adventure`` — winning gives you money.\n\n"
+        "8. Fight the tailed beast boss with ``/tailedboss`` — earn money based on damage dealt; the last hit has a chance to drop cards and weapons.\n\n"
+    ),
+
+    # embeds: interact
+    "help.embed.interact.title": "🃏 Cards & Weapons Guide",
+    "help.embed.interact.desc": (
+        "1. Open the card shop with ``/shop`` to see packs, drop rates, how to buy, and how many pulls are needed to guarantee rare cards (personalized per player).\n\n"
+        "2. After buying, check your inventory with ``/inventory``.\n\n"
+        "3. Similarly, you can visit the weapon shop via its related commands.\n\n"
+        "4. Upgrade cards and weapons using ``/levelupcard`` and ``/levelupweapon`` (upgrades increase power if you have duplicates).\n\n"
+        "5. Equip your best cards and weapons using ``/setcard`` and ``/setweapon`` to prepare for battles.\n\n"
+        "6. See the full battle rules with ``/battlerule``.\n\n"
+    ),
+
+    # embeds: community
+    "help.embed.community.title": "🌐 Community Server",
+    "help.embed.community.desc": (
+        "• Join our [community server]({community_link}) to get **giftcode** announcements and bot events.\n\n"
+    ),
+
+
+
+    "inventory.command_desc": "Show your inventory",
+
+    "inventory.embed.cards.title": "🎴 Card Inventory",
+    "inventory.embed.weapons.title": "🔪 Weapon Inventory",
+
+    "inventory.embed.cards.empty": "You have no cards.",
+    "inventory.embed.weapons.empty": "You have no weapons.",
+
+    "inventory.footer.page": "Page {page}/{total}",
+
+    "inventory.button.prev": "Previous",
+    "inventory.button.next": "Next",
+    "inventory.button.to_weapons": "Weapons",
+    "inventory.button.to_cards": "Cards",
+
+    "inventory.msg.first_page": "You are already on the first page.",
+    "inventory.msg.last_page": "You are already on the last page.",
+
+    "inventory.error.not_registered": "You are not registered yet. Please use `/register` first.",
+
+    "inventory.field.id": "ID",
+    "inventory.field.tier": "Tier",
+    "inventory.field.grade": "Grade",
+    "inventory.field.tanker": "Tanker",
+    "inventory.field.quantity": "Quantity",
+    "inventory.field.quantity_weapon": "Quantity",
+
+    "inventory.card.locked_marker": " (Locked)",
+
+    "inventory.buff.damage": "Damage",
+    "inventory.buff.health": "HP",
+    "inventory.buff.armor": "Armor",
+    "inventory.buff.crit_rate": "Crit Rate",
+    "inventory.buff.speed": "Evasion",
+    "inventory.buff.chakra": "Chakra",
 }
