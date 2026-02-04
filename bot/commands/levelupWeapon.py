@@ -6,6 +6,8 @@ from bot.config.database import getDbSession
 from bot.repository.playerRepository import PlayerRepository
 from bot.repository.playerWeaponRepository import PlayerWeaponRepository
 from bot.entity.playerWeapon import PlayerWeapon
+from bot.services.i18n import t
+
 
 class LevelUpWeapon(commands.Cog):
     def __init__(self, bot):
@@ -13,93 +15,78 @@ class LevelUpWeapon(commands.Cog):
 
     @app_commands.command(
         name="levelupweapon",
-        description="Nâng cấp vũ khí của bạn (tăng 1 cấp)"
+        description="Upgrade weapon"
     )
     @app_commands.describe(
-        weapon_id="ID vũ khí bạn muốn nâng cấp (xem trong /inventory)"
+        weapon_id="weapon_id"
     )
     async def levelUpWeapon(self, interaction: discord.Interaction, weapon_id: int):
         await interaction.response.defer(thinking=True)
         playerId = interaction.user.id
+        guild_id = interaction.guild.id if interaction.guild else None
 
         try:
             with getDbSession() as session:
-                playerRepo  = PlayerRepository(session)
-                weaponRepo  = PlayerWeaponRepository(session)
+                playerRepo = PlayerRepository(session)
+                weaponRepo = PlayerWeaponRepository(session)
 
-                # 1) Kiểm tra người chơi đã đăng ký
+                # 1) check registered
                 player = playerRepo.getById(playerId)
                 if not player:
-                    await interaction.followup.send(
-                        "⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!"
-                    )
+                    await interaction.followup.send(f"⚠️ {t(guild_id, 'levelupweapon.error.not_registered')}")
                     return
 
-                # 2) Lấy vũ khí theo ID
+                # 2) get weapon by id & ownership
                 mainWeaponCandidate = weaponRepo.getById(weapon_id)
                 if not mainWeaponCandidate or mainWeaponCandidate.player_id != playerId:
                     await interaction.followup.send(
-                        f"⚠️ Bạn không sở hữu vũ khí với ID `{weapon_id}`. Kiểm tra lại trong /inventory."
+                        f"⚠️ {t(guild_id, 'levelupweapon.error.not_owner', weapon_id=weapon_id)}"
                     )
                     return
 
-                weapon_name   = mainWeaponCandidate.template.name
+                weapon_name = mainWeaponCandidate.template.name
                 current_level = mainWeaponCandidate.level
                 desired_level = current_level + 1
 
-                # Nếu muốn giới hạn max level thì thêm check ở đây (vd: >50)
-
-                # 3) Lấy tất cả các bản ghi cùng weapon_key của player
-                weapons = weaponRepo.getByPlayerIdAndWeaponKey(
-                    playerId,
-                    mainWeaponCandidate.weapon_key
-                )
+                # 3) all same weapon_key for this player
+                weapons = weaponRepo.getByPlayerIdAndWeaponKey(playerId, mainWeaponCandidate.weapon_key)
                 if not weapons:
-                    await interaction.followup.send(
-                        "⚠️ Dữ liệu vũ khí không hợp lệ. Vui lòng thử lại sau."
-                    )
+                    await interaction.followup.send(f"⚠️ {t(guild_id, 'levelupweapon.error.invalid_data')}")
                     return
 
-                # 4) Chỉ cho nâng từ vũ khí cấp cao nhất
+                # 4) only upgrade from highest level
                 highestLevel = max(w.level for w in weapons)
                 if highestLevel != current_level:
                     await interaction.followup.send(
-                        f"⚠️ Bạn chỉ có thể nâng cấp từ vũ khí cấp cao nhất.\n"
-                        f"Vũ khí với ID `{weapon_id}` đang ở cấp {current_level}, "
-                        f"nhưng vũ khí cao nhất của bạn là cấp {highestLevel}."
+                        f"⚠️ {t(guild_id, 'levelupweapon.error.not_highest_level', weapon_id=weapon_id, current_level=current_level, highest_level=highestLevel)}"
                     )
                     return
 
-                # 5) Vũ khí chính không được đang equipped
+                # 5) cannot upgrade while equipped
                 if mainWeaponCandidate.equipped:
                     await interaction.followup.send(
-                        f"⚠️ Vũ khí **{weapon_name}** (ID `{mainWeaponCandidate.id}`) "
-                        f"đang được trang bị, hãy tháo nó ra bằng lệnh /unequipweapon trước khi nâng cấp."
+                        f"⚠️ {t(guild_id, 'levelupweapon.error.equipped', weapon_name=weapon_name, weapon_id=mainWeaponCandidate.id)}"
                     )
                     return
 
-                # 6) Tính nguyên liệu phôi (vũ khí cấp 1)
-                # Giữ logic như thẻ: requiredMaterials = 3 * (desired_level - 1)
-                # => requiredMaterials = 3 * current_level
+                # 6) required materials (level 1) = 3 * current_level
                 requiredMaterials = 3 * current_level
-
                 level1Weapons = [w for w in weapons if w.level == 1]
                 totalLevel1Quantity = sum(w.quantity for w in level1Weapons)
 
                 if totalLevel1Quantity < requiredMaterials:
                     await interaction.followup.send(
-                        f"⚠️ Bạn không có đủ vũ khí **{weapon_name}** cấp 1 để nâng cấp.\n"
-                        f"Yêu cầu: {requiredMaterials}, hiện có: {totalLevel1Quantity}."
+                        f"⚠️ {t(guild_id, 'levelupweapon.error.not_enough_materials', weapon_name=weapon_name, required=requiredMaterials, current=totalLevel1Quantity)}"
                     )
                     return
 
-                # 7) Tiêu hao vũ khí chính (1 bản)
+                # 7) consume main weapon (1 copy)
                 if mainWeaponCandidate.quantity > 1:
                     mainWeaponCandidate.quantity -= 1
                 else:
                     weaponRepo.deleteWeapon(mainWeaponCandidate)
 
-                # 8) Tạo bản ghi mới cho vũ khí đã nâng cấp
+                # 8) create upgraded weapon record
                 newWeapon = PlayerWeapon(
                     player_id=playerId,
                     weapon_key=mainWeaponCandidate.weapon_key,
@@ -109,7 +96,7 @@ class LevelUpWeapon(commands.Cog):
                 )
                 weaponRepo.create(newWeapon)
 
-                # 9) Tiêu hao vũ khí cấp 1 làm phôi
+                # 9) consume level 1 materials
                 remaining = requiredMaterials
                 for w in level1Weapons:
                     if remaining <= 0:
@@ -123,20 +110,19 @@ class LevelUpWeapon(commands.Cog):
                             weaponRepo.deleteWeapon(w)
                         remaining = 0
 
-                # 10) Thưởng exp
+                # 10) exp reward
                 playerRepo.incrementExp(playerId, amount=10)
 
                 session.commit()
+
                 await interaction.followup.send(
-                    f"✅ Nâng cấp thành công! Vũ khí **{newWeapon.template.name}** "
-                    f"(ID `{newWeapon.id}`) đã được nâng từ cấp {current_level} lên cấp {desired_level}."
+                    f"✅ {t(guild_id, 'levelupweapon.success', weapon_name=newWeapon.template.name, new_weapon_id=newWeapon.id, from_level=current_level, to_level=desired_level)}"
                 )
 
         except Exception as e:
             print("❌ Lỗi khi xử lý levelupweapon:", e)
-            await interaction.followup.send(
-                "❌ Có lỗi xảy ra. Vui lòng thử lại sau."
-            )
+            await interaction.followup.send(f"❌ {t(guild_id, 'levelupweapon.error.generic')}")
+
 
 async def setup(bot):
     await bot.add_cog(LevelUpWeapon(bot))

@@ -522,4 +522,86 @@ VI = {
     "inventory.buff.crit_rate": "Crit Rate",
     "inventory.buff.speed": "Speed",
     "inventory.buff.chakra": "Chakra",
+
+
+
+    "levelupweapon.command_desc": "Nâng cấp vũ khí của bạn (tăng 1 cấp)",
+    "levelupweapon.param.weapon_id": "ID vũ khí bạn muốn nâng cấp (xem trong /inventory)",
+
+    "levelupweapon.error.not_registered": "Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!",
+    "levelupweapon.error.not_owner": "Bạn không sở hữu vũ khí với ID `{weapon_id}`. Kiểm tra lại trong /inventory.",
+    "levelupweapon.error.invalid_data": "Dữ liệu vũ khí không hợp lệ. Vui lòng thử lại sau.",
+
+    "levelupweapon.error.not_highest_level": (
+        "Bạn chỉ có thể nâng cấp từ vũ khí cấp cao nhất.\n"
+        "Vũ khí với ID `{weapon_id}` đang ở cấp {current_level}, "
+        "nhưng vũ khí cao nhất của bạn là cấp {highest_level}."
+    ),
+
+    "levelupweapon.error.equipped": (
+        "Vũ khí **{weapon_name}** (ID `{weapon_id}`) "
+        "đang được trang bị, hãy tháo nó ra bằng lệnh /unequipweapon trước khi nâng cấp."
+    ),
+
+    "levelupweapon.error.not_enough_materials": (
+        "Bạn không có đủ vũ khí **{weapon_name}** cấp 1 để nâng cấp.\n"
+        "Yêu cầu: {required}, hiện có: {current}."
+    ),
+
+    "levelupweapon.success": (
+        "Nâng cấp thành công! Vũ khí **{weapon_name}** "
+        "(ID `{new_weapon_id}`) đã được nâng từ cấp {from_level} lên cấp {to_level}."
+    ),
+
+    "levelupweapon.error.generic": "Có lỗi xảy ra. Vui lòng thử lại sau.",
+
+
+
+    "levelupcard.command_desc": "Nâng cấp thẻ của bạn (tăng 1 cấp)",
+    "levelupcard.param.card_id": "ID thẻ bạn muốn nâng cấp (xem trong /inventory)",
+
+    "levelupcard.error.not_registered": "Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!",
+    "levelupcard.error.not_owner": "Bạn không sở hữu thẻ với ID `{card_id}`. Kiểm tra lại trong /inventory.",
+
+    "levelupcard.error.max_level": "Cấp thẻ lớn nhất có thể nâng cấp là 50. Thẻ này đang ở cấp {current_level}.",
+    "levelupcard.error.invalid_data": "Dữ liệu thẻ không hợp lệ. Vui lòng thử lại sau.",
+
+    "levelupcard.error.not_highest_level": (
+        "Bạn chỉ có thể nâng cấp từ thẻ cấp cao nhất.\n"
+        "Thẻ với ID `{card_id}` đang ở cấp {current_level}, "
+        "nhưng thẻ cao nhất của bạn là cấp {highest_level}."
+    ),
+
+    "levelupcard.error.equipped": (
+        "Thẻ **{card_name}** (ID `{card_id}`) đang được dùng làm thẻ chính, "
+        "hãy tháo thẻ đó ra bằng lệnh /setcard một thẻ khác trước khi nâng cấp."
+    ),
+
+    "levelupcard.error.not_enough_materials": (
+        "Bạn không có đủ thẻ **{card_name}** cấp 1 để nâng cấp.\n"
+        "Yêu cầu: {required}, hiện có: {current}."
+    ),
+
+    "levelupcard.success": (
+        "Nâng cấp thành công! Thẻ **{card_name}** "
+        "(ID `{new_card_id}`) đã được nâng từ cấp {from_level} lên cấp {to_level}."
+    ),
+
+    "levelupcard.error.generic": "Có lỗi xảy ra. Vui lòng thử lại sau.",
+
+
+
+    "lockcard.command_desc": "Khoá toàn bộ thẻ cùng loại, thẻ bị khoá sẽ không thể bán",
+    "lockcard.param.card_id": "ID thẻ bạn muốn khoá (xem trong /inventory)",
+
+    "lockcard.error.not_registered": "Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!",
+    "lockcard.error.not_owner": "Bạn không sở hữu thẻ với ID `{card_id}`.",
+    "lockcard.error.not_found_same_type": "Không tìm thấy các bản thẻ cùng loại để khoá.",
+
+    "lockcard.success": (
+        "Đã khoá **toàn bộ thẻ `{card_name}`** của bạn "
+        "(bao gồm mọi cấp độ & phôi)."
+    ),
+
+    "lockcard.error.generic": "Có lỗi xảy ra khi khoá thẻ. Vui lòng thử lại sau.",
 }

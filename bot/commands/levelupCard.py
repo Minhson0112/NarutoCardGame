@@ -6,99 +6,94 @@ from bot.config.database import getDbSession
 from bot.repository.playerRepository import PlayerRepository
 from bot.repository.playerCardRepository import PlayerCardRepository
 from bot.entity.playerCards import PlayerCard
+from bot.services.i18n import t
+
 
 class LevelUpCard(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @app_commands.command(name="levelupcard", description="Nâng cấp thẻ của bạn (tăng 1 cấp)")
+    @app_commands.command(
+        name="levelupcard",
+        description="Upgrade card"
+    )
     @app_commands.describe(
-        card_id="ID thẻ bạn muốn nâng cấp (xem trong /inventory)"
+        card_id="card_id"
     )
     async def levelUp(self, interaction: discord.Interaction, card_id: int):
         await interaction.response.defer(thinking=True)
         playerId = interaction.user.id
+        guild_id = interaction.guild.id if interaction.guild else None
 
         try:
             with getDbSession() as session:
                 playerRepo = PlayerRepository(session)
-                cardRepo   = PlayerCardRepository(session)
+                cardRepo = PlayerCardRepository(session)
 
-                # 1) Kiểm tra người chơi đã đăng ký
+                # check registered
                 player = playerRepo.getById(playerId)
                 if not player:
-                    await interaction.followup.send(
-                        "⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!"
-                    )
+                    await interaction.followup.send(f"⚠️ {t(guild_id, 'levelupcard.error.not_registered')}")
                     return
 
-                # 2) Lấy thẻ theo ID
+                # get card by id & ownership
                 mainCardCandidate = cardRepo.getById(card_id)
                 if not mainCardCandidate or mainCardCandidate.player_id != playerId:
                     await interaction.followup.send(
-                        f"⚠️ Bạn không sở hữu thẻ với ID `{card_id}`. Kiểm tra lại trong /inventory."
+                        f"⚠️ {t(guild_id, 'levelupcard.error.not_owner', card_id=card_id)}"
                     )
                     return
 
-                card_name     = mainCardCandidate.template.name
+                card_name = mainCardCandidate.template.name
                 current_level = mainCardCandidate.level
                 desired_level = current_level + 1
 
-                # 3) Giới hạn max level
+                # max level
                 if desired_level > 50:
                     await interaction.followup.send(
-                        f"⚠️ Cấp thẻ lớn nhất có thể nâng cấp là 50. Thẻ này đang ở cấp {current_level}."
+                        f"⚠️ {t(guild_id, 'levelupcard.error.max_level', current_level=current_level)}"
                     )
                     return
 
-                # 4) Lấy tất cả các bản ghi cùng card_key của player
+                # get all same card_key
                 cards = cardRepo.getByPlayerIdAndCardKey(playerId, mainCardCandidate.card_key)
                 if not cards:
-                    await interaction.followup.send(
-                        "⚠️ Dữ liệu thẻ không hợp lệ. Vui lòng thử lại sau."
-                    )
+                    await interaction.followup.send(f"⚠️ {t(guild_id, 'levelupcard.error.invalid_data')}")
                     return
 
-                # 5) Chỉ cho nâng từ thẻ cao nhất
+                # only upgrade from highest level
                 highestLevel = max(c.level for c in cards)
                 if highestLevel != current_level:
                     await interaction.followup.send(
-                        f"⚠️ Bạn chỉ có thể nâng cấp từ thẻ cấp cao nhất.\n"
-                        f"Thẻ với ID `{card_id}` đang ở cấp {current_level}, "
-                        f"nhưng thẻ cao nhất của bạn là cấp {highestLevel}."
+                        f"⚠️ {t(guild_id, 'levelupcard.error.not_highest_level', card_id=card_id, current_level=current_level, highest_level=highestLevel)}"
                     )
                     return
 
-                # 6) Thẻ chính không được đang equipped
+                # cannot upgrade if equipped
                 if mainCardCandidate.equipped:
                     await interaction.followup.send(
-                        f"⚠️ Thẻ **{card_name}** (ID `{mainCardCandidate.id}`) đang được dùng làm thẻ chính, "
-                        f"hãy tháo thẻ đó ra bằng lệnh /setcard một thẻ khác trước khi nâng cấp."
+                        f"⚠️ {t(guild_id, 'levelupcard.error.equipped', card_name=card_name, card_id=mainCardCandidate.id)}"
                     )
                     return
 
-                # 7) Tính nguyên liệu phôi (thẻ cấp 1)
-                # Logic gốc: requiredMaterials = 3 * (desired_level - 1)
-                # Ở đây desired_level = current_level + 1 => requiredMaterials = 3 * current_level
+                # materials (level 1) = 3 * current_level
                 requiredMaterials = 3 * current_level
-
                 level1Cards = [c for c in cards if c.level == 1]
                 totalLevel1Quantity = sum(c.quantity for c in level1Cards)
 
                 if totalLevel1Quantity < requiredMaterials:
                     await interaction.followup.send(
-                        f"⚠️ Bạn không có đủ thẻ **{card_name}** cấp 1 để nâng cấp.\n"
-                        f"Yêu cầu: {requiredMaterials}, hiện có: {totalLevel1Quantity}."
+                        f"⚠️ {t(guild_id, 'levelupcard.error.not_enough_materials', card_name=card_name, required=requiredMaterials, current=totalLevel1Quantity)}"
                     )
                     return
 
-                # 8) Tiêu hao thẻ chính (1 bản)
+                #  consume main card (1 copy)
                 if mainCardCandidate.quantity > 1:
                     mainCardCandidate.quantity -= 1
                 else:
                     cardRepo.deleteCard(mainCardCandidate)
 
-                # 9) Tạo bản ghi mới cho thẻ đã nâng cấp
+                # create upgraded card record
                 newCard = PlayerCard(
                     player_id=playerId,
                     card_key=mainCardCandidate.card_key,
@@ -109,7 +104,7 @@ class LevelUpCard(commands.Cog):
                 )
                 cardRepo.create(newCard)
 
-                # 10) Tiêu hao thẻ cấp 1 làm phôi
+                # consume level 1 materials
                 remaining = requiredMaterials
                 for c in level1Cards:
                     if remaining <= 0:
@@ -123,19 +118,19 @@ class LevelUpCard(commands.Cog):
                             cardRepo.deleteCard(c)
                         remaining = 0
 
-                # 11) Thưởng exp
+                # exp reward
                 playerRepo.incrementExp(playerId, amount=5)
 
                 session.commit()
 
                 await interaction.followup.send(
-                    f"✅ Nâng cấp thành công! Thẻ **{card_name}** "
-                    f"(ID `{newCard.id}`) đã được nâng từ cấp {current_level} lên cấp {desired_level}."
+                    f"✅ {t(guild_id, 'levelupcard.success', card_name=card_name, new_card_id=newCard.id, from_level=current_level, to_level=desired_level)}"
                 )
 
         except Exception as e:
             print("❌ Lỗi khi xử lý levelup:", e)
-            await interaction.followup.send("❌ Có lỗi xảy ra. Vui lòng thử lại sau.")
+            await interaction.followup.send(f"❌ {t(guild_id, 'levelupcard.error.generic')}")
+
 
 async def setup(bot):
     await bot.add_cog(LevelUpCard(bot))

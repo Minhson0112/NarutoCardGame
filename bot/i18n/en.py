@@ -521,4 +521,87 @@ EN = {
     "inventory.buff.crit_rate": "Crit Rate",
     "inventory.buff.speed": "Evasion",
     "inventory.buff.chakra": "Chakra",
+
+
+
+    "levelupweapon.command_desc": "Upgrade your weapon (increase by 1 level)",
+    "levelupweapon.param.weapon_id": "Weapon ID you want to upgrade (check /inventory)",
+
+    "levelupweapon.error.not_registered": "You are not registered yet. Please use /register first.",
+    "levelupweapon.error.not_owner": "You do not own a weapon with ID `{weapon_id}`. Please check /inventory.",
+    "levelupweapon.error.invalid_data": "Invalid weapon data. Please try again later.",
+
+    "levelupweapon.error.not_highest_level": (
+        "You can only upgrade from your highest-level weapon.\n"
+        "Weapon ID `{weapon_id}` is level {current_level}, "
+        "but your highest weapon level is {highest_level}."
+    ),
+
+    "levelupweapon.error.equipped": (
+        "Weapon **{weapon_name}** (ID `{weapon_id}`) "
+        "is currently equipped. Please unequip it using /unequipweapon before upgrading."
+    ),
+
+    "levelupweapon.error.not_enough_materials": (
+        "You don't have enough level 1 copies of **{weapon_name}** to upgrade.\n"
+        "Required: {required}, you have: {current}."
+    ),
+
+    "levelupweapon.success": (
+        "Upgrade successful! Weapon **{weapon_name}** "
+        "(ID `{new_weapon_id}`) has been upgraded from level {from_level} to level {to_level}."
+    ),
+
+    "levelupweapon.error.generic": "Something went wrong. Please try again later.",
+
+
+
+    "levelupcard.command_desc": "Upgrade your card (increase by 1 level)",
+    "levelupcard.param.card_id": "Card ID you want to upgrade (check /inventory)",
+
+    "levelupcard.error.not_registered": "You are not registered yet. Please use /register first.",
+    "levelupcard.error.not_owner": "You do not own a card with ID `{card_id}`. Please check /inventory.",
+
+    "levelupcard.error.max_level": "The maximum card level is 50. This card is currently level {current_level}.",
+    "levelupcard.error.invalid_data": "Invalid card data. Please try again later.",
+
+    "levelupcard.error.not_highest_level": (
+        "You can only upgrade from your highest-level card.\n"
+        "Card ID `{card_id}` is level {current_level}, "
+        "but your highest card level is {highest_level}."
+    ),
+
+    "levelupcard.error.equipped": (
+        "Card **{card_name}** (ID `{card_id}`) is currently equipped as your main card. "
+        "Please set another card using /setcard before upgrading."
+    ),
+
+    "levelupcard.error.not_enough_materials": (
+        "You don't have enough level 1 copies of **{card_name}** to upgrade.\n"
+        "Required: {required}, you have: {current}."
+    ),
+
+    "levelupcard.success": (
+        "Upgrade successful! Card **{card_name}** "
+        "(ID `{new_card_id}`) has been upgraded from level {from_level} to level {to_level}."
+    ),
+
+    "levelupcard.error.generic": "Something went wrong. Please try again later.",
+
+
+
+
+    "lockcard.command_desc": "Lock all cards of the same type. Locked cards cannot be sold",
+    "lockcard.param.card_id": "Card ID you want to lock (check /inventory)",
+
+    "lockcard.error.not_registered": "You are not registered yet. Please use /register first.",
+    "lockcard.error.not_owner": "You do not own a card with ID `{card_id}`.",
+    "lockcard.error.not_found_same_type": "Cannot find other cards of the same type to lock.",
+
+    "lockcard.success": (
+        "Locked **all your `{card_name}` cards** "
+        "(including all levels and materials)."
+    ),
+
+    "lockcard.error.generic": "Something went wrong while locking cards. Please try again later.",
 }
