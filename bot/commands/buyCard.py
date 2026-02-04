@@ -14,7 +14,7 @@ from bot.services.playerService import PlayerService
 from bot.config.gachaConfig import GACHA_PRICES, PITY_LIMIT, PITY_PROTECTION, GACHA_DROP_RATE
 from bot.config.imageMap import CARD_IMAGE_MAP
 from bot.entity.cardTemplate import CardTemplate
-from bot.config.characterSkill import SKILL_MAP
+from bot.config.characterSkill import SKILL_KEY_MAP
 from bot.services.i18n import t
 
 
@@ -93,7 +93,8 @@ class BuyCard(commands.Cog):
                 playerCardRepo.incrementQuantity(playerId, card.card_key, increment=1)
 
                 imageUrl = CARD_IMAGE_MAP.get(card.image_url, card.image_url)
-                skillDescription = SKILL_MAP.get(card.image_url, t(guild_id, "buycard.skill_missing"))
+                skill_key = SKILL_KEY_MAP.get(card.image_url)
+                skillDescription = t(guild_id, f"skill.{skill_key}") if skill_key else t(guild_id, "buycard.skill_missing")
 
                 yes = t(guild_id, "buycard.common.yes")
                 no = t(guild_id, "buycard.common.no")
@@ -145,7 +146,6 @@ class BuyCard(commands.Cog):
             return
 
         raise error
-
 
 async def setup(bot):
     await bot.add_cog(BuyCard(bot))
