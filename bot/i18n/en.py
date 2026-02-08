@@ -666,4 +666,292 @@ EN = {
     ),
 
     "lockcard.error.generic": "Something went wrong while locking cards. Please try again later.",
+
+    "narutotrap.not_registered": "⚠️ You haven't registered yet. Please use /register first!",
+    "narutotrap.bet.must_be_positive": "⚠️ Your bet must be greater than 0.",
+    "narutotrap.bet.too_high": "⚠️ Your bet cannot exceed 1,000,000.",
+    "narutotrap.bet.not_enough_balance": "⚠️ You don't have enough balance.",
+    "narutotrap.error.generic": "❌ Something went wrong. Please try again later.",
+
+    "narutotrap.embed.title": "🔥 Naruto Trap Game 🔥",
+    "narutotrap.embed.playing": "Bet: **{bet:,} Ryo**\n\n{grid}\n\nMove: ⬆️, ➡️, ⬅️",
+    "narutotrap.embed.playing_hint": "Bet: **{bet:,} Ryo** — move your ninja to the top row to win\n\n{grid}\n\nMove: ⬆️, ➡️, ⬅️",
+
+    "narutotrap.timeout.title": "⏰ Naruto Trap Game",
+    "narutotrap.timeout.desc": "Timed out. The game has ended!\n\n{grid}",
+
+    "narutotrap.lose.title": "💣 Naruto Trap Game",
+    "narutotrap.lose.desc": "You stepped on a trap!\n\n{grid}\n\n💥 All traps have been revealed.\n\nYou lost **{bet:,} Ryo**.",
+
+    "narutotrap.win.title": "🎉 Naruto Trap Game",
+    "narutotrap.win.desc": "Congratulations! You made it through and earned: x2 your bet!\n\n{grid}\n\n💥 All traps have been revealed.",
+
+    "narutotrap.move.invalid_direction": "Invalid move direction.",
+    "narutotrap.move.out_of_bounds": "Invalid move (out of bounds).",
+
+
+    "register.success": "✅ Registration successful! Next, use /help to learn how to use the bot.",
+    "register.already_registered": "⚠️ You are already registered.",
+    "register.error": "❌ An error occurred during registration. Please try again.",
+
+
+
+    "rename.too_long": "⚠️ Your new name must be 16 characters or fewer.",
+    "rename.not_registered": "⚠️ You are not registered yet. Please use /register first!",
+    "rename.success": "✅ Rename successful! Your new name is: **{newName}**",
+    "rename.error": "❌ An error occurred while renaming. Please try again later.",
+
+
+
+    "resetrank.no_permission": "❌ You don't have permission to use this command.",
+    "resetrank.announce.title": "🎉 **Rank Reset Announcement (Season Reset)**",
+    "resetrank.announce.card_penalty": "🔁 All cards in the game have had their levels reduced according to the season reset rule.",
+    "resetrank.announce.footer": "✅ Rank points and win streaks have been reset, and the card level penalty has been applied to all players.",
+    "resetrank.top_line.million": "🏆 **Top {rank}. {username}** – rank points: {oldPoints} – received **1m** ryo",
+    "resetrank.top_line.thousand": "🏆 **Top {rank}. {username}** – rank points: {oldPoints} – received **{rewardK}k** ryo",
+    "resetrank.error": "❌ An error occurred. Please try again later.",
+
+
+    "sellallcard.not_registered": "⚠️ You haven't registered an account yet. Please use /register first!",
+    "sellallcard.no_cards_in_tier": "⚠️ You don't have any cards of tier **{tier}**.",
+    "sellallcard.nothing_to_sell": "⚠️ There are no cards to sell — equipped cards, lower-level duplicates, or locked cards were kept.",
+    "sellallcard.success": "✅ Sold successfully! You received **{money:,} Ryo** for selling {quantity} **{tier}** cards.",
+    "sellallcard.error": "❌ An error occurred. Please try again later.",
+
+
+    "sellcard.quantity_must_be_positive": "⚠️ The quantity must be greater than 0.",
+    "sellcard.not_registered": "⚠️ You haven't registered an account yet. Please use /register first!",
+    "sellcard.not_owner": "⚠️ You do not own a card with ID `{cardId}`.",
+    "sellcard.locked": "🔒 The card **{cardName}** (ID `{cardId}`) is locked.\nPlease unlock it with `/unlockcard` before selling.",
+    "sellcard.equipped": "⚠️ The card **{cardName}** (ID `{cardId}`) is currently equipped.\nPlease equip another card using `/setcard` before selling this one.",
+    "sellcard.not_enough_quantity": "⚠️ You don't have enough quantity to sell. You have: {current}, requested: {requested}.",
+    "sellcard.success": "✅ Sold successfully! You received **{money:,} Ryo** for selling {quantity} **{cardName}** (Lv {cardLevel}).",
+    "sellcard.error": "❌ An error occurred. Please try again later.",
+
+
+    "sellweapon.quantity_must_be_positive": "⚠️ The quantity must be greater than 0.",
+    "sellweapon.not_registered": "⚠️ You haven't registered an account yet. Please use /register first!",
+    "sellweapon.not_owner": "⚠️ You do not own a weapon with ID `{weaponId}`.",
+    "sellweapon.equipped": "⚠️ The weapon **{weaponName}** (ID `{weaponId}`) is currently equipped as your main weapon. Please unequip it using `/unequipweapon` before selling.",
+    "sellweapon.not_enough_quantity": "⚠️ You don't have enough weapons to sell. You have: {current}, requested: {requested}.",
+    "sellweapon.success": "✅ Sold successfully! You received **{money:,} Ryo** for selling {quantity} **{weaponName}** (Lv {weaponLevel}).",
+    "sellweapon.error": "❌ An error occurred. Please try again later.",
+
+
+    "setcard.not_registered": "⚠️ You haven't registered an account yet. Please use `/register` first!",
+    "setcard.not_owner": "⚠️ You do not own a card with ID `{cardId}`.",
+    "setcard.invalid_tanker": "❌ This card cannot be placed in the front line (tanker).",
+    "setcard.must_be_tanker": "❌ This card must be placed in the front line and cannot be equipped in middle/back.",
+    "setcard.duplicate_slot": "❌ This card is already equipped in another position. You can't equip the same card twice!",
+    "setcard.success": "✅ Equipped **{cardName}** (Lv {cardLevel}) to **{pos}**.",
+    "setcard.error": "❌ Error while running setcard:\n```{error}```",
+
+
+    "setlanguage.description": "Set the server language",
+    "setlanguage.param.language": "Language",
+    "setlanguage.server_only": "This command can only be used in a server.",
+    "setlanguage.admin_only": "You need Administrator permission to use this command.",
+    "setlanguage.success": "Server language has been set to `{language}`.",
+    "setlanguage.error": "❌ An error occurred:\n```{trace}```",
+
+
+    "setweapon.not_registered": "⚠️ You haven't registered yet. Use `/register` first!",
+    "setweapon.not_owner": "⚠️ You don't own a weapon with ID `{weaponId}`.",
+    "setweapon.no_card_in_slot": "❌ You can't equip a weapon in **{position}** because the matching card slot is empty.",
+    "setweapon.duplicate_weapon": "❌ This weapon is already equipped in another position. Duplicate equips are not allowed!",
+    "setweapon.success": "✅ Equipped **{weaponName}** (Lv {weaponLevel}) to **{position}**.",
+    "setweapon.error": "❌ Error while running setweapon:\n```{error}```",
+
+
+
+
+    "shop.title.cards": "🛒 Card Shop",
+    "shop.title.weapons": "🛒 Weapon Shop",
+    "shop.balance": "💰 Your balance: **{coin:,} Ryo**",
+
+    "shop.pack.name": "📦 **{pack}**",
+    "shop.pack.separator": "━━━━━━━━━━━━━━━━━━",
+
+    "shop.field.price": "**Price:** {price:,} Ryo",
+    "shop.field.rates.title": "**Drop rates:**",
+    "shop.field.rates.empty": "• No rate configuration found.",
+    "shop.field.rates.line": "• **{tier}**: {percent}%",
+
+    "shop.field.pity": "**Pity:** **{left}** pulls left to guarantee **{protection}**",
+    "shop.field.buy.card": "**Buy:** `/buycard pack:{pack}`",
+    "shop.field.buy.weapon": "**Buy:** `/buyweapon pack:{pack}`",
+
+    "shop.footer.cards": "Card Shop",
+    "shop.footer.weapons": "Weapon Shop",
+
+    "shop.button.to_weapons": "Weapon shop",
+    "shop.button.to_cards": "Card shop",
+
+    "shop.not_registered": "⚠️ You haven't registered yet. Use `/register` first!",
+    "shop.error": "❌ An error occurred:\n```{error}```",
+
+
+
+    "showcard.description": "Show detailed info of a card by name",
+    "showcard.card_name.describe": "Type a few letters to see suggestions",
+
+    "showcard.not_found": "❌ No card found with the name `{cardName}`.",
+    "showcard.skill_missing": "No special skill yet.",
+    "showcard.title": "🔍 Card: {cardName}",
+
+    "showcard.stats.damage": "**Damage:** {value}",
+    "showcard.stats.hp": "**HP:** {value}",
+    "showcard.stats.armor": "**Armor:** {value}",
+    "showcard.stats.crit_rate": "**Crit rate:** {value}",
+    "showcard.stats.dodge": "**Dodge:** {value}",
+    "showcard.stats.base_chakra": "**Base chakra:** {value}",
+    "showcard.stats.tanker": "**Tanker:** {value}",
+    "showcard.stats.tier": "**Tier:** {value}",
+    "showcard.stats.element": "**Chakra element:** {value}",
+    "showcard.stats.sell_price": "**Sell price:** {value:,} Ryo",
+
+    "showcard.skill_title": "📜 **Special skill:**",
+    "showcard.error": "❌ An error occurred:\n```{error}```",
+
+    "common.yes_icon": "✅",
+    "common.no_icon": "❌",
+
+
+
+    "showprofile.description": "Show your battle profile (3 cards + 3 weapons)",
+
+    "showprofile.not_registered": "⚠️ You haven't registered yet. Please use `/register` first!",
+    "showprofile.title": "🛡️ Your Battle Profile",
+
+    "showprofile.section.cards.slot.tanker": "Tanker",
+    "showprofile.section.cards.slot.middle": "Middle",
+    "showprofile.section.cards.slot.back": "Back",
+
+    "showprofile.card.line": "**{slotName}:** {cardName} (Lv {level})\n  ┣ HP♥️: {hp}\n  ┣ Damage⚔️: {damage}\n  ┣ Tier🎖️: {tier}\n  ┗ Element📜: {element}",
+    "showprofile.card.empty": "**{slotName}:** No card equipped",
+
+    "showprofile.weapon.title": "Weapon {slotIndex} (Card {slotName}):",
+    "showprofile.weapon.line.header": "**{weaponTitle}** {weaponName} (Lv {level})\n  ┣ Grade: {grade}",
+    "showprofile.weapon.bonus_item": "  {bullet} **{name}:** {value}",
+    "showprofile.weapon.empty": "**{weaponTitle}** No weapon equipped",
+
+    "showprofile.level.current": "**Your current level:** {level}",
+    "showprofile.level.to_next": "**EXP to level {nextLevel}:** [{bar}] {expText}",
+    "showprofile.level.max": "**EXP:** [{bar}] {expText} (MAX)",
+
+    "showprofile.footer": "Balance: {coin:,} Ryo | Rank points: {rankPoints}",
+
+    "showprofile.error": "❌ Error while processing ShowProfile:\n```{error}```",
+
+
+
+    "showweapon.description": "Show detailed weapon info by name",
+    "showweapon.prompt.weapon_name": "Type a few letters to see suggestions",
+
+    "showweapon.not_found": "❌ No weapon found with the name `{weaponName}`.",
+    "showweapon.skill_missing": "No special weapon skill yet.",
+
+    "showweapon.title": "🔨 Weapon: {weaponName}",
+
+    "showweapon.stats.bonus_damage": "**Bonus Damage:** {value}",
+    "showweapon.stats.bonus_hp": "**Bonus HP:** {value}",
+    "showweapon.stats.bonus_armor": "**Bonus Armor:** {value}",
+    "showweapon.stats.bonus_crit_rate": "**Bonus Crit Rate:** {value}",
+    "showweapon.stats.bonus_dodge": "**Bonus Dodge:** {value}",
+    "showweapon.stats.bonus_chakra": "**Bonus Chakra:** {value}",
+    "showweapon.stats.grade": "**Grade:** {value}",
+    "showweapon.stats.sell_price": "**Sell price:** {value} Ryo",
+
+    "showweapon.section.skill_title": "📜 **Weapon Skill:**",
+
+    "showweapon.error": "❌ An error occurred:\n```{error}```",
+
+
+
+    "slot.description": "Play the slot machine to win rewards",
+    "slot.prompt.bet": "The amount you want to bet (Ryo)",
+
+    "slot.not_registered": "⚠️ You are not registered yet. Please use /register first!",
+    "slot.bet_must_be_positive": "⚠️ Your bet must be greater than 0.",
+    "slot.bet_too_large": "⚠️ Your bet cannot exceed 1,000,000.",
+    "slot.not_enough_balance": "⚠️ You don't have enough balance.",
+
+    "slot.initial.title": "🎰 Slot Machine 🎰",
+    "slot.initial.desc": "💰 Bet: **{bet} Ryo**\n🎮 Spinning...",
+
+    "slot.result.title": "🎰 Slot Result 🎰",
+    "slot.result.spin_line": "**Spin result:** {outcome}",
+
+    "slot.result.jackpot": "🥳 Congrats! The slot rolled: **{outcome}**.\nJackpot! You win **{reward} Ryo** (Bet x10).",
+    "slot.result.win": "😊 Congrats! The slot rolled: **{outcome}**.\nYou win **{reward} Ryo** (Bet x2).",
+    "slot.result.lose": "😢 Unlucky! The slot rolled: **{outcome}**.\nYou lost your bet (**{bet} Ryo**).",
+
+    "slot.result.balance": "💰 Current balance: **{balance} Ryo**",
+
+    "slot.error": "❌ Something went wrong. Please try again later.",
+
+
+
+    "tailedboss.description": "Hunt Tailed Beasts to earn Ryo, cards, and weapons",
+    "tailedboss.prompt.difficulty": "Difficulty",
+
+    "tailedboss.not_registered": "⚠️ You are not registered yet. Please use /register first!",
+    "tailedboss.need_full_team": "⚠️ You must equip all 3 cards (Tanker, Middle, Back) to join the battle!",
+
+    "tailedboss.team.attacker": "**Attacking Team**",
+    "tailedboss.team.defender": "**Defending Team**",
+    "tailedboss.battle.starting": "The battle is starting…",
+    "tailedboss.battle.turn_header": "--- Turn {turn}: {name} ---",
+
+    "tailedboss.log.title": "🦊 {username} found {boss} level: {level} in the lair",
+
+    "tailedboss.result.draw": "🏳️ Draw",
+    "tailedboss.result.win": "Victory",
+    "tailedboss.result.lose": "Defeat",
+
+    "tailedboss.result.draw_text": "⚔️ After 200 turns you couldn’t defeat {boss}, so it’s a draw. Come back in 1 hour.",
+    "tailedboss.result.win_text": "You defeated {boss} and claimed your reward. Come back in 1 hour.",
+    "tailedboss.result.lose_text": "You were defeated by {boss}. Come back in 1 hour.",
+
+    "tailedboss.result.damage_text": "You dealt {damage} damage to {boss}.",
+    "tailedboss.result.reward_money_only": "💰**Reward:** {money:,} Ryo",
+    "tailedboss.result.reward_money_card": "💰**Reward:** {boss} was defeated and dropped {money:,} Ryo and a card {card} (tier {tier})",
+    "tailedboss.result.reward_money_weapon": "💰**Reward:** {boss} was defeated and dropped {money:,} Ryo and a weapon {weapon} (grade {grade})",
+
+    "tailedboss.result.embed_title": "🏁 Battle Result: {player} VS {boss}",
+    "tailedboss.result.embed_result": "🎖️ **Result:** {result}",
+
+    "tailedboss.cooldown": "⏱️ You must wait **{seconds:.1f}** more seconds before hunting a tailed beast again.",
+    "tailedboss.error": "❌ An error occurred.",
+
+
+
+    "top10.description": "Show the current Top 10 rank leaderboard",
+    "top10.embed.title": "Top 10 Rank Leaderboard",
+    "top10.line": "🏆 **{idx}. {username}** - {points} points",
+    "top10.footer.my_rank": "🌟 Your rank: {rank}",
+    "top10.footer.no_rank": "❗ You don’t have any rank points yet.",
+    "top10.error": "❌ An error occurred. Please try again later.",
+
+
+    
+    "unequipweapon.description": "Unequip a weapon from a specified slot",
+    "unequipweapon.describe.position": "Choose a slot to unequip: tanker/middle/back",
+
+    "unequipweapon.not_registered": "⚠️ You haven't registered yet. Please use `/register` first!",
+    "unequipweapon.no_setup": "❌ You haven't equipped any cards yet, so you can't unequip a weapon!",
+    "unequipweapon.empty_slot": "❌ There is currently no weapon in **{pos}**.",
+    "unequipweapon.success": "✅ Unequipped **{name}** from **{pos}**.",
+    "unequipweapon.error": "❌ An error occurred. Please try again later.",
+
+
+
+    "unlockcard.description": "Unlock a card by its ID",
+    "unlockcard.describe.card_id": "The card ID you want to unlock (see it in /inventory)",
+
+    "unlockcard.not_registered": "⚠️ You haven't registered yet. Please use /register first!",
+    "unlockcard.not_owner": "⚠️ You don't own the card with ID `{card_id}`.",
+    "unlockcard.already_unlocked": "ℹ️ The card **{card_name}** (ID `{card_id}`, Lv {card_level}) is already unlocked.",
+    "unlockcard.success": "✅ Unlocked **{card_name}** (ID `{card_id}`, Lv {card_level}).\n🔓 You can now sell this card.",
+    "unlockcard.error": "❌ An error occurred while unlocking the card. Please try again later.",
 }

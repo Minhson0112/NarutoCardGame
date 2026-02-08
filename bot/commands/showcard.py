@@ -5,8 +5,8 @@ import traceback
 
 from bot.config.database import getDbSession
 from bot.config.imageMap import CARD_IMAGE_MAP
-from bot.config.characterSkill import SKILL_MAP
 from bot.repository.cardTemplateRepository import CardTemplateRepository
+from bot.services.i18n import t
 
 
 class ShowCard(commands.Cog):
@@ -35,6 +35,8 @@ class ShowCard(commands.Cog):
     async def showcard(self, interaction: discord.Interaction, card_name: str):
         await interaction.response.defer(thinking=True)
 
+        guild_id = interaction.guild.id if interaction.guild else None
+
         try:
             with getDbSession() as session:
                 repo = CardTemplateRepository(session)
@@ -42,29 +44,42 @@ class ShowCard(commands.Cog):
 
                 if not card:
                     await interaction.followup.send(
-                        f"❌ Không tìm thấy thẻ với tên `{card_name}`.",
+                        t(guild_id, "showcard.not_found", cardName=card_name),
                         ephemeral=True
                     )
                     return
 
                 image_url = CARD_IMAGE_MAP.get(card.image_url, card.image_url)
-                skill_desc = SKILL_MAP.get(card.image_url, "Chưa có skill đặc biệt.")
+
+                skill_key = f"skill.{card.image_url}"
+                skill_desc = t(guild_id, skill_key)
+                if skill_desc == skill_key:
+                    skill_desc = t(guild_id, "showcard.skill_missing")
+
+                tanker_icon = t(guild_id, "common.yes_icon") if card.first_position else t(guild_id, "common.no_icon")
+
+                crit_rate_text = f"{card.crit_rate:.0%}"
+                dodge_text = f"{card.speed:.0%}"
+
+                desc_lines = [
+                    t(guild_id, "showcard.stats.damage", value=card.base_damage),
+                    t(guild_id, "showcard.stats.hp", value=card.health),
+                    t(guild_id, "showcard.stats.armor", value=card.armor),
+                    t(guild_id, "showcard.stats.crit_rate", value=crit_rate_text),
+                    t(guild_id, "showcard.stats.dodge", value=dodge_text),
+                    t(guild_id, "showcard.stats.base_chakra", value=card.chakra),
+                    t(guild_id, "showcard.stats.tanker", value=tanker_icon),
+                    t(guild_id, "showcard.stats.tier", value=card.tier),
+                    t(guild_id, "showcard.stats.element", value=card.element),
+                    t(guild_id, "showcard.stats.sell_price", value=card.sell_price),
+                    "",
+                    t(guild_id, "showcard.skill_title"),
+                    skill_desc,
+                ]
 
                 embed = discord.Embed(
-                    title=f"🔍 Thẻ: {card.name}",
-                    description=(
-                        f"**Damage:** {card.base_damage}\n"
-                        f"**Hp:** {card.health}\n"
-                        f"**Giáp:** {card.armor}\n"
-                        f"**Tỉ lệ chí mạng:** {card.crit_rate:.0%}\n"
-                        f"**Né:** {card.speed:.0%}\n"
-                        f"**Chakra gốc:** {card.chakra}\n"
-                        f"**Tanker:** {'✅' if card.first_position else '❌'}\n"
-                        f"**Bậc:** {card.tier}\n"
-                        f"**Hệ chakra:** {card.element}\n"
-                        f"**Giá bán:** {card.sell_price:,} Ryo\n\n"
-                        f"📜 **Skill đặc biệt:**\n{skill_desc}"
-                    ),
+                    title=t(guild_id, "showcard.title", cardName=card.name),
+                    description="\n".join(desc_lines),
                     color=discord.Color.blue()
                 )
                 embed.set_image(url=image_url)
@@ -73,7 +88,10 @@ class ShowCard(commands.Cog):
 
         except Exception:
             tb = traceback.format_exc()
-            await interaction.followup.send(f"❌ Có lỗi xảy ra:\n```{tb}```", ephemeral=True)
+            await interaction.followup.send(
+                t(guild_id, "showcard.error", error=tb),
+                ephemeral=True
+            )
 
 
 async def setup(bot: commands.Bot):

@@ -666,4 +666,290 @@ VI = {
     ),
 
     "lockcard.error.generic": "Có lỗi xảy ra khi khoá thẻ. Vui lòng thử lại sau.",
+
+
+
+    "narutotrap.not_registered": "⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!",
+    "narutotrap.bet.must_be_positive": "⚠️ Số tiền cược phải lớn hơn 0.",
+    "narutotrap.bet.too_high": "⚠️ Số tiền cược không được quá 1 triệu.",
+    "narutotrap.bet.not_enough_balance": "⚠️ Số dư của bạn không đủ.",
+    "narutotrap.error.generic": "❌ Có lỗi xảy ra. Vui lòng thử lại sau.",
+
+    "narutotrap.embed.title": "🔥 Naruto Trap Game 🔥",
+    "narutotrap.embed.playing": "Tiền cược: **{bet:,} Ryo**\n\n{grid}\n\nDi chuyển: ⬆️, ➡️, ⬅️",
+    "narutotrap.embed.playing_hint": "Tiền cược: **{bet:,} Ryo** — đưa ninja lên hàng trên cùng để về đích\n\n{grid}\n\nDi chuyển: ⬆️, ➡️, ⬅️",
+
+    "narutotrap.timeout.title": "⏰ Naruto Trap Game",
+    "narutotrap.timeout.desc": "Hết thời gian chờ. Trò chơi kết thúc!\n\n{grid}",
+
+    "narutotrap.lose.title": "💣 Naruto Trap Game",
+    "narutotrap.lose.desc": "Bạn rơi vào bẫy!\n\n{grid}\n\n💥 Tất cả bẫy đã được tiết lộ.\n\nBạn mất **{bet:,} Ryo**.",
+
+    "narutotrap.win.title": "🎉 Naruto Trap Game",
+    "narutotrap.win.desc": "Chúc mừng! Bạn đã vượt qua chướng ngại và nhận thưởng: x2 tiền cược!\n\n{grid}\n\n💥 Tất cả bẫy đã được tiết lộ.",
+
+    "narutotrap.move.invalid_direction": "Hướng di chuyển không hợp lệ.",
+    "narutotrap.move.out_of_bounds": "Hướng di chuyển không hợp lệ (ra ngoài biên).",
+
+
+    "register.success": "✅ Bạn đã đăng ký tài khoản thành công! Tiếp theo hãy dùng lệnh /help để biết cách dùng bot nhé.",
+    "register.already_registered": "⚠️ Bạn đã đăng ký rồi.",
+    "register.error": "❌ Có lỗi xảy ra khi đăng ký. Vui lòng thử lại.",
+
+
+    "rename.too_long": "⚠️ Tên mới không được vượt quá 16 ký tự.",
+    "rename.not_registered": "⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!",
+    "rename.success": "✅ Đổi tên thành công! Tên mới của bạn: **{newName}**",
+    "rename.error": "❌ Có lỗi xảy ra trong quá trình đổi tên. Vui lòng thử lại sau.",
+
+
+    "resetrank.no_permission": "❌ Bạn không có quyền sử dụng lệnh này.",
+    "resetrank.announce.title": "🎉 **Thông Báo Reset Điểm Rank (Season Reset)**",
+    "resetrank.announce.card_penalty": "🔁 Tất cả thẻ trong game đã bị trừ cấp theo rule reset season.",
+    "resetrank.announce.footer": "✅ Đã reset điểm rank, chuỗi thắng và áp dụng trừ cấp thẻ cho toàn bộ người chơi.",
+    "resetrank.top_line.million": "🏆 **Top {rank}. {username}** – điểm rank: {oldPoints} – đã nhận **1m** ryo",
+    "resetrank.top_line.thousand": "🏆 **Top {rank}. {username}** – điểm rank: {oldPoints} – đã nhận **{rewardK}k** ryo",
+    "resetrank.error": "❌ Có lỗi xảy ra. Vui lòng thử lại sau.",
+
+
+    "sellallcard.not_registered": "⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!",
+    "sellallcard.no_cards_in_tier": "⚠️ Bạn không có thẻ nào thuộc cấp **{tier}**.",
+    "sellallcard.nothing_to_sell": "⚠️ Không có thẻ nào để bán — bạn đã giữ lại thẻ đang lắp, cấp thấp hơn hoặc đã khoá.",
+    "sellallcard.success": "✅ Bán thành công! Bạn nhận được **{money:,} Ryo** từ việc bán {quantity} thẻ cấp **{tier}**.",
+    "sellallcard.error": "❌ Có lỗi xảy ra. Vui lòng thử lại sau.",
+
+
+    "sellcard.quantity_must_be_positive": "⚠️ Số lượng thẻ bán phải lớn hơn 0.",
+    "sellcard.not_registered": "⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!",
+    "sellcard.not_owner": "⚠️ Bạn không sở hữu thẻ với ID `{cardId}`.",
+    "sellcard.locked": "🔒 Thẻ **{cardName}** (ID `{cardId}`) đang bị khoá.\nHãy mở khoá bằng lệnh `/unlockcard` trước khi bán.",
+    "sellcard.equipped": "⚠️ Thẻ **{cardName}** (ID `{cardId}`) đang được dùng trong đội hình.\nHãy tháo thẻ đó ra bằng lệnh `/setcard` một thẻ khác trước khi bán.",
+    "sellcard.not_enough_quantity": "⚠️ Bạn không có đủ số lượng để bán. Hiện có: {current}, yêu cầu: {requested}.",
+    "sellcard.success": "✅ Bán thành công! Bạn nhận được **{money:,} Ryo** từ việc bán {quantity} thẻ **{cardName}** cấp {cardLevel}.",
+    "sellcard.error": "❌ Có lỗi xảy ra. Vui lòng thử lại sau.",
+
+
+
+    "sellweapon.quantity_must_be_positive": "⚠️ Số lượng vũ khí bán phải lớn hơn 0.",
+    "sellweapon.not_registered": "⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!",
+    "sellweapon.not_owner": "⚠️ Bạn không sở hữu vũ khí với ID `{weaponId}`.",
+    "sellweapon.equipped": "⚠️ Vũ khí **{weaponName}** (ID `{weaponId}`) đang được dùng làm vũ khí chính, hãy tháo vũ khí đó ra bằng lệnh `/unequipweapon` trước khi bán.",
+    "sellweapon.not_enough_quantity": "⚠️ Bạn không có đủ số lượng vũ khí để bán. Bạn có: {current}, yêu cầu: {requested}.",
+    "sellweapon.success": "✅ Bán thành công! Bạn nhận được **{money:,} Ryo** từ việc bán {quantity} vũ khí **{weaponName}** cấp {weaponLevel}.",
+    "sellweapon.error": "❌ Có lỗi xảy ra. Vui lòng thử lại sau.",
+
+
+    "setcard.not_registered": "⚠️ Bạn chưa đăng ký tài khoản. Dùng `/register` trước!",
+    "setcard.not_owner": "⚠️ Bạn không sở hữu thẻ với ID `{cardId}`.",
+    "setcard.invalid_tanker": "❌ Thẻ này không thể đứng hàng đầu (tanker).",
+    "setcard.must_be_tanker": "❌ Thẻ này bắt buộc phải ở hàng đầu, không thể lắp middle|back.",
+    "setcard.duplicate_slot": "❌ Thẻ này đã được lắp ở vị trí khác, không thể lắp trùng!",
+    "setcard.success": "✅ Đã lắp thẻ **{cardName}** (Lv {cardLevel}) vào **{pos}**.",
+    "setcard.error": "❌ Lỗi khi setcard:\n```{error}```",
+
+
+    "setlanguage.description": "Thiết lập ngôn ngữ cho server",
+    "setlanguage.param.language": "Ngôn ngữ",
+    "setlanguage.server_only": "Lệnh này chỉ dùng trong server.",
+    "setlanguage.admin_only": "Bạn cần quyền Administrator để dùng lệnh này.",
+    "setlanguage.success": "Đã thiết lập ngôn ngữ server thành `{language}`.",
+    "setlanguage.error": "❌ Có lỗi xảy ra:\n```{trace}```",
+
+
+    "setweapon.not_registered": "⚠️ Bạn chưa đăng ký tài khoản. Dùng `/register` trước!",
+    "setweapon.not_owner": "⚠️ Bạn không sở hữu vũ khí với ID `{weaponId}`.",
+    "setweapon.no_card_in_slot": "❌ Không thể lắp vũ khí vào vị trí **{position}** khi chưa có thẻ tương ứng.",
+    "setweapon.duplicate_weapon": "❌ Vũ khí này đã được lắp ở vị trí khác, không thể lắp trùng!",
+    "setweapon.success": "✅ Đã lắp vũ khí **{weaponName}** (Lv {weaponLevel}) vào **{position}**.",
+    "setweapon.error": "❌ Lỗi khi setweapon:\n```{error}```",
+
+
+
+    "shop.title.cards": "🛒 Shop Thẻ Bài",
+    "shop.title.weapons": "🛒 Shop Vũ Khí",
+    "shop.balance": "💰 Số dư của bạn: **{coin:,} Ryo**",
+
+    "shop.pack.name": "📦 **{pack}**",
+    "shop.pack.separator": "━━━━━━━━━━━━━━━━━━",
+
+    "shop.field.price": "**Giá:** {price:,} Ryo",
+    "shop.field.rates.title": "**Tỉ lệ:**",
+    "shop.field.rates.empty": "• Không có cấu hình tỉ lệ.",
+    "shop.field.rates.line": "• **{tier}**: {percent}%",
+
+    "shop.field.pity": "**Bảo hiểm:** Còn **{left}** lần để đảm bảo nhận **{protection}**",
+    "shop.field.buy.card": "**Mua:** `/buycard pack:{pack}`",
+    "shop.field.buy.weapon": "**Mua:** `/buyweapon pack:{pack}`",
+
+    "shop.footer.cards": "Shop Thẻ Bài",
+    "shop.footer.weapons": "Shop Vũ Khí",
+
+    "shop.button.to_weapons": "Shop vũ khí",
+    "shop.button.to_cards": "Shop thẻ",
+
+    "shop.not_registered": "⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng `/register` trước nhé!",
+    "shop.error": "❌ Có lỗi xảy ra:\n```{error}```",
+
+
+
+    "showcard.description": "Hiển thị thông tin chi tiết của một thẻ theo tên",
+    "showcard.card_name.describe": "Gõ vài chữ để hiện gợi ý",
+
+    "showcard.not_found": "❌ Không tìm thấy thẻ với tên `{cardName}`.",
+    "showcard.skill_missing": "Chưa có skill đặc biệt.",
+    "showcard.title": "🔍 Thẻ: {cardName}",
+
+    "showcard.stats.damage": "**Damage:** {value}",
+    "showcard.stats.hp": "**Hp:** {value}",
+    "showcard.stats.armor": "**Giáp:** {value}",
+    "showcard.stats.crit_rate": "**Tỉ lệ chí mạng:** {value}",
+    "showcard.stats.dodge": "**Né:** {value}",
+    "showcard.stats.base_chakra": "**Chakra gốc:** {value}",
+    "showcard.stats.tanker": "**Tanker:** {value}",
+    "showcard.stats.tier": "**Bậc:** {value}",
+    "showcard.stats.element": "**Hệ chakra:** {value}",
+    "showcard.stats.sell_price": "**Giá bán:** {value:,} Ryo",
+
+    "showcard.skill_title": "📜 **Skill đặc biệt:**",
+    "showcard.error": "❌ Có lỗi xảy ra:\n```{error}```",
+
+    "common.yes_icon": "✅",
+    "common.no_icon": "❌",
+
+
+    "showprofile.description": "Hiển thị hồ sơ chiến đấu (3 thẻ + 3 vũ khí) của bạn",
+
+    "showprofile.not_registered": "⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng `/register` trước nhé!",
+    "showprofile.title": "🛡️ Hồ sơ Chiến Đấu của bạn",
+
+    "showprofile.section.cards.slot.tanker": "Tanker",
+    "showprofile.section.cards.slot.middle": "Middle",
+    "showprofile.section.cards.slot.back": "Back",
+
+    "showprofile.card.line": "**{slotName}:** {cardName} (Lv {level})\n  ┣ HP♥️: {hp}\n  ┣ Damage⚔️: {damage}\n  ┣ Bậc🎖️: {tier}\n  ┗ Hệ📜: {element}",
+    "showprofile.card.empty": "**{slotName}:** Chưa lắp thẻ",
+
+    "showprofile.weapon.title": "Vũ khí {slotIndex} (Thẻ {slotName}):",
+    "showprofile.weapon.line.header": "**{weaponTitle}** {weaponName} (Lv {level})\n  ┣ Bậc: {grade}",
+    "showprofile.weapon.bonus_item": "  {bullet} **{name}:** {value}",
+    "showprofile.weapon.empty": "**{weaponTitle}** Chưa lắp vũ khí",
+
+    "showprofile.level.current": "**Cấp độ hiện tại của bạn:** {level}",
+    "showprofile.level.to_next": "**EXP tới cấp {nextLevel}:** [{bar}] {expText}",
+    "showprofile.level.max": "**EXP:** [{bar}] {expText} (MAX)",
+
+    "showprofile.footer": "Số dư: {coin:,} Ryo | Điểm rank: {rankPoints}",
+
+    "showprofile.error": "❌ Lỗi khi xử lý ShowProfile:\n```{error}```",
+
+
+    "showweapon.description": "Hiển thị thông tin chi tiết của một vũ khí theo tên",
+    "showweapon.prompt.weapon_name": "Gõ vài chữ để hiện gợi ý",
+
+    "showweapon.not_found": "❌ Không tìm thấy vũ khí với tên `{weaponName}`.",
+    "showweapon.skill_missing": "Chưa có kỹ năng đặc biệt.",
+
+    "showweapon.title": "🔨 Vũ khí: {weaponName}",
+
+    "showweapon.stats.bonus_damage": "**Damage cộng thêm:** {value}",
+    "showweapon.stats.bonus_hp": "**Hp cộng thêm:** {value}",
+    "showweapon.stats.bonus_armor": "**Giáp cộng thêm:** {value}",
+    "showweapon.stats.bonus_crit_rate": "**Tỉ lệ chí mạng cộng thêm:** {value}",
+    "showweapon.stats.bonus_dodge": "**Né cộng thêm:** {value}",
+    "showweapon.stats.bonus_chakra": "**Chakra cộng thêm:** {value}",
+    "showweapon.stats.grade": "**Bậc:** {value}",
+    "showweapon.stats.sell_price": "**Giá bán:** {value} Ryo",
+
+    "showweapon.section.skill_title": "📜 **Kỹ năng vũ khí:**",
+
+    "showweapon.error": "❌ Có lỗi xảy ra:\n```{error}```",
+
+
+
+    "slot.description": "Chơi máy slot để trúng thưởng",
+    "slot.prompt.bet": "Số tiền cược bạn muốn đặt (Ryo)",
+
+    "slot.not_registered": "⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!",
+    "slot.bet_must_be_positive": "⚠️ Số tiền cược phải lớn hơn 0.",
+    "slot.bet_too_large": "⚠️ Số tiền cược không được quá 1m.",
+    "slot.not_enough_balance": "⚠️ Số dư của bạn không đủ.",
+
+    "slot.initial.title": "🎰 Máy Slot 🎰",
+    "slot.initial.desc": "💰 Tiền cược: **{bet} Ryo**\n🎮 Đang quay thưởng...",
+
+    "slot.result.title": "🎰 Kết quả Máy Slot 🎰",
+    "slot.result.spin_line": "**Kết quả quay:** {outcome}",
+
+    "slot.result.jackpot": "🥳 Chúc mừng! Máy Slot ra: **{outcome}**.\nBạn trúng jackpot, nhận thưởng **{reward} Ryo** (Cược x10).",
+    "slot.result.win": "😊 Chúc mừng! Máy Slot ra: **{outcome}**.\nBạn trúng thưởng, nhận thưởng **{reward} Ryo** (Cược x2).",
+    "slot.result.lose": "😢 Rất tiếc! Máy Slot ra: **{outcome}**.\nBạn thất bại, mất hết số tiền cược (**{bet} Ryo**).",
+
+    "slot.result.balance": "💰 Số dư hiện tại: **{balance} Ryo**",
+
+    "slot.error": "❌ Có lỗi xảy ra. Vui lòng thử lại sau.",
+
+
+
+    "tailedboss.description": "Săn vĩ thú nhận Ryo, thẻ và vũ khí",
+    "tailedboss.prompt.difficulty": "Độ khó",
+
+    "tailedboss.not_registered": "⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!",
+    "tailedboss.need_full_team": "⚠️ Bạn phải lắp đủ 3 thẻ (Tanker, Middle, Back) mới có thể tham gia đấu!",
+
+    "tailedboss.team.attacker": "**Team Tấn Công**",
+    "tailedboss.team.defender": "**Team Phòng Thủ**",
+    "tailedboss.battle.starting": "Đang khởi đầu trận đấu…",
+    "tailedboss.battle.turn_header": "--- Lượt {turn}: {name} ---",
+
+    "tailedboss.log.title": "🦊 {username} đã tìm thấy {boss} level: {level} trong hang",
+
+    "tailedboss.result.draw": "🏳️ Hoà",
+    "tailedboss.result.win": "Chiến Thắng",
+    "tailedboss.result.lose": "Thất Bại",
+
+    "tailedboss.result.draw_text": "⚔️ Sau 200 lượt bạn không hạ được {boss} nên hoà, hãy quay lại sau 1 tiếng.",
+    "tailedboss.result.win_text": "Bạn đã chiến thắng {boss} và đã nhận thưởng, hãy quay lại sau 1 tiếng.",
+    "tailedboss.result.lose_text": "Bạn đã bị {boss} đánh bại, hãy quay lại sau 1 tiếng.",
+
+    "tailedboss.result.damage_text": "Bạn đã gây ra {damage} sát thương lên {boss}.",
+    "tailedboss.result.reward_money_only": "💰**Thưởng:** {money:,} Ryo",
+    "tailedboss.result.reward_money_card": "💰**Thưởng:** {boss} chết và rơi ra {money:,} Ryo và thẻ {card} (bậc {tier})",
+    "tailedboss.result.reward_money_weapon": "💰**Thưởng:** {boss} chết và rơi ra {money:,} Ryo và vũ khí {weapon} (bậc {grade})",
+
+    "tailedboss.result.embed_title": "🏁 Kết quả trận chiến của {player} VS {boss}",
+    "tailedboss.result.embed_result": "🎖️ **Kết quả:** {result}",
+
+    "tailedboss.cooldown": "⏱️ Bạn phải chờ **{seconds:.1f}** giây nữa mới đánh được vĩ thú.",
+    "tailedboss.error": "❌ Có lỗi xảy ra.",
+
+
+
+    "top10.description": "Lấy bảng xếp hạng Top 10 theo điểm rank hiện tại",
+    "top10.embed.title": "BXH Điểm Rank Top 10",
+    "top10.line": "🏆 **{idx}. {username}** - {points} điểm",
+    "top10.footer.my_rank": "🌟 Rank của bạn: {rank}",
+    "top10.footer.no_rank": "❗ Bạn chưa có điểm rank.",
+    "top10.error": "❌ Có lỗi xảy ra. Vui lòng thử lại sau.",
+
+
+
+    "unequipweapon.description": "Tháo vũ khí khỏi vị trí đã lắp",
+    "unequipweapon.describe.position": "Chọn vị trí tháo: tanker/middle/back",
+
+    "unequipweapon.not_registered": "⚠️ Bạn chưa đăng ký tài khoản. Dùng `/register` trước!",
+    "unequipweapon.no_setup": "❌ Bạn chưa lắp thẻ nào, không thể tháo vũ khí!",
+    "unequipweapon.empty_slot": "❌ Hiện không có vũ khí nào ở vị trí **{pos}**.",
+    "unequipweapon.success": "✅ Đã tháo vũ khí **{name}** khỏi **{pos}**.",
+    "unequipweapon.error": "❌ Có lỗi xảy ra. Vui lòng thử lại sau.",
+
+
+
+    "unlockcard.description": "Mở khoá một thẻ theo ID",
+    "unlockcard.describe.card_id": "ID thẻ bạn muốn mở khoá (xem trong /inventory)",
+
+    "unlockcard.not_registered": "⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!",
+    "unlockcard.not_owner": "⚠️ Bạn không sở hữu thẻ với ID `{card_id}`.",
+    "unlockcard.already_unlocked": "ℹ️ Thẻ **{card_name}** (ID `{card_id}`, Lv {card_level}) hiện đang không bị khoá.",
+    "unlockcard.success": "✅ Đã mở khoá thẻ **{card_name}** (ID `{card_id}`, Lv {card_level}).\n🔓 Thẻ này giờ có thể bán.",
+    "unlockcard.error": "❌ Có lỗi xảy ra khi mở khoá thẻ. Vui lòng thử lại sau.",
 }

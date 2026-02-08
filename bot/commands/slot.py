@@ -7,41 +7,45 @@ import asyncio
 from bot.config.database import getDbSession
 from bot.repository.playerRepository import PlayerRepository
 from bot.repository.dailyTaskRepository import DailyTaskRepository
+from bot.services.i18n import t
+
 
 class Slot(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        # Danh sách các emoji cho máy slot – bạn có thể mở rộng thêm theo mong muốn
         self.slot_emojis = ["🍒", "🍋", "🍊", "🍇", "🍉", "⭐", "💎"]
 
     @app_commands.command(name="slot", description="Chơi máy slot để trúng thưởng 🎰")
     @app_commands.describe(bet="Số tiền cược bạn muốn đặt (Ryo)")
     async def slot(self, interaction: discord.Interaction, bet: int):
-        # Tạm hoãn phản hồi ban đầu để xử lý logic lâu hơn
         await interaction.response.defer(thinking=True)
         player_id = interaction.user.id
+        guild_id = interaction.guild.id if interaction.guild else None
 
         try:
             with getDbSession() as session:
-                # Kiểm tra thông tin người chơi và số dư
                 playerRepo = PlayerRepository(session)
                 dailyTaskRepo = DailyTaskRepository(session)
+
                 player = playerRepo.getById(player_id)
                 if not player:
-                    await interaction.followup.send("⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!")
+                    await interaction.followup.send(t(guild_id, "slot.not_registered"))
                     return
+
                 if bet <= 0:
-                    await interaction.followup.send("⚠️ Số tiền cược phải lớn hơn 0.")
+                    await interaction.followup.send(t(guild_id, "slot.bet_must_be_positive"))
                     return
-                if bet > 1000000:
-                    await interaction.followup.send("⚠️ Số tiền cược không được quá 1m.")
+
+                if bet > 1_000_000:
+                    await interaction.followup.send(t(guild_id, "slot.bet_too_large"))
                     return
+
                 if player.coin_balance < bet:
-                    await interaction.followup.send("⚠️ Số dư của bạn không đủ.")
+                    await interaction.followup.send(t(guild_id, "slot.not_enough_balance"))
                     return
-                
+
                 dailyTaskRepo.updateMinigame(player_id)
-                # Random ra 3 emoji (3 ngăn quay)
+
                 outcome = [random.choice(self.slot_emojis) for _ in range(3)]
                 unique_count = len(set(outcome))
                 if unique_count == 1:
@@ -51,77 +55,64 @@ class Slot(commands.Cog):
                 else:
                     multiplier = 0
 
-                # Gửi thông báo ban đầu
                 initial_embed = discord.Embed(
-                    title="🎰 Máy Slot 🎰",
-                    description=f"💰 Tiền cược: **{bet} Ryo**\n🎮 Đang quay thưởng...",
+                    title=t(guild_id, "slot.initial.title"),
+                    description=t(guild_id, "slot.initial.desc", bet=bet),
                     color=discord.Color.gold()
                 )
                 msg = await interaction.followup.send(embed=initial_embed)
 
-                # Cập nhật 1: Hiển thị emoji thứ nhất
                 await asyncio.sleep(0.5)
                 embed_step1 = discord.Embed(
-                    title="🎰 Máy Slot 🎰",
+                    title=t(guild_id, "slot.initial.title"),
                     description=f"{outcome[0]}",
                     color=discord.Color.gold()
                 )
                 await msg.edit(embed=embed_step1)
 
-                # Cập nhật 2: Hiển thị emoji thứ nhất và thứ hai
                 await asyncio.sleep(0.5)
                 embed_step2 = discord.Embed(
-                    title="🎰 Máy Slot 🎰",
+                    title=t(guild_id, "slot.initial.title"),
                     description=f"{outcome[0]} | {outcome[1]}",
                     color=discord.Color.gold()
                 )
                 await msg.edit(embed=embed_step2)
 
-                # Cập nhật 3: Hiển thị đủ 3 emoji
                 await asyncio.sleep(0.5)
                 embed_step3 = discord.Embed(
-                    title="🎰 Máy Slot 🎰",
+                    title=t(guild_id, "slot.initial.title"),
                     description=f"{outcome[0]} | {outcome[1]} | {outcome[2]}",
                     color=discord.Color.gold()
                 )
                 await msg.edit(embed=embed_step3)
 
-                # Chờ thêm một chút để đảm bảo người dùng có thể theo dõi quá trình hiển thị
                 await asyncio.sleep(1)
 
-                # Xử lý kết quả và cập nhật số dư của người chơi
+                outcome_joined = " | ".join(outcome)
+
                 if multiplier > 0:
                     reward = bet * multiplier
                     if multiplier == 10:
-                        outcome_text = (
-                            f"🥳 Chúc mừng! Máy Slot ra: **{' | '.join(outcome)}**.\n"
-                            f"Bạn trúng jackpot, nhận thưởng **{reward} Ryo** (Cược x10)."
-                        )
+                        outcome_text = t(guild_id, "slot.result.jackpot", outcome=outcome_joined, reward=reward)
                     else:
-                        outcome_text = (
-                            f"😊 Chúc mừng! Máy Slot ra: **{' | '.join(outcome)}**.\n"
-                            f"Bạn trúng thưởng, nhận thưởng **{reward} Ryo** (Cược x2)."
-                        )
+                        outcome_text = t(guild_id, "slot.result.win", outcome=outcome_joined, reward=reward)
+
                     player.coin_balance = player.coin_balance - bet + reward
                     final_color = discord.Color.green()
                 else:
-                    outcome_text = (
-                        f"😢 Rất tiếc! Máy Slot ra: **{' | '.join(outcome)}**.\n"
-                        f"Bạn thất bại, mất hết số tiền cược (**{bet} Ryo**)."
-                    )
+                    outcome_text = t(guild_id, "slot.result.lose", outcome=outcome_joined, bet=bet)
                     player.coin_balance -= bet
                     final_color = discord.Color.red()
-                #tăng exp
-                playerRepo.incrementExp(player_id,amount=2)
+
+                playerRepo.incrementExp(player_id, amount=2)
                 session.commit()
 
-                # Cập nhật cuối cùng: Hiển thị kết quả đầy đủ
                 final_embed = discord.Embed(
-                    title="🎰 Kết quả Máy Slot 🎰",
+                    title=t(guild_id, "slot.result.title"),
                     description=(
-                        f"**Kết quả quay:** {' | '.join(outcome)}\n\n"
+                        f"{t(guild_id, 'slot.result.spin_line', outcome=outcome_joined)}\n\n"
                         f"{outcome_text}\n\n"
-                        f"💰 Số dư hiện tại: **{player.coin_balance} Ryo**"
+                        f"{t(guild_id, 'slot.result.balance', balance=f'{player.coin_balance:,}')}"
                     ),
                     color=final_color
                 )
@@ -129,7 +120,7 @@ class Slot(commands.Cog):
 
         except Exception as e:
             print("❌ Lỗi khi xử lý /slot:", e)
-            await interaction.followup.send("❌ Có lỗi xảy ra. Vui lòng thử lại sau.")
+            await interaction.followup.send(t(guild_id, "slot.error"))
 
 async def setup(bot):
     await bot.add_cog(Slot(bot))

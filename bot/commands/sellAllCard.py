@@ -6,6 +6,8 @@ from bot.config.database import getDbSession
 from bot.repository.playerRepository import PlayerRepository
 from bot.repository.playerCardRepository import PlayerCardRepository
 from bot.repository.dailyTaskRepository import DailyTaskRepository
+from bot.services.i18n import t
+
 
 class SellAllCard(commands.Cog):
     def __init__(self, bot):
@@ -25,6 +27,8 @@ class SellAllCard(commands.Cog):
     ])
     async def sellallcard(self, interaction: discord.Interaction, tier: app_commands.Choice[str]):
         await interaction.response.defer(thinking=True)
+        guild_id = interaction.guild.id if interaction.guild else None
+
         player_id = interaction.user.id
         selected_tier = tier.value
 
@@ -34,15 +38,13 @@ class SellAllCard(commands.Cog):
                 cardRepo = PlayerCardRepository(session)
                 dailyTaskRepo = DailyTaskRepository(session)
 
-                # 1️⃣ Kiểm tra tài khoản
                 player = playerRepo.getById(player_id)
                 if not player:
                     await interaction.followup.send(
-                        "⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!"
+                        t(guild_id, "sellallcard.not_registered")
                     )
                     return
 
-                # 2️⃣ Lấy tất cả thẻ cùng tier, nhưng chưa loại locked
                 all_cards = cardRepo.getByPlayerId(player_id)
                 matching_cards = [
                     c for c in all_cards
@@ -51,11 +53,10 @@ class SellAllCard(commands.Cog):
 
                 if not matching_cards:
                     await interaction.followup.send(
-                        f"⚠️ Bạn không có thẻ nào thuộc cấp **{selected_tier}**."
+                        t(guild_id, "sellallcard.no_cards_in_tier", tier=selected_tier)
                     )
                     return
 
-                # 3️⃣ Xác định thẻ equipped và cấp thấp hơn cần giữ
                 equipped_cards = [c for c in matching_cards if c.equipped]
                 preserve_ids = set()
                 for eq in equipped_cards:
@@ -64,20 +65,17 @@ class SellAllCard(commands.Cog):
                         if c.card_key == eq.card_key and c.level < eq.level:
                             preserve_ids.add(c.id)
 
-                # 4️⃣ Xác định thẻ có thể bán: 
-                #    - Không nằm trong preserve_ids
-                #    - Và không bị locked
                 sellable_cards = [
-                    c for c in matching_cards 
-                    if c.id not in preserve_ids and not getattr(c, 'locked', False)
+                    c for c in matching_cards
+                    if c.id not in preserve_ids and not getattr(c, "locked", False)
                 ]
+
                 if not sellable_cards:
                     await interaction.followup.send(
-                        "⚠️ Không có thẻ nào để bán — bạn đã giữ lại thẻ đang lắp, cấp thấp hơn hoặc đã khoá."
+                        t(guild_id, "sellallcard.nothing_to_sell")
                     )
                     return
 
-                # 5️⃣ Tính tiền và xóa thẻ
                 total_money = 0
                 total_quantity = 0
                 for card in sellable_cards:
@@ -86,22 +84,26 @@ class SellAllCard(commands.Cog):
                     total_quantity += card.quantity
                     cardRepo.deleteCard(card)
 
-                # 6️⃣ Cộng xu, cập nhật daily task và commit
                 player.coin_balance += total_money
                 dailyTaskRepo.updateShopSell(player_id)
                 session.commit()
 
-                # 7️⃣ Phản hồi kết quả
                 await interaction.followup.send(
-                    f"✅ Bán thành công! Bạn nhận được **{total_money:,} Ryo** "
-                    f"từ việc bán {total_quantity} thẻ cấp **{selected_tier}**."
+                    t(
+                        guild_id,
+                        "sellallcard.success",
+                        money=total_money,
+                        quantity=total_quantity,
+                        tier=selected_tier
+                    )
                 )
 
         except Exception as e:
             print("❌ Lỗi khi xử lý sellallcard:", e)
             await interaction.followup.send(
-                "❌ Có lỗi xảy ra. Vui lòng thử lại sau."
+                t(guild_id, "sellallcard.error")
             )
+
 
 async def setup(bot):
     await bot.add_cog(SellAllCard(bot))

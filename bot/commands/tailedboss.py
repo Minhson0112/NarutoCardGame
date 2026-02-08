@@ -13,24 +13,24 @@ from bot.repository.playerWeaponRepository import PlayerWeaponRepository
 from bot.repository.playerActiveSetupRepository import PlayerActiveSetupRepository
 from bot.repository.cardTemplateRepository import CardTemplateRepository
 from bot.repository.dailyTaskRepository import DailyTaskRepository
-from bot.repository.playerCardRepository import PlayerCardRepository
 from bot.repository.weaponTemplateRepository import WeaponTemplateRepository
-from bot.repository.playerWeaponRepository import PlayerWeaponRepository
-from bot.config.imageMap import CARD_IMAGE_LOCAL_PATH_MAP,TAILED_IMAGE_LOCAL_PATH_MAP , BG_TAILED, NON_CARD_PATH
+
+from bot.config.imageMap import CARD_IMAGE_LOCAL_PATH_MAP, TAILED_IMAGE_LOCAL_PATH_MAP, BG_TAILED, NON_CARD_PATH
 from bot.config.gachaConfig import GACHA_DROP_RATE
 from bot.config.weaponGachaConfig import WEAPON_GACHA_DROP_RATE
 from bot.services.tailedRender import renderImageFight
 from bot.services.battle import Battle
 from bot.services.help import get_battle_card_params, render_team_status, get_tailed_effective_stats
 from bot.services.createCard import create_card
+from bot.services.i18n import t
+
 
 class TailedBoss(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-    @app_commands.command(name= "tailedboss", description= "săn vĩ thú nhận ryo, thẻ và vũ khí")
-    @app_commands.describe(
-        difficulty="độ khó"
-    )
+
+    @app_commands.command(name="tailedboss", description="săn vĩ thú nhận ryo, thẻ và vũ khí")
+    @app_commands.describe(difficulty="độ khó")
     @app_commands.choices(difficulty=[
         app_commands.Choice(name="Dễ", value="easy"),
         app_commands.Choice(name="Trung Bình", value="medium"),
@@ -39,13 +39,14 @@ class TailedBoss(commands.Cog):
     @checks.cooldown(1, 3600, key=lambda interaction: interaction.user.id)
     async def tailedboss(self, interaction: discord.Interaction, difficulty: str):
         attacker_id = interaction.user.id
+        guild_id = interaction.guild.id if interaction.guild else None
+
         await interaction.response.defer(thinking=True)
 
         type1OfTailed = ["1vi", "2vi", "3vi", "4vi", "5vi", "6vi", "7vi"]
 
         try:
             with getDbSession() as session:
-                # Lấy các repository cần thiết
                 playerRepo = PlayerRepository(session)
                 cardRepo = PlayerCardRepository(session)
                 weaponRepo = PlayerWeaponRepository(session)
@@ -56,33 +57,24 @@ class TailedBoss(commands.Cog):
                 weaponTemplateRepo = WeaponTemplateRepository(session)
                 playerWeaponRepo = PlayerWeaponRepository(session)
 
-                # Lấy thông tin người tấn công
                 attacker = playerRepo.getById(attacker_id)
                 if not attacker:
-                    await interaction.followup.send("⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!")
+                    await interaction.followup.send(t(guild_id, "tailedboss.not_registered"))
                     return
 
-                # Lấy active setup của người tấn công
                 attackerSetup = activeSetupRepo.getByPlayerId(attacker_id)
-                # Kiểm 3 slot thẻ
+
                 slots = [
                     attackerSetup.card_slot1,
                     attackerSetup.card_slot2,
                     attackerSetup.card_slot3,
                 ]
                 if any(slot is None for slot in slots):
-                    await interaction.followup.send(
-                        "⚠️ Bạn phải lắp đủ 3 thẻ (Tanker, Middle, Back) mới có thể tham gia đấu!"
-                    )
+                    await interaction.followup.send(t(guild_id, "tailedboss.need_full_team"))
                     return
 
-                # Nếu đầy đủ, lấy ra các đối tượng PlayerCard
-                attacker_cards = [
-                    cardRepo.getById(slot_id)
-                    for slot_id in slots
-                ]
+                attacker_cards = [cardRepo.getById(slot_id) for slot_id in slots]
 
-                # lấy vũ khí
                 attacker_weapon_slots = [
                     attackerSetup.weapon_slot1,
                     attackerSetup.weapon_slot2,
@@ -95,61 +87,75 @@ class TailedBoss(commands.Cog):
 
                 battle_attacker_team = []
                 for pc, pw in zip(attacker_cards, attacker_weapons):
-                    # Lấy tuple params đã buff level + bonus vũ khí
                     params = get_battle_card_params(pc, pw)
-                    # Create đúng subclass dựa trên element và tier
                     battle_card = create_card(*params)
                     battle_attacker_team.append(battle_card)
 
                 tailedCardlevel = 1
-                if (difficulty == "easy"):
+                if difficulty == "easy":
                     tailedCardlevel = 1
-                elif (difficulty == "medium"):
+                elif difficulty == "medium":
                     tailedCardlevel = random.randint(2, 6)
-                elif (difficulty == "hard"):
+                elif difficulty == "hard":
                     tailedCardlevel = random.randint(7, 10)
 
                 battle_defender_team = []
                 defenderCardImgPaths = []
                 list_cards = cardtemplaterepo.getRandomTailedCard()
+
                 for card in list_cards:
                     img_path = TAILED_IMAGE_LOCAL_PATH_MAP.get(card.image_url, NON_CARD_PATH)
-                    taileCard = get_tailed_effective_stats(card.name, card.health, card.armor, card.base_damage, card.crit_rate, card.speed, card.chakra, card.element, card.tier, tailedCardlevel, weapon_name=None)
+                    taileCard = get_tailed_effective_stats(
+                        card.name,
+                        card.health,
+                        card.armor,
+                        card.base_damage,
+                        card.crit_rate,
+                        card.speed,
+                        card.chakra,
+                        card.element,
+                        card.tier,
+                        tailedCardlevel,
+                        weapon_name=None
+                    )
                     battle_card = create_card(*taileCard)
                     battle_defender_team.append(battle_card)
                     defenderCardImgPaths.append(img_path)
-                
+
                 attackCardImgpaths = []
                 for pc in attacker_cards:
                     key = pc.template.image_url
-                    # nếu không tìm thấy key trong map thì fallback sang NON_CARD_PATH nếu bạn có
                     img_path = CARD_IMAGE_LOCAL_PATH_MAP.get(key, NON_CARD_PATH)
                     attackCardImgpaths.append(img_path)
-                
+
                 paths = attackCardImgpaths + defenderCardImgPaths
-                buffer = renderImageFight(
-                    paths[0], paths[1], paths[2],paths[3],BG_TAILED
-                )
+                buffer = renderImageFight(paths[0], paths[1], paths[2], paths[3], BG_TAILED)
                 filename = f"battle_{attacker_id}.png"
                 battle_file = discord.File(buffer, filename=filename)
 
                 for c in battle_attacker_team:
-                    c.team      = battle_attacker_team
+                    c.team = battle_attacker_team
                     c.enemyTeam = battle_defender_team
 
-                # --- Gán team/enemyTeam cho defender ---
                 for c in battle_defender_team:
-                    c.team      = battle_defender_team
+                    c.team = battle_defender_team
                     c.enemyTeam = battle_attacker_team
-                
-                # 1) Gửi embed log ban đầu kèm ảnh
+
+                boss_name = list_cards[0].name
+
                 initial_desc = []
-                initial_desc += render_team_status(battle_attacker_team, "**Team Tấn Công**")
-                initial_desc += render_team_status(battle_defender_team, "**Team Phòng Thủ**")
-                initial_desc.append("\nĐang khởi đầu trận đấu…")
+                initial_desc += render_team_status(battle_attacker_team, t(guild_id, "tailedboss.team.attacker"))
+                initial_desc += render_team_status(battle_defender_team, t(guild_id, "tailedboss.team.defender"))
+                initial_desc.append("\n" + t(guild_id, "tailedboss.battle.starting"))
 
                 log_embed = discord.Embed(
-                    title=f"🦊 {attacker.username} đã tìm thấy {list_cards[0].name} level: {tailedCardlevel} trong hang",
+                    title=t(
+                        guild_id,
+                        "tailedboss.log.title",
+                        username=attacker.username,
+                        boss=boss_name,
+                        level=tailedCardlevel
+                    ),
                     description="\n".join(initial_desc),
                     color=discord.Color.blurple()
                 )
@@ -160,8 +166,8 @@ class TailedBoss(commands.Cog):
                     wait=True
                 )
 
-                #..........................battle.................................
                 battle = Battle(battle_attacker_team, battle_defender_team, maxturn=200)
+
                 while (
                     battle.is_team_alive(battle.attacker_team) and
                     battle.is_team_alive(battle.defender_team) and
@@ -174,44 +180,62 @@ class TailedBoss(commands.Cog):
                         for c in atk_team:
                             if not c.is_alive():
                                 continue
+
                             logs = battle.battle_turn_one_card(c)
+
                             static_lines = []
-                            static_lines += render_team_status(battle_attacker_team, "**Team Tấn Công**")
-                            static_lines += render_team_status(battle_defender_team, "**Team Phòng Thủ**")
+                            static_lines += render_team_status(battle_attacker_team, t(guild_id, "tailedboss.team.attacker"))
+                            static_lines += render_team_status(battle_defender_team, t(guild_id, "tailedboss.team.defender"))
+
                             desc = "\n".join(static_lines)
-                            desc += f"\n--- Lượt {battle.turn}: {c.name} ---\n"
+                            desc += "\n" + t(guild_id, "tailedboss.battle.turn_header", turn=battle.turn, name=c.name) + "\n"
                             desc += "\n".join(logs)
 
                             edit_embed = discord.Embed(
-                                title=f"🦊 {attacker.username} đã tìm thấy {list_cards[0].name} level: {tailedCardlevel} trong hang",
+                                title=t(
+                                    guild_id,
+                                    "tailedboss.log.title",
+                                    username=attacker.username,
+                                    boss=boss_name,
+                                    level=tailedCardlevel
+                                ),
                                 description=desc,
                                 color=discord.Color.blurple()
                             )
                             edit_embed.set_image(url=f"attachment://{filename}")
                             await log_msg.edit(embed=edit_embed)
+
                             await asyncio.sleep(2)
                             battle.turn += 1
+
                             if not battle.is_team_alive(def_team):
                                 break
+
                         if not battle.is_team_alive(def_team):
                             break
 
-                bonus_reward = 0  # số tiền thưởng dựa trên việc đánh bại đối thủ
-                damageDead = 0 # sát thương gây ra lên boss
+            bonus_reward = 0
+            damageDead = 0
+
             with getDbSession() as session2:
                 playerRepo2 = PlayerRepository(session2)
-                fresh_attacker = playerRepo2.getById(attacker_id) 
-                # xác định người thắng
+                fresh_attacker = playerRepo2.getById(attacker_id)
+
                 if battle.turn >= battle.maxturn:
-                    result = "🏳️ Hoà"
-                    outcome_text = f"⚔️ sau 200 lượt bạn không hạ được {list_cards[0].name} nên hòa, hãy quay lại sau 1 tiếng"
+                    result_key = "tailedboss.result.draw"
+                    outcome_text = t(guild_id, "tailedboss.result.draw_text", boss=boss_name)
+
                     damageDead = battle_defender_team[0].max_health - battle_defender_team[0].health
                     bonus_reward = damageDead * 50
                     fresh_attacker.coin_balance += bonus_reward
-                    damageDeadTxt = f"bạn đã gây ra {damageDead} sát thương lên {list_cards[0].name}"
-                    thuong = f"💰**Thưởng:** {bonus_reward:,} Ryo"
+
+                    damageDeadTxt = t(guild_id, "tailedboss.result.damage_text", damage=damageDead, boss=boss_name)
+                    thuong = t(guild_id, "tailedboss.result.reward_money_only", money=bonus_reward)
+
                 elif battle.is_team_alive(battle.attacker_team):
-                    result = "Chiến Thắng"
+                    result_key = "tailedboss.result.win"
+                    outcome_text = t(guild_id, "tailedboss.result.win_text", boss=boss_name)
+
                     damageDead = battle_defender_team[0].max_health
                     bonus_reward = damageDead * 50
                     fresh_attacker.coin_balance += bonus_reward
@@ -223,60 +247,83 @@ class TailedBoss(commands.Cog):
                         outcomeTier = random.choices(tiers, weights=weights, k=1)[0]
                         card = cardtemplaterepo.getRandomByTier(outcomeTier)
                         playerCardRepo.incrementQuantity(attacker_id, card.card_key, increment=1)
-                        thuong = f"💰**Thưởng:** {list_cards[0].name} chết và rơi ra {bonus_reward:,} Ryo và thẻ {card.name}(bậc {card.tier})"
-                    elif list_cards[0].tier not in type1OfTailed:
+
+                        thuong = t(
+                            guild_id,
+                            "tailedboss.result.reward_money_card",
+                            boss=boss_name,
+                            money=bonus_reward,
+                            card=card.name,
+                            tier=card.tier
+                        )
+                    else:
                         rates = WEAPON_GACHA_DROP_RATE["weapon_pack"]
                         tiers = list(rates.keys())
                         weights = list(rates.values())
                         outcomeTier = random.choices(tiers, weights=weights, k=1)[0]
                         weapon = weaponTemplateRepo.getRandomByGrade(outcomeTier)
                         playerWeaponRepo.incrementQuantity(attacker_id, weapon.weapon_key, increment=1)
-                        thuong = f"💰**Thưởng:** {list_cards[0].name} chết và rơi ra {bonus_reward:,} Ryo và vũ khí {weapon.name}(bậc {weapon.grade})"
 
-                    damageDeadTxt = f"bạn đã gây ra {damageDead} sát thương lên {list_cards[0].name}"
-                    outcome_text = f"bạn đã chiến thắng {list_cards[0].name} và đã nhận thưởng, hãy quay lại sau 1 tiếng."
-                    
+                        thuong = t(
+                            guild_id,
+                            "tailedboss.result.reward_money_weapon",
+                            boss=boss_name,
+                            money=bonus_reward,
+                            weapon=weapon.name,
+                            grade=weapon.grade
+                        )
+
+                    damageDeadTxt = t(guild_id, "tailedboss.result.damage_text", damage=damageDead, boss=boss_name)
+
                 else:
-                    result = "Thất Bại"
-                    outcome_text = f"bạn đã bị {list_cards[0].name} đấm chết và nhận thưởng, hãy quay lại sau 1 tiếng."
+                    result_key = "tailedboss.result.lose"
+                    outcome_text = t(guild_id, "tailedboss.result.lose_text", boss=boss_name)
+
                     damageDead = battle_defender_team[0].max_health - battle_defender_team[0].health
                     bonus_reward = damageDead * 25
                     fresh_attacker.coin_balance += bonus_reward
-                    damageDeadTxt = f"bạn đã gây ra {damageDead} sát thương lên {list_cards[0].name}"
-                    thuong = f"💰**Thưởng:** {bonus_reward:,} Ryo"
+
+                    damageDeadTxt = t(guild_id, "tailedboss.result.damage_text", damage=damageDead, boss=boss_name)
+                    thuong = t(guild_id, "tailedboss.result.reward_money_only", money=bonus_reward)
+
                 fresh_attacker.exp += 10
                 session2.commit()
 
-                # 3) Gửi embed kết quả cuối cùng
+                result_value = t(guild_id, result_key)
                 result_embed = discord.Embed(
-                    title=f"🏁 Kết quả trận chiến của {fresh_attacker.username} VS {list_cards[0].name}",
+                    title=t(guild_id, "tailedboss.result.embed_title", player=fresh_attacker.username, boss=boss_name),
                     description=(
-                        f"🎖️ **Kết quả:** {result}\n"
-                        f"{thuong}\n\n"
-                        f"{damageDeadTxt}\n\n"
-                        f"{outcome_text}"
+                        t(guild_id, "tailedboss.result.embed_result", result=result_value)
+                        + "\n"
+                        + f"{thuong}\n\n"
+                        + f"{damageDeadTxt}\n\n"
+                        + f"{outcome_text}"
                     ),
-                    color=discord.Color.green() if result == "Chiến Thắng" else discord.Color.red()
+                    color=discord.Color.green() if result_key == "tailedboss.result.win" else discord.Color.red()
                 )
                 result_embed.set_footer(text=f"Điểm Rank: {fresh_attacker.rank_points}")
                 await interaction.followup.send(embed=result_embed)
 
-        except Exception as e:
+        except Exception:
             tb = traceback.format_exc()
             await interaction.followup.send(
-                f"❌ Có lỗi xảy ra:\n```{tb}```",
+                f"{t(guild_id, 'tailedboss.error')}\n```{tb}```",
                 ephemeral=True
             )
+
     @tailedboss.error
-    async def buycard_error(self, interaction: discord.Interaction, error):
+    async def tailedboss_error(self, interaction: discord.Interaction, error):
+        guild_id = interaction.guild.id if interaction.guild else None
+
         if isinstance(error, CommandOnCooldown):
             await interaction.response.send_message(
-                f"⏱️ Bạn phải chờ **{error.retry_after:.1f}** giây nữa mới đánh được vĩ thú.",
+                t(guild_id, "tailedboss.cooldown", seconds=error.retry_after),
                 ephemeral=True
             )
-        else:
-            # Với lỗi khác, ta vẫn raise lên để discord.py xử hoặc log
-            raise error
+            return
+
+        raise error
+
 
 async def setup(bot):
     await bot.add_cog(TailedBoss(bot))

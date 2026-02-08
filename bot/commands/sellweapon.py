@@ -6,6 +6,8 @@ from bot.config.database import getDbSession
 from bot.repository.playerRepository import PlayerRepository
 from bot.repository.playerWeaponRepository import PlayerWeaponRepository
 from bot.repository.dailyTaskRepository import DailyTaskRepository
+from bot.services.i18n import t
+
 
 class SellWeapon(commands.Cog):
     def __init__(self, bot):
@@ -18,69 +20,89 @@ class SellWeapon(commands.Cog):
     )
     async def sellweapon(self, interaction: discord.Interaction, weapon_id: int, quantity: int):
         await interaction.response.defer(thinking=True)
+
+        guild_id = interaction.guild.id if interaction.guild else None
         player_id = interaction.user.id
 
         if quantity <= 0:
-            await interaction.followup.send("⚠️ Số lượng vũ khí bán phải lớn hơn 0.")
+            await interaction.followup.send(
+                t(guild_id, "sellweapon.quantity_must_be_positive")
+            )
             return
 
         try:
             with getDbSession() as session:
-                # Lấy thông tin người chơi
                 player_repo = PlayerRepository(session)
                 weapon_repo = PlayerWeaponRepository(session)
                 dailyTaskRepo = DailyTaskRepository(session)
+
                 player = player_repo.getById(player_id)
                 if not player:
-                    await interaction.followup.send("⚠️ Bạn chưa đăng ký tài khoản. Hãy dùng /register trước nhé!")
-                    return
-
-                # Lấy danh sách các vũ khí của người chơi có tên khớp
-                weapon = weapon_repo.getById(weapon_id)
-                if not weapon or weapon.player_id != player_id:
                     await interaction.followup.send(
-                        f"⚠️ Bạn không sở hữu vũ khí với ID `{weapon_id}`."
+                        t(guild_id, "sellweapon.not_registered")
                     )
                     return
 
-                # Kiểm tra nếu có vũ khí đang được cài đặt (equipped)
-                if weapon.equipped:
+                weapon = weapon_repo.getById(weapon_id)
+                if not weapon or weapon.player_id != player_id:
                     await interaction.followup.send(
-                        f"⚠️ Vũ khí **{weapon.template.name}** (ID `{weapon.id}`) "
-                        f"đang được dùng làm vũ khí chính, hãy tháo vũ khí đó ra "
-                        f"bằng lệnh `/unequipweapon` trước khi bán."
+                        t(guild_id, "sellweapon.not_owner", weaponId=weapon_id)
                     )
                     return
 
                 weaponName = weapon.template.name
                 weaponLevel = weapon.level
 
-                # Tính tổng số lượng vũ khí ở cấp đó
-                if weapon.quantity < quantity:
+                if weapon.equipped:
                     await interaction.followup.send(
-                        f"⚠️ Bạn không có đủ số lượng vũ khí để bán. "
-                        f"Bạn có: {weapon.quantity}, yêu cầu: {quantity}."
+                        t(
+                            guild_id,
+                            "sellweapon.equipped",
+                            weaponName=weaponName,
+                            weaponId=weapon.id
+                        )
                     )
                     return
 
-                # Tính số tiền nhận được: tiền nhận = sell_price * level * quantity
-                sell_price  = weapon.template.sell_price
+                if weapon.quantity < quantity:
+                    await interaction.followup.send(
+                        t(
+                            guild_id,
+                            "sellweapon.not_enough_quantity",
+                            current=weapon.quantity,
+                            requested=quantity
+                        )
+                    )
+                    return
+
+                sell_price = weapon.template.sell_price
                 total_money = sell_price * weapon.level * quantity
 
-                # Tiêu hao các bản ghi vũ khí bán ra:
                 weapon.quantity -= quantity
                 if weapon.quantity <= 0:
                     weapon_repo.deleteWeapon(weapon)
-                # Cộng tiền bán được vào số dư của người chơi
+
                 player.coin_balance += total_money
                 dailyTaskRepo.updateShopSell(player_id)
                 session.commit()
+
                 await interaction.followup.send(
-                    f"✅ Bán thành công! Bạn nhận được **{total_money:,} Ryo** từ việc bán {quantity} vũ khí **{weaponName}** cấp {weaponLevel}."
+                    t(
+                        guild_id,
+                        "sellweapon.success",
+                        money=total_money,
+                        quantity=quantity,
+                        weaponName=weaponName,
+                        weaponLevel=weaponLevel
+                    )
                 )
+
         except Exception as e:
             print("❌ Lỗi khi xử lý sellweapon:", e)
-            await interaction.followup.send("❌ Có lỗi xảy ra. Vui lòng thử lại sau.")
+            await interaction.followup.send(
+                t(guild_id, "sellweapon.error")
+            )
+
 
 async def setup(bot):
     await bot.add_cog(SellWeapon(bot))
