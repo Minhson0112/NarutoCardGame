@@ -1,7 +1,7 @@
 from bot.services.effectBase import Effect
 
 class BuffSpeedEffect(Effect):
-    def __init__(self, duration, value, flat_bonus=0, description="Tăng né"):
+    def __init__(self, duration, value, flat_bonus=0, description=""):
         super().__init__(
             name="BuffSpeed",
             duration=duration,

@@ -1,7 +1,7 @@
 from bot.services.effectBase import Effect
 
 class DebuffArmorEffect(Effect):
-    def __init__(self, duration, value, flat_bonus=0, description="Giảm giáp"):
+    def __init__(self, duration, value, flat_bonus=0, description=""):
         super().__init__(
             name="DebuffArmor",
             duration=duration,

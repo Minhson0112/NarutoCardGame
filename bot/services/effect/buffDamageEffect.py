@@ -1,7 +1,7 @@
 from bot.services.effectBase import Effect
 
 class BuffDamageEffect(Effect):
-    def __init__(self, duration, value = 0.0, flat_bonus=0, description="Tăng sát thương"):
+    def __init__(self, duration, value=0.0, flat_bonus=0, description=""):
         """
         Hiệu ứng tăng sát thương:
         - value: % tăng (ví dụ 0.2 = +20%),
@@ -13,5 +13,5 @@ class BuffDamageEffect(Effect):
             effect_type="buff",
             value=value,
             flat_bonus=flat_bonus,
-            description=description
+            description=description,
         )

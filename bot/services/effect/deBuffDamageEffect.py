@@ -1,7 +1,7 @@
 from bot.services.effectBase import Effect
 
 class DebuffDamageEffect(Effect):
-    def __init__(self, duration, value, flat_bonus=0, description="Giảm sát thương"):
+    def __init__(self, duration, value, flat_bonus=0, description=""):
         """
         Hiệu ứng giảm sát thương:
         - value: % giảm (ví dụ 0.2 = -20%),

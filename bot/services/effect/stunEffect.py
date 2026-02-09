@@ -1,7 +1,7 @@
 from bot.services.effectBase import Effect
 
 class StunEffect(Effect):
-    def __init__(self, duration, description="Bị choáng"):
+    def __init__(self, duration, description=""):
         """
         Hiệu ứng choáng (không thể hành động).
 

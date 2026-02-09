@@ -994,5 +994,9 @@ VI = {
 
 
     "effect.expired": "⏳ {effect_desc} trên {card_name} đã hết hiệu lực.",
-
+    "effect.burn.tick": "🔥 {name} chịu {damage} sát thương từ {source}.",
+    "effect.illusion.hit": "🎭 {card_name} bị trúng Ảo Thuật và tạm thời coi đồng minh là địch, địch là đồng minh!",
+    "effect.illusion.expired": "🌀 Ảo Thuật trên {card_name} đã hết hiệu lực, trở lại bình thường.",
+    "effect.sealchakra.active": "🔒 {card_name} bị phong ấn chakra, không thể tích tụ năng lượng.",
+    "effect.sealchakra.expired": "⏳ {effect_desc} trên {card_name} đã hết hiệu lực, chakra có thể tăng trở lại.",
 }

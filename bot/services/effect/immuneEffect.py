@@ -1,7 +1,7 @@
 from bot.services.effectBase import Effect
 
 class ImmuneEffect(Effect):
-    def __init__(self, duration, description="Miễn nhiễm sát thương"):
+    def __init__(self, duration, description=""):
         super().__init__(
             name="Immune",
             duration=duration,

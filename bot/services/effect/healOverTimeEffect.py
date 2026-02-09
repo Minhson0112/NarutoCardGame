@@ -1,7 +1,7 @@
 from bot.services.effectBase import Effect
 
 class HealOverTimeEffect(Effect):
-    def __init__(self, duration, value, description="Heal Over Time"):
+    def __init__(self, duration, value, description=""):
         """
         Args:
             duration (int): Số lượt hiệu ứng tồn tại.

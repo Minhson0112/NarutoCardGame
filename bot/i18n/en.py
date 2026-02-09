@@ -996,4 +996,9 @@ EN = {
 
 
     "effect.expired": "⏳ {effect_desc} on {card_name} has expired.",
+    "effect.burn.tick": "🔥 {name} takes {damage} damage from {source}.",
+    "effect.illusion.hit": "🎭 {card_name} is caught in an illusion and temporarily treats allies as enemies and enemies as allies!",
+    "effect.illusion.expired": "🌀 The illusion on {card_name} has expired. Back to normal.",
+    "effect.sealchakra.active": "🔒 {card_name}'s chakra is sealed and cannot accumulate energy.",
+    "effect.sealchakra.expired": "⏳ {effect_desc} on {card_name} has expired; chakra can increase again.",
 }
