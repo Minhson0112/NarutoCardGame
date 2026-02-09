@@ -88,7 +88,7 @@ class TailedBoss(commands.Cog):
                 battle_attacker_team = []
                 for pc, pw in zip(attacker_cards, attacker_weapons):
                     params = get_battle_card_params(pc, pw)
-                    battle_card = create_card(*params)
+                    battle_card = create_card(*params, guild_id=guild_id)
                     battle_attacker_team.append(battle_card)
 
                 tailedCardlevel = 1
@@ -118,7 +118,7 @@ class TailedBoss(commands.Cog):
                         tailedCardlevel,
                         weapon_name=None
                     )
-                    battle_card = create_card(*taileCard)
+                    battle_card = create_card(*taileCard, guild_id=guild_id)
                     battle_defender_team.append(battle_card)
                     defenderCardImgPaths.append(img_path)
 
@@ -166,7 +166,7 @@ class TailedBoss(commands.Cog):
                     wait=True
                 )
 
-                battle = Battle(battle_attacker_team, battle_defender_team, maxturn=200)
+                battle = Battle(battle_attacker_team, battle_defender_team, maxturn=200, guild_id=guild_id)
 
                 while (
                     battle.is_team_alive(battle.attacker_team) and

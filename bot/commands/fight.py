@@ -77,7 +77,7 @@ class Fight(commands.Cog):
                 battle_attacker_team = []
                 for pc, pw in zip(attacker_cards, attacker_weapons):
                     params = get_battle_card_params(pc, pw)
-                    battle_attacker_team.append(create_card(*params))
+                    battle_attacker_team.append(create_card(*params, guild_id=guild_id))
 
                 minRank = (attacker.rank_points or 0) - 30
                 maxRank = (attacker.rank_points or 0) + 30
@@ -147,7 +147,7 @@ class Fight(commands.Cog):
                 battle_defender_team = []
                 for pc, pw in zip(defender_cards, defender_weapons):
                     params = get_battle_card_params(pc, pw)
-                    battle_defender_team.append(create_card(*params))
+                    battle_defender_team.append(create_card(*params, guild_id=guild_id))
 
                 paths = []
                 for pc in attacker_cards + defender_cards:
@@ -197,7 +197,7 @@ class Fight(commands.Cog):
                     wait=True
                 )
 
-                battle = Battle(battle_attacker_team, battle_defender_team, maxturn=120)
+                battle = Battle(battle_attacker_team, battle_defender_team, maxturn=120, guild_id=guild_id)
                 while (
                     battle.is_team_alive(battle.attacker_team) and
                     battle.is_team_alive(battle.defender_team) and

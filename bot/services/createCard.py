@@ -180,7 +180,7 @@ WEAPON_NAME_MAP = {
     "Gudodama": Gudodama,
 }
 
-def create_card(name, health, armor, base_damage, crit_rate, speed, chakra, element, tier, level, weapon_name = None):
+def create_card(name, health, armor, base_damage, crit_rate, speed, chakra, element, tier, level, weapon_name = None, guild_id=None):
 
     weapon_passive = None
 
@@ -189,4 +189,4 @@ def create_card(name, health, armor, base_damage, crit_rate, speed, chakra, elem
         weapon_passive = weapon_class()
 
     card_class = SPECIAL_CARD_CLASS_MAP.get(name, Card)
-    return card_class(name, health, armor, base_damage, crit_rate, speed, chakra, element, tier, level, weapon_passive)
+    return card_class(name, health, armor, base_damage, crit_rate, speed, chakra, element, tier, level, weapon_passive, guild_id=guild_id)

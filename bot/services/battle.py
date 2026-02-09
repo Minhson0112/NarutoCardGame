@@ -1,7 +1,10 @@
 import random
 from bot.services.cardBase import Card
+from bot.services.i18n import t
+
+
 class Battle:
-    def __init__(self, attacker_team, defender_team, maxturn):
+    def __init__(self, attacker_team, defender_team, maxturn, guild_id=None):
         self.attacker_team = attacker_team
         self.defender_team = defender_team
         self.first_team, self.second_team = (
@@ -14,15 +17,15 @@ class Battle:
         self.lostteam = None
         self.turn = 1
         self.logs = []
+        self.guild_id = guild_id
 
     def get_default_target(self, enemy_team):
         for target in enemy_team:
             if target.is_alive():
                 return target
         return None
-    
+
     def get_default_target_reversed(self, enemy_team):
-        # duyệt 2 → 1 → 0
         for target in reversed(enemy_team):
             if target.is_alive():
                 return target
@@ -41,8 +44,11 @@ class Battle:
 
     def battle_turn_one_card(self, atk: Card):
         logs = []
-        true_damage=False
-        execute_threshold=None
+
+        guild_id = getattr(atk, "guild_id", None) or self.guild_id
+
+        true_damage = False
+        execute_threshold = None
 
         if atk.has_passives_effect("TrueDamage"):
             true_damage = True
@@ -56,34 +62,41 @@ class Battle:
         logs.extend(atk.process_pre_action_effects())
 
         if atk.has_effect("Stun"):
-            logs.append(f"⚡ {atk.name} đang bị khống chế, không thể hành động.")
+            logs.append(t(guild_id, "battle.controlled_skip_action").format(name=atk.name))
             logs.extend(atk.process_effects())
             return logs
 
-        is_rooted = atk.has_effect("Root")  # Hiệu ứng "trói chân"
+        is_rooted = atk.has_effect("Root")
 
         if atk.chakra >= 100 and not is_rooted:
-            logs.append(f"{atk.name} dùng kỹ năng đặc biệt!")
+            logs.append(t(guild_id, "battle.special_use").format(name=atk.name))
             logs += atk.special_skills()
             atk.chakra = max(atk.chakra - 100, 0)
         else:
             if atk.chakra >= 100 and is_rooted:
-                logs.append(f"🚫 {atk.name} đang bị khống chế, không thể dùng kỹ năng!")
+                logs.append(t(guild_id, "battle.controlled_cant_use_special").format(name=atk.name))
 
             tgt = atk.target if atk.target and atk.target.is_alive() else self.get_default_target(atk.enemyTeam)
             if not tgt:
-                logs.append(f"{atk.name} không có mục tiêu.")
+                logs.append(t(guild_id, "battle.no_target").format(name=atk.name))
                 return logs
 
-            logs.append(f"**{atk.name}** tấn công **{tgt.name}**")
+            logs.append(
+                t(guild_id, "battle.basic_attack").format(attacker=atk.name, target=tgt.name)
+            )
+
             if random.random() < tgt.get_effective_speed():
-                logs.append(f"→ {tgt.name} né thành công! ({tgt.speed:.0%})")
+                logs.append(
+                    t(guild_id, "battle.dodge_success").format(target=tgt.name, speed=tgt.speed)
+                )
             else:
                 crit = random.random() < atk.get_effective_crit_rate()
                 dmg = atk.get_effective_base_damage() * (2 if crit else 1)
                 dealt, new_logs = tgt.receive_damage(dmg, true_damage, execute_threshold, attacker=atk)
+
                 if crit:
-                    logs.append(f"💥 ĐÒN CHÍ MẠNG của {atk.name}!")
+                    logs.append(t(guild_id, "battle.critical_hit").format(attacker=atk.name))
+
                 logs.extend(new_logs)
 
             for e in atk.passives:

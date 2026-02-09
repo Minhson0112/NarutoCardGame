@@ -934,7 +934,7 @@ EN = {
     "top10.error": "❌ An error occurred. Please try again later.",
 
 
-    
+
     "unequipweapon.description": "Unequip a weapon from a specified slot",
     "unequipweapon.describe.position": "Choose a slot to unequip: tanker/middle/back",
 
@@ -954,4 +954,46 @@ EN = {
     "unlockcard.already_unlocked": "ℹ️ The card **{card_name}** (ID `{card_id}`, Lv {card_level}) is already unlocked.",
     "unlockcard.success": "✅ Unlocked **{card_name}** (ID `{card_id}`, Lv {card_level}).\n🔓 You can now sell this card.",
     "unlockcard.error": "❌ An error occurred while unlocking the card. Please try again later.",
+
+
+
+    "card.damage.immune": "🛡️ {name} is immune to damage!",
+    "card.damage.true": "{name} takes {damage} true damage (ignores armor).",
+    "card.damage.normal": "{name} takes {damage} damage.",
+    "card.execute": "💀 {name} was executed because HP dropped below {threshold_percent}% after the hit.",
+    "card.reflect": "🌀 {attacker_name} takes {reflect_damage} reflected damage ({reflect_percent}% of {dealt_damage}).",
+
+    "card.heal.invalid_input": "⚠️ No valid healing value was provided.",
+    "card.heal.antiheal_applied": "{name} is affected by {effect_desc}",
+    "card.heal.no_heal": "{name} could not heal any HP.",
+    "card.heal.success": "💚 {name} heals {healed} HP.",
+
+    "card.buff.base_damage": "⚔️ {name} gains +{amount} base damage (current: {current}).",
+    "card.buff.armor": "🛡️ {name} gains +{amount} armor (current: {current}).",
+    "card.buff.crit": "💥 {name} gains +{percent}% crit (from {before}% to {after}%).",
+    "card.buff.speed": "🏃 {name} gains +{percent}% speed (from {before}% to {after}%).",
+
+    "card.chakra.sealed": "🔋 {name} 🚫 is chakra-sealed and cannot gain chakra.",
+    "card.chakra.gain": "🔋 {name} gains +{amount} chakra",
+
+    "card.reduce.armor": "🛡️ {name} loses {amount} armor directly (from {before} to {after}).",
+    "card.reduce.crit": "💥 {name} loses {percent}% crit directly (from {before}% to {after}%).",
+    "card.reduce.speed": "🏃 {name} loses {percent}% speed directly (from {before}% to {after}%).",
+    "card.reduce.chakra": "🔋 {name} loses {amount} chakra directly (from {before} to {after}).",
+
+    "card.hp_bar": "HP: [{bar}] {hp}/{max_hp}",
+
+
+
+    "battle.controlled_skip_action": "⚡ {name} is controlled and cannot act.",
+    "battle.special_use": "{name} uses a special skill!",
+    "battle.controlled_cant_use_special": "🚫 {name} is controlled and cannot use a skill!",
+    "battle.no_target": "{name} has no target.",
+    "battle.basic_attack": "**{attacker}** attacks **{target}**",
+    "battle.dodge_success": "→ {target} dodged successfully! ({speed:.0%})",
+    "battle.critical_hit": "💥 CRITICAL HIT by {attacker}!",
+
+
+
+    "effect.expired": "⏳ {effect_desc} on {card_name} has expired.",
 }

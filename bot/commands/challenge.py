@@ -22,6 +22,7 @@ class ChallengeGame(commands.Cog):
     async def challenge(self, interaction: discord.Interaction):
         await interaction.response.defer(thinking=True)
         player_id = interaction.user.id
+        guild_id = interaction.guild.id if interaction.guild else None
 
         try:
             with getDbSession() as session:
@@ -74,7 +75,7 @@ class ChallengeGame(commands.Cog):
                     # Lấy tuple params đã buff level + bonus vũ khí
                     params = get_battle_card_params(pc, pw)
                     # Create đúng subclass dựa trên element và tier
-                    battle_card = create_card(*params)
+                    battle_card = create_card(*params, guild_id=guild_id)
                     battle_attacker_team.append(battle_card)
 
                 total_damage = sum(card.base_damage for card in battle_attacker_team)

@@ -87,7 +87,7 @@ class Adventure(commands.Cog):
                 battle_attacker_team = []
                 for pc, pw in zip(attacker_cards, attacker_weapons):
                     params = get_battle_card_params(pc, pw)
-                    battle_card = create_card(*params)
+                    battle_card = create_card(*params, guild_id=guild_id)
                     battle_attacker_team.append(battle_card)
 
                 defenderCardLevel = 1
@@ -120,7 +120,7 @@ class Adventure(commands.Cog):
                         defenderCardLevel,
                         weapon_name
                     )
-                    battle_card = create_card(*params)
+                    battle_card = create_card(*params, guild_id=guild_id)
                     battle_defender_team.append(battle_card)
                     defenderCardImgPaths.append(img_path)
 
@@ -164,7 +164,7 @@ class Adventure(commands.Cog):
                     wait=True
                 )
 
-                battle = Battle(battle_attacker_team, battle_defender_team, maxturn=120)
+                battle = Battle(battle_attacker_team, battle_defender_team, maxturn=120, guild_id=guild_id)
                 while (
                     battle.is_team_alive(battle.attacker_team) and
                     battle.is_team_alive(battle.defender_team) and

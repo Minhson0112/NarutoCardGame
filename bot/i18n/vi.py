@@ -952,4 +952,47 @@ VI = {
     "unlockcard.already_unlocked": "ℹ️ Thẻ **{card_name}** (ID `{card_id}`, Lv {card_level}) hiện đang không bị khoá.",
     "unlockcard.success": "✅ Đã mở khoá thẻ **{card_name}** (ID `{card_id}`, Lv {card_level}).\n🔓 Thẻ này giờ có thể bán.",
     "unlockcard.error": "❌ Có lỗi xảy ra khi mở khoá thẻ. Vui lòng thử lại sau.",
+
+
+
+    "card.damage.immune": "🛡️ {name} miễn nhiễm sát thương!",
+    "card.damage.true": "{name} nhận {damage} sát thương chuẩn (bỏ qua giáp).",
+    "card.damage.normal": "{name} nhận {damage} sát thương.",
+    "card.execute": "💀 {name} bị kết liễu do HP xuống dưới {threshold_percent}% sau đòn đánh.",
+    "card.reflect": "🌀 {attacker_name} bị phản lại {reflect_damage} sát thương ({reflect_percent}% của {dealt_damage}).",
+
+    "card.heal.invalid_input": "⚠️ Không có giá trị hồi máu hợp lệ được truyền vào.",
+    "card.heal.antiheal_applied": "{name} đang bị dính {effect_desc}",
+    "card.heal.no_heal": "{name} không hồi được máu nào.",
+    "card.heal.success": "💚 {name} hồi {healed} HP.",
+
+    "card.buff.base_damage": "⚔️ {name} nhận buff +{amount} sát thương cơ bản (hiện tại: {current}).",
+    "card.buff.armor": "🛡️ {name} nhận buff +{amount} giáp (hiện tại: {current}).",
+    "card.buff.crit": "💥 {name} nhận buff +{percent}% chí mạng (từ {before}% lên {after}%).",
+    "card.buff.speed": "🏃 {name} nhận buff +{percent}% speed (từ {before}% lên {after}%).",
+
+    "card.chakra.sealed": "🔋 {name} 🚫 đang bị phong ấn chakra, không nhận được chakra.",
+    "card.chakra.gain": "🔋 {name} nhận +{amount} chakra",
+
+    "card.reduce.armor": "🛡️ {name} bị giảm trực tiếp {amount} giáp (từ {before} xuống {after}).",
+    "card.reduce.crit": "💥 {name} bị giảm trực tiếp {percent}% chí mạng (từ {before}% xuống {after}%).",
+    "card.reduce.speed": "🏃 {name} bị giảm trực tiếp {percent}% speed (từ {before}% xuống {after}%).",
+    "card.reduce.chakra": "🔋 {name} bị giảm trực tiếp {amount} chakra (từ {before} xuống {after}).",
+
+    "card.hp_bar": "HP: [{bar}] {hp}/{max_hp}",
+
+
+
+    "battle.controlled_skip_action": "⚡ {name} đang bị khống chế, không thể hành động.",
+    "battle.special_use": "{name} dùng kỹ năng đặc biệt!",
+    "battle.controlled_cant_use_special": "🚫 {name} đang bị khống chế, không thể dùng kỹ năng!",
+    "battle.no_target": "{name} không có mục tiêu.",
+    "battle.basic_attack": "**{attacker}** tấn công **{target}**",
+    "battle.dodge_success": "→ {target} né thành công! ({speed:.0%})",
+    "battle.critical_hit": "💥 ĐÒN CHÍ MẠNG của {attacker}!",
+
+
+
+    "effect.expired": "⏳ {effect_desc} trên {card_name} đã hết hiệu lực.",
+
 }
