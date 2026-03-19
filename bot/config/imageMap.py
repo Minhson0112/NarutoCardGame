@@ -176,7 +176,16 @@ CARD_IMAGE_LOCAL_PATH_MAP = {
     "naruto": "bot/Image/Legendary/Uzumaki_Naruto.gif",
     "susanoosasuke": "bot/Image/Legendary/Susanoo_Sasuke.gif",
     "6pain": "bot/Image/Legendary/Six_Paths_Pain.gif",
-    "akatsukiitachi": "bot/Image/Legendary/Akatstuki_Itachi.gif"
+    "akatsukiitachi": "bot/Image/Legendary/Akatstuki_Itachi.gif",
+    "1vi": "bot/Image/tailed/nhatvi.gif",
+    "2vi": "bot/Image/tailed/nhivi.gif",
+    "3vi": "bot/Image/tailed/tamvi.gif",
+    "4vi": "bot/Image/tailed/tuvi.gif",
+    "5vi": "bot/Image/tailed/nguvi.gif",
+    "6vi": "bot/Image/tailed/lucvi.gif",
+    "7vi": "bot/Image/tailed/thatvi.gif",
+    "8vi": "bot/Image/tailed/batvi.gif",
+    "9vi": "bot/Image/tailed/cuuvi.gif",
 }
 
 
