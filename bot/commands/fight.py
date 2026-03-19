@@ -134,10 +134,11 @@ class Fight(commands.Cog):
                 maxRank = attacker.rank_points + 30
                 opponents = session.query(Player).filter(
                     Player.player_id != attacker_id,
+                    Player.player_id != 1357746151457292409,
                     Player.rank_points >= minRank,
                     Player.rank_points <= maxRank
                 ).all()
-                
+
                 # Lọc lại chỉ những người đã lắp thẻ
                 valid_opponents = []
                 for opp in opponents:
