@@ -1,14 +1,19 @@
+# docker-compose.yml - Naruto Card Game Bot
+
 services:
   bot:
     build: .
     container_name: naruto-bot
-    env_file: .env
+    env_file: .env # Load môi trường từ .env file
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy # Bot sẽ chỉ khởi động sau khi MySQL báo "healthy"
     restart: unless-stopped
     volumes:
-      - .:/app         # Gắn toàn bộ project vào container tại /app
-      - /app/__pycache__  # Ngăn Docker ghi cache .pyc gây xung đột
+      - .:/app # Gắn mã nguồn vào container để dễ phát triển (Sync code realtime)
+      - /app/__pycache__ # Ngăn ghi ngược cache từ container ra máy thật
+    environment:
+      - PYTHONUNBUFFERED=1
 
   mysql:
     image: mysql:8.0
@@ -23,6 +28,13 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    # Thêm Healthcheck để đảm bảo bot không bị crash khi MySQL đang khởi tạo
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
 volumes:
-  mysql_data:
+  mysql_data: # Lưu trữ dữ liệu MySQL bền vững (không mất khi xóa container)

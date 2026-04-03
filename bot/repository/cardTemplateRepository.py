@@ -116,3 +116,10 @@ class CardTemplateRepository:
                         break
 
         return names
+
+    def getTiersForAutocomplete(self) -> List[str]:
+        """
+        Trả về danh sách các tier duy nhất có trong database.
+        """
+        rows = self.session.query(CardTemplate.tier).distinct().all()
+        return [r[0] for r in rows if r[0]]

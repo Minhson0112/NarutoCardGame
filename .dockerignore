@@ -1,0 +1,30 @@
+# .dockerignore - Naruto Card Game Bot
+
+# Exclude Git
+.git
+.gitignore
+
+# Exclude Local Config & Keys (Should be passed via ENV or mounted)
+.env
+.env.example
+
+# Exclude Python Cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+
+# Exclude Logs & Media (Should be volumes)
+logs/
+media/
+screenshots/
+tmp/
+
+# Exclude OS Specific Files
+.DS_Store
+Thumbs.db
+
+# Exclude VSCode/IDE files
+.vscode
+.idea
+.gemini

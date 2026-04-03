@@ -1,0 +1,30 @@
+from sqlalchemy import Column, Integer, BigInteger, String, TIMESTAMP, text, ForeignKey
+from sqlalchemy.orm import relationship
+from bot.config.database import Base
+
+class MarketListing(Base):
+    __tablename__ = 'market_listings'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    seller_id = Column(BigInteger, ForeignKey('players.player_id'), nullable=False)
+    card_key = Column(String(50), ForeignKey('card_templates.card_key'), nullable=False)
+    level = Column(Integer, nullable=False, default=1)
+    quantity = Column(Integer, nullable=False, default=1)
+    unit_price = Column(Integer, nullable=False)
+    
+    # Status: LISTED, SOLD, CANCELLED, EXPIRED
+    status = Column(String(20), nullable=False, default='LISTED')
+    
+    created_at = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+    expires_at = Column(TIMESTAMP, nullable=False)
+
+    # Relationships
+    seller = relationship("Player", backref="market_listings")
+    template = relationship("CardTemplate", backref="market_listings", lazy='joined')
+
+    def __repr__(self):
+        return (
+            f"<MarketListing(id={self.id}, seller_id={self.seller_id}, "
+            f"card_key='{self.card_key}', level={self.level}, "
+            f"quantity={self.quantity}, unit_price={self.unit_price}, status='{self.status}')>"
+        )

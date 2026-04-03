@@ -1,18 +1,18 @@
-# requirements.txt
+# requirements.txt - Naruto Card Game Bot
 
-# Bot Discord
-discord.py
+# Discord API
+discord.py>=2.3.2
 
-# Database
-mysql-connector-python
-SQLAlchemy
+# Database Handling
+mysql-connector-python>=8.0.33
+SQLAlchemy>=2.0.19
 
-# Hỗ trợ dotenv để load config
-python-dotenv
+# Configuration
+python-dotenv>=1.0.0
 
-# Hỗ trợ xử lý ảnh hoặc tạo ảnh embed
-Pillow==10.2.0
-requests==2.31.0
+# Image Processing (For card & battle rendering)
+Pillow>=10.1.0
+requests>=2.31.0
 
-# Scheduler cho các tác vụ định kỳ
-APScheduler==3.10.4
+# Utilities
+# Removed APScheduler as it is replaced by discord.ext.tasks

@@ -36,40 +36,33 @@ class PlayerCardRepository:
         """
         self.session.commit()
 
-    def incrementQuantity(self, playerId: int, cardKey: str, increment: int = 1):
+    def incrementQuantity(self, playerId: int, cardKey: str, level: int = 1, increment: int = 1):
         """
-        Thêm thẻ level 1 vào kho của người chơi, nhưng nếu đã có
-        bất kỳ bản ghi nào của cardKey này đang bị khóa (locked=True),
-        thì bản level 1 mới cũng sẽ inherit locked=True.
+        Thêm thẻ vào kho của người chơi. 
         """
-        # 1) Tìm tất cả các bản PlayerCard của user với cardKey
-        existing_cards = (
+        # 1) Tìm bản ghi hiện có với cùng cardKey + level TRONG KHO (INVENTORY)
+        existing_card = (
             self.session.query(PlayerCard)
-            .filter_by(player_id=playerId, card_key=cardKey)
-            .all()
+            .filter_by(player_id=playerId, card_key=cardKey, level=level, status='INVENTORY')
+            .first()
         )
-        # 2) Xem có bản nào locked không
-        locked_flag = any(c.locked for c in existing_cards)
 
-        # 3) Tìm riêng bản level 1 nếu đã có
-        level1 = next((c for c in existing_cards if c.level == 1), None)
-
-        if level1:
+        if existing_card:
             # Nếu đã có, chỉ tăng quantity
-            level1.quantity += increment
-            # Đồng thời nếu locked_flag = True, đảm bảo nó cũng khoá
-            if locked_flag:
-                level1.locked = True
+            existing_card.quantity += increment
+            # Đảm bảo trạng thái là INVENTORY để hiện ra kho đồ
+            existing_card.status = 'INVENTORY'
         else:
-            # Tạo mới bản level 1 với lock flag kế thừa
-            level1 = PlayerCard(
+            # Tạo mới bản ghi
+            new_card = PlayerCard(
                 player_id=playerId,
                 card_key=cardKey,
-                level=1,
+                level=level,
                 quantity=increment,
-                locked=locked_flag,
+                locked=False,
+                status='INVENTORY'
             )
-            self.session.add(level1)
+            self.session.add(new_card)
 
         self.session.commit()
 

@@ -2,6 +2,11 @@ import discord
 from discord.ext import commands, tasks
 import asyncio
 from bot.config.config import DISCORD_TOKEN
+<<<<<<< HEAD
+=======
+from bot.services.guildLanguageCache import guildLanguageCache
+from bot.config.init_db import init_db
+>>>>>>> a810d81 (cập nhập chợ đen và thuế)
 
 # Định nghĩa intents – bắt buộc nếu muốn bot đọc tin nhắn hoặc phản hồi người dùng
 intents = discord.Intents.default()
@@ -35,6 +40,9 @@ async def on_ready():
 
 # Hàm main để load các extension
 async def main():
+    # Khởi tạo DB tự động (tạo bảng nếu chưa có)
+    init_db()
+
     # Danh sách các module cần load
     extensions = [
         "bot.commands.register",
@@ -78,6 +86,11 @@ async def main():
         "bot.commands.showweapon",
         "bot.commands.buyMultiCard",
         "bot.commands.shop",
+<<<<<<< HEAD
+=======
+        "bot.commands.setLanguage",
+        "bot.commands.market",
+>>>>>>> a810d81 (cập nhập chợ đen và thuế)
     ]
 
     # Load từng extension
